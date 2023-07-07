@@ -1,5 +1,9 @@
 package com.example.hw49.entity;
 
+
+import lombok.Data;
+
+@Data
 public class Employer {
     private Long id;
     private String jobTitle;
@@ -7,5 +11,5 @@ public class Employer {
     private String jobDescription;
     private String requiredExp;
 
-    //TODO
+    private Category category;
 }
