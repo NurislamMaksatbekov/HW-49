@@ -10,6 +10,5 @@ public class Employer {
     private double salary;
     private String jobDescription;
     private String requiredExp;
-
     private Category category;
 }
