@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class JobList {
+    private Long id;
     private Employer whoPosted;
     private Category category;
     private LocalDate date;

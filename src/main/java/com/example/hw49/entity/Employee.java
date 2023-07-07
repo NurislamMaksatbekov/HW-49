@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Employee {
     private Long id;
-    private String post;
+    private String jobTitle;
     private double requiredSalary;
     private String experience;
     private String education;
