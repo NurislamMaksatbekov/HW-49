@@ -9,6 +9,7 @@ public class Employer {
     private String jobTitle;
     private double salary;
     private String jobDescription;
-    private String requiredExp;
+    private int requiredMaxExp;
+    private int requiredMinExp;
     private Category category;
 }
