@@ -9,6 +9,6 @@ public class User {
     private String surname;
     private String username;
     private String email;
-    private Type type;
     private String password;
+    private Type type;
 }

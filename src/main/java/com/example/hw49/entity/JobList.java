@@ -9,6 +9,6 @@ public class JobList {
     private Long id;
     private Employer whoPosted;
     private Category category;
-    private LocalDate date;
+    private LocalDate dateOfPosted;
 
 }
