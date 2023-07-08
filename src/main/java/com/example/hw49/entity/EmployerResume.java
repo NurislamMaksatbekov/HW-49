@@ -4,7 +4,7 @@ package com.example.hw49.entity;
 import lombok.Data;
 
 @Data
-public class Employer {
+public class EmployerResume {
     private Long id;
     private String jobTitle;
     private double salary;
@@ -12,4 +12,5 @@ public class Employer {
     private int requiredMaxExp;
     private int requiredMinExp;
     private Category category;
+    private User user;
 }
