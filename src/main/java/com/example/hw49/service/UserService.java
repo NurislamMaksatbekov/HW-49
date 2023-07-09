@@ -15,4 +15,12 @@ public class UserService {
     public Optional<User> findUserByName(String name){
         return userDao.findUserByName(name);
     }
+
+    public Optional<User> findUserByPhoneNumber(String number){
+        return userDao.findUserByPhoneNumber(number);
+    }
+
+    public Optional<User> findUserByEmail(String email){
+        return userDao.findUserByEmail(email);
+    }
 }

@@ -10,6 +10,7 @@ create table if not exists users(
     username varchar(50) not null,
     email varchar(50) not null,
     password varchar(50) not null,
+    number varchar(50) not null,
     type_id bigint not null references type (id)
 );
 
@@ -70,9 +71,9 @@ values ( 'Employer' ),
 ('Employee');
 
 
-insert into users(name, surname, username, email, password, type_id)
-values ( 'Nurislam', 'Maksatbekov', 'maksatbekov', 'maksatbekov@mail.ru', 'qwerty', 1),
-       ('Azidin', 'Amankulov', 'azidinn', 'azidin@mail.ru', 'azidinmanka', 2);
+insert into users(name, surname, username, email, password, number, type_id)
+values ( 'Nurislam', 'Maksatbekov', 'maksatbekov', 'maksatbekov@mail.ru', 'qwerty', '+996502271004', 1),
+       ('Azidin', 'Amankulov', 'azidinn', 'azidin@mail.ru', 'azidinmanka', '+996555555555', 2);
 
 
 insert into category(title)

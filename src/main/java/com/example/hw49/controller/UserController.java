@@ -18,7 +18,18 @@ public class UserController {
 
 
     @GetMapping("/{name}")
-    public Optional<User> findUserByName(@PathVariable String name){
+    public Optional<User> findUserByName(@PathVariable String name) {
         return userService.findUserByName(name);
     }
+
+    @GetMapping("/phone/{number}")
+    public Optional<User> findUserByPhoneNumber(@PathVariable String number) {
+        return userService.findUserByPhoneNumber(number);
+    }
+
+    @GetMapping("/email/{email}")
+    public Optional<User> findUserByEmail(@PathVariable String email) {
+        return userService.findUserByEmail(email);
+    }
+
 }

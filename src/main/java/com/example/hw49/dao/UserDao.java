@@ -20,4 +20,18 @@ public class UserDao {
             jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), name)
     ));
     }
+
+    public Optional<User> findUserByPhoneNumber(String number){
+        String sql = "select * from users where number = ?";
+        return Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), number)
+        ));
+    }
+
+    public Optional<User> findUserByEmail(String email){
+        String sql = "select * from users where email = ?";
+        return Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
+        ));
+    }
 }
