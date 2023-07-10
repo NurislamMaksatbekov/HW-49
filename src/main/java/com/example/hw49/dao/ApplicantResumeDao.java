@@ -2,7 +2,6 @@ package com.example.hw49.dao;
 
 
 import com.example.hw49.entity.ApplicantResume;
-import com.example.hw49.entity.EmployerResume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

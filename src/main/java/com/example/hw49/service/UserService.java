@@ -5,6 +5,7 @@ import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,5 +27,9 @@ public class UserService {
 
     public boolean checkUser(String email){
         return userDao.checkUser(email);
+    }
+
+    public List<User> getUserByResponds(Long vacancyId){
+        return userDao.getUserByResponds(vacancyId);
     }
 }

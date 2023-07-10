@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 public class WhoResponded {
     private Long id;
     private Long applicantId;
-    private Long jobId;
+    private Long vacancyId;
     private LocalDateTime dateTime;
 }

@@ -1,7 +1,5 @@
 package com.example.hw49.dao;
 
-import com.example.hw49.entity.EmployerResume;
-import com.example.hw49.entity.JobList;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
@@ -9,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -44,5 +43,13 @@ public class UserDao {
                 "else false " +
                 "end ";
         return jdbcTemplate.queryForObject(sql, Boolean.class, email);
+    }
+
+    public List<User> getUserByResponds(Long vacancyId){
+        String sql = "select * from USERS\n" +
+                "inner join VACANCY V on USERS.ID = V.AUTHOR_ID\n" +
+                "inner join RESPONDS R on V.ID = R.FOR_WHAT_RESPONDED\n" +
+                "where r.FOR_WHAT_RESPONDED = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), vacancyId);
     }
 }
