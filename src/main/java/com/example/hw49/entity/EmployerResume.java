@@ -12,5 +12,5 @@ public class EmployerResume {
     private int requiredMaxExp;
     private int requiredMinExp;
     private Category category;
-    private User user;
+    private Long authorId;
 }

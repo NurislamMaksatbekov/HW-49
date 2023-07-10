@@ -23,4 +23,8 @@ public class UserService {
     public Optional<User> findUserByEmail(String email){
         return userDao.findUserByEmail(email);
     }
+
+    public boolean checkUser(String email){
+        return userDao.checkUser(email);
+    }
 }

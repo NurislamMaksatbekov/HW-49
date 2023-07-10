@@ -1,5 +1,7 @@
 package com.example.hw49.dao;
 
+import com.example.hw49.entity.EmployerResume;
+import com.example.hw49.entity.JobList;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
@@ -33,5 +35,14 @@ public class UserDao {
         return Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
         ));
+    }
+
+    public boolean checkUser(String email){
+        String sql = "select case when exists(" +
+                "select * from users where email = ?) " +
+                "then true " +
+                "else false " +
+                "end ";
+        return jdbcTemplate.queryForObject(sql, Boolean.class, email);
     }
 }

@@ -10,6 +10,6 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String number;
-    private Type type;
+    private String phoneNumber;
+    private Long types;
 }
