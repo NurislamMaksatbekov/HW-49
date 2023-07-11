@@ -12,8 +12,8 @@ import java.util.List;
 public class VacancyService {
     private final VacancyDao vacancyDao;
 
-    public List<Vacancy> getVacancyByResponds(Long userId){
-       return vacancyDao.getVacancyByResponds(userId);
+    public List<Vacancy> getVacancyByResponds(String authorEmail){
+       return vacancyDao.getVacancyByResponds(authorEmail);
     }
 
     public List<Vacancy> getAllVacancy(){

@@ -23,7 +23,7 @@ public class UserDao {
     }
 
     public Optional<User> findUserByPhoneNumber(String number){
-        String sql = "select * from users where number = ?";
+        String sql = "select * from users where phone_number = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), number)
         ));
@@ -46,10 +46,9 @@ public class UserDao {
     }
 
     public List<User> getUserByResponds(Long vacancyId){
-        String sql = "select * from USERS\n" +
-                "inner join VACANCY V on USERS.ID = V.AUTHOR_ID\n" +
-                "inner join RESPONDS R on V.ID = R.FOR_WHAT_RESPONDED\n" +
-                "where r.FOR_WHAT_RESPONDED = ?";
+        String sql = "select * from users u " +
+                "inner join responds r on u.email = r.respond " +
+                "where for_what_responded = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), vacancyId);
     }
 }

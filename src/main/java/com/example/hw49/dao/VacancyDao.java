@@ -13,11 +13,11 @@ import java.util.List;
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public List<Vacancy> getVacancyByResponds(Long userId){
+    public List<Vacancy> getVacancyByResponds(String authorEmail){
         String sql = "select * from vacancy as v " +
                 "inner join responds as r on v.id = r.for_what_responded " +
-                "where r.who_responded = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), userId);
+                "where r.respond = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), authorEmail);
     }
 
     public List<Vacancy> getAllVacancy(){

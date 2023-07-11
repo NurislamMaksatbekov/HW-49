@@ -3,7 +3,7 @@ package com.example.hw49.entity;
 import lombok.Data;
 
 @Data
-public class ApplicantResume {
+public class Resume {
     private Long id;
     private String jobTitle;
     private double requiredSalary;
@@ -11,7 +11,8 @@ public class ApplicantResume {
     private String titleOfCompany;
     private String responsibilities;
     private String education;
-    private Contact contacts;
-    private Long authorId;
+    private boolean active;
+    private Long contacts;
+    private String authorEmail;
     private Long categoryId;
 }

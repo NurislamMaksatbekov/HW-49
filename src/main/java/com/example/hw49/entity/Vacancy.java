@@ -14,6 +14,7 @@ public class Vacancy {
     private int requiredMaxExp;
     private int requiredMinExp;
     private LocalDate dateOfPosted;
+    private boolean active;
     private Long categoryId;
-    private Long authorId;
+    private String authorEmail;
 }
