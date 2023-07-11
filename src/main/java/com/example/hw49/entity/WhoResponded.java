@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class WhoResponded {
     private Long id;
-    private Employee whoResponded;
-    private JobList forWhatResponded;
+    private String respond;
+    private Long vacancyId;
     private LocalDateTime dateTime;
 }
