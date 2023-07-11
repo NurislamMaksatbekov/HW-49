@@ -13,10 +13,12 @@ public class ResumeService {
     private final ResumeDao resumeDao;
 
     public List<Resume> findResumeByCategory(Long id){
+        // Поиск резюме по категории
         return resumeDao.findResumeByCategory(id);
     }
 
     public List<Resume> selectResumeByUser(String authorEmail){
+        // Выборка созданных пользователем резюме
         return resumeDao.selectResumesByUser(authorEmail);
     }
 }
