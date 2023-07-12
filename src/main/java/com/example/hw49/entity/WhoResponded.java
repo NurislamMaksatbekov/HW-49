@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class WhoResponded {
     private Long id;
-    private String respond;
-    private Long vacancyId;
+    private String whoResponded;
+    private Long forWhatResponded;
     private LocalDateTime dateTime;
 }

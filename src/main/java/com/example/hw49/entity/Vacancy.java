@@ -11,9 +11,10 @@ public class Vacancy {
     private String jobTitle;
     private double salary;
     private String jobDescription;
-    private int requiredMaxExp;
     private int requiredMinExp;
+    private int requiredMaxExp;
     private LocalDate dateOfPosted;
+    private LocalDate dateOfUpdated;
     private boolean active;
     private Long categoryId;
     private String authorEmail;

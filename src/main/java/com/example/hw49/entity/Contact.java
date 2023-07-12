@@ -7,7 +7,7 @@ public class Contact {
     private Long id;
     private String telegram;
     private String email;
-    private String number;
+    private String phoneNumber;
     private String facebookLink;
     private String linkedinLink;
 }

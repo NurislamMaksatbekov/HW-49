@@ -1,0 +1,88 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-foreign-key-to-chats
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: chats
+            baseColumnNames: user_email
+            constraintName: chats_table
+            referencedTableName: users
+            referencedColumnNames: email
+
+        - addForeignKeyConstraint:
+            baseTableName: experiences
+            baseColumnNames: company_id
+            constraintName: experiences_table
+            referencedTableName: companies
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: author_email
+            constraintName: resumes_table
+            referencedTableName: users
+            referencedColumnNames: email
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: experience_id
+            constraintName: resumes_table_1
+            referencedTableName: experiences
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: education_id
+            constraintName: resumes_table_2
+            referencedTableName: educations
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: category_id
+            constraintName: resumes_table_3
+            referencedTableName: categories
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: contact_id
+            constraintName: resumes_table_4
+            referencedTableName: contacts
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: type_id
+            constraintName: users_table
+            referencedTableName: types_of_account
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: category_id
+            constraintName: vacancies_table
+            referencedTableName: categories
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: author_email
+            constraintName: vacancies_table_1
+            referencedTableName: users
+            referencedColumnNames: email
+
+        - addForeignKeyConstraint:
+            baseTableName: responds
+            baseColumnNames: who_responded
+            constraintName: responds_table
+            referencedTableName: users
+            referencedColumnNames: email
+
+        - addForeignKeyConstraint:
+            baseTableName: responds
+            baseColumnNames: for_what_responded
+            constraintName: responds_table_1
+            referencedTableName: vacancies
+            referencedColumnNames: id
