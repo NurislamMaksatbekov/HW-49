@@ -87,27 +87,11 @@ databaseChangeLog:
             tableName: contacts_type
             columns:
               - column:
-                  name: id
-                  type: long
-                  autoIncrement: true
+                  name: type
+                  type: varchar(80)
                   constraints:
                     primaryKey: true
                     nullable: false
-              - column:
-                  name: phone_number
-                  type: varchar(50)
-              - column:
-                  name: telegram
-                  type: varchar(50)
-              - column:
-                  name: email
-                  type: varchar(50)
-              - column:
-                  name: facebook_link
-                  type: varchar(150)
-              - column:
-                  name: linkedin_link
-                  type: varchar(50)
 
   - changeSet:
       id: create-contacts-table
@@ -124,13 +108,20 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: type
+                  name: value
                   type: varchar(150)
                   constraints:
                     nullable: false
               - column:
                   name: contact_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resume_id
                   type: long
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: create-responds-table
@@ -208,11 +199,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: category_id
-                  type: long
-                  constraints:
-                    nullable: false
-              - column:
-                  name: contact_id
                   type: long
                   constraints:
                     nullable: false
