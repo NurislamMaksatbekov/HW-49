@@ -1,0 +1,17 @@
+package com.example.hw49.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum ContactType {
+
+    EMAIL("Email"),
+    TELEGRAM("Telegram"),
+    PHONE_NUMBER("Phone number"),
+    FACEBOOK_LINK("Facebook link"),
+    LINKEDIN_LINK("Linkedin link");
+
+    private String value;
+}

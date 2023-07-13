@@ -3,8 +3,7 @@ package com.example.hw49.entity;
 import lombok.Data;
 
 @Data
-public class Chat {
+public class ExperienceInfo {
     private Long id;
-    private String message;
-    private String userEmail;
+    private Long experienceId;
 }

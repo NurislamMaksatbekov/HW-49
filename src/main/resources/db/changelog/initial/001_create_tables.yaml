@@ -8,43 +8,30 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: long
+                  type: int
                   autoIncrement: true
                   constraints:
-                    unique: true
                     primaryKey: true
                     nullable: false
               - column:
-                  name: job_title
+                  name: title
                   type: varchar(100)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: category_id
-                  type: long
                   constraints:
                     nullable: false
 
   - changeSet:
-      id: create-type-of-account-table
+      id: create-types_of_account
       author: Nurislam
       changes:
         - createTable:
             tableName: types_of_account
             columns:
               - column:
-                  name: id
-                  type: long
-                  autoIncrement: true
-                  constraints:
-                    unique: true
-                    nullable: false
-                    primaryKey: true
-              - column:
                   name: type
                   type: varchar(50)
                   constraints:
                     nullable: false
+                    primaryKey: true
 
   - changeSet:
       id: create-users-table
@@ -87,24 +74,23 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: type_id
-                  type: long
+                  name: account_type
+                  type: varchar(50)
                   constraints:
                     nullable: false
 
   - changeSet:
-      id: create-contacts-table
+      id: create-contacts-type-table
       author: Nurislam
       changes:
         - createTable:
-            tableName: contacts
+            tableName: contacts_type
             columns:
               - column:
                   name: id
                   type: long
                   autoIncrement: true
                   constraints:
-                    unique: true
                     primaryKey: true
                     nullable: false
               - column:
@@ -124,6 +110,29 @@ databaseChangeLog:
                   type: varchar(50)
 
   - changeSet:
+      id: create-contacts-table
+      author: Nurislam
+      changes:
+        - createTable:
+            tableName: contacts
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contact_type
+                  type: long
+
+  - changeSet:
       id: create-responds-table
       author: Nurislam
       changes:
@@ -135,7 +144,6 @@ databaseChangeLog:
                   type: long
                   autoIncrement: true
                   constraints:
-                    unique: true
                     primaryKey: true
                     nullable: false
               - column:
@@ -144,16 +152,15 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: who_responded
+                  name: responder_email
                   type: varchar(50)
                   constraints:
                     nullable: false
               - column:
-                  name: for_what_responded
+                  name: responded_vacancy_id
                   type: varchar(50)
                   constraints:
                     nullable: false
-
 
   - changeSet:
       id: create-resumes-table
@@ -169,9 +176,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    unique: true
               - column:
-                  name: job_title
+                  name: title
                   type: varchar(50)
                   constraints:
                     nullable: false
@@ -191,12 +197,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: experience_id
+                  name: experience_info_id
                   type: long
                   constraints:
                     nullable: false
               - column:
-                  name: education_id
+                  name: education_info_id
                   type: long
                   constraints:
                     nullable: false
@@ -212,51 +218,6 @@ databaseChangeLog:
                     nullable: false
 
   - changeSet:
-      id: create-chats-table
-      author: Nurislam
-      changes:
-        - createTable:
-            tableName: chats
-            columns:
-              - column:
-                  name: id
-                  type: long
-                  autoIncrement: true
-                  constraints:
-                    nullable: false
-                    unique: true
-                    primaryKey: true
-              - column:
-                  name: message
-                  type: text
-                  constraints:
-                    nullable: false
-              - column:
-                  name: user_email
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-
-  - changeSet:
-      id: create-company-table
-      author: Nurislam
-      changes:
-        - createTable:
-            tableName: companies
-            columns:
-              - column:
-                  name: id
-                  type: long
-                  autoIncrement: true
-                  constraints:
-                    nullable: false
-                    unique: true
-                    primaryKey: true
-              - column:
-                  name: company_name
-                  type: varchar(50)
-
-  - changeSet:
       id: create-educations-table
       author: Nurislam
       changes:
@@ -268,7 +229,6 @@ databaseChangeLog:
                   type: long
                   autoIncrement: true
                   constraints:
-                    unique: true
                     nullable: false
                     primaryKey: true
               - column:
@@ -300,8 +260,12 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     nullable: false
-                    unique: true
                     primaryKey: true
+              - column:
+                  name: company_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
               - column:
                   name: year_of_work
                   type: varchar(50)
@@ -310,11 +274,6 @@ databaseChangeLog:
               - column:
                   name: responsibilities
                   type: text
-                  constraints:
-                    nullable: false
-              - column:
-                  name: company_id
-                  type: long
                   constraints:
                     nullable: false
 
@@ -331,10 +290,9 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     nullable: false
-                    unique: true
                     primaryKey: true
               - column:
-                  name: job_title
+                  name: title
                   type: varchar(100)
                   constraints:
                     nullable: false
@@ -375,11 +333,50 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: category_id
-                  type: long
+                  type: int
                   constraints:
                     nullable: false
               - column:
                   name: author_email
                   type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: create-education_info_table
+      author: Nurislam
+      changes:
+        - createTable:
+            tableName: educations_info
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: education_id
+                  type: long
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-experience_info_table
+      author: Nurislam
+      changes:
+        - createTable:
+            tableName: experiences_info
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: experience_id
+                  type: long
                   constraints:
                     nullable: false
