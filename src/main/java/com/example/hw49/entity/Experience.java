@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class Experience {
     private Long id;
-    private String yearOfWork;
+    private String companyName;
+    private String workPeriod;
     private String responsibilities;
-    private Long companyId;
 
 }

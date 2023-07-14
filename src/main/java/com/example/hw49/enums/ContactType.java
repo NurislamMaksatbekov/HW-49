@@ -1,4 +1,4 @@
-package com.example.hw49.entity;
+package com.example.hw49.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,5 +13,5 @@ public enum ContactType {
     FACEBOOK_LINK("Facebook link"),
     LINKEDIN_LINK("Linkedin link");
 
-    private String value;
+    private String type;
 }

@@ -1,4 +1,4 @@
-package com.example.hw49.entity;
+package com.example.hw49.enums;
 
 import lombok.Getter;
 import lombok.AllArgsConstructor;

@@ -253,7 +253,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: year_of_work
+                  name: work_period
                   type: varchar(50)
                   constraints:
                     nullable: false
