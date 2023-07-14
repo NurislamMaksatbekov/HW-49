@@ -15,6 +15,7 @@ target/
 
 ### IntelliJ IDEA ###
 .db
+.logs
 .idea
 *.iws
 *.iml
@@ -35,3 +36,5 @@ build/
 /db/
 /db/
 /db/
+/logs/
+/logs/

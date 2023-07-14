@@ -4,10 +4,9 @@ import lombok.Data;
 
 @Data
 public class Contact {
-    private Long id;
-    private String telegram;
-    private String email;
-    private String number;
-    private String facebookLink;
-    private String linkedinLink;
+    private int id;
+    private String value;
+    private String contactType;
+    private Long resumeId;
+
 }

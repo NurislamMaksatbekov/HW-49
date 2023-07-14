@@ -1,0 +1,120 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: add-foreign-key-to-contacts
+      author: Nurislam
+      changes:
+      - addForeignKeyConstraint:
+          baseTableName: contacts
+          baseColumnNames: contact_type
+          constraintName: fk_contacts_contact_type
+          referencedTableName: contacts_type
+          referencedColumnNames: type
+
+      - addForeignKeyConstraint:
+            baseTableName: contacts
+            baseColumnNames: resume_id
+            constraintName: fk_resume_id
+            referencedTableName: resumes
+            referencedColumnNames: id
+
+  - changeSet:
+      id: add-foreign-key-to-users
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: account_type
+            constraintName: fk_users_account_type
+            referencedTableName: types_of_account
+            referencedColumnNames: type
+
+  - changeSet:
+      id: add-foreign-key-to-resumes
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: author_email
+            constraintName: fk_resumes_author_email
+            referencedTableName: users
+            referencedColumnNames: email
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: experience_info_id
+            constraintName: fk_resumes_experience_info
+            referencedTableName: experiences_info
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: education_info_id
+            constraintName: fk_resumes_education_info
+            referencedTableName: educations_info
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: category_id
+            constraintName: fk_resumes_category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+
+  - changeSet:
+      id: add-foreign-key-to-vacancies
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: category_id
+            constraintName: fk_vacancies_category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: author_email
+            constraintName: fk_vacancies_author_email
+            referencedTableName: users
+            referencedColumnNames: email
+
+  - changeSet:
+      id: add-foreign-key-to-responds
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: responds
+            baseColumnNames: responder_email
+            constraintName: fk_responds_responder_email
+            referencedTableName: users
+            referencedColumnNames: email
+
+        - addForeignKeyConstraint:
+            baseTableName: responds
+            baseColumnNames: responded_vacancy_id
+            constraintName: fk_responds_responded_vacancy_id
+            referencedTableName: vacancies
+            referencedColumnNames: id
+
+  - changeSet:
+      id: add-foreign-key-to-educations_info
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: educations_info
+            baseColumnNames: education_id
+            constraintName: fk_educations_info_education_id
+            referencedTableName: educations
+            referencedColumnNames: id
+
+  - changeSet:
+      id: add-foreign-key-to-experiences_info
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: experiences_info
+            baseColumnNames: experience_id
+            constraintName: fk_experiences_info_experience_id
+            referencedTableName: experiences
+            referencedColumnNames: id

@@ -1,16 +1,17 @@
-package com.example.hw49.entity;
+package com.example.hw49.dto;
 
+import com.example.hw49.enums.Type;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class User {
+public class UserDto {
+    private Long id;
     private String name;
     private String surname;
     private String username;
     private String email;
-    private String password;
     private String photo;
     private String phoneNumber;
     private Long type;
