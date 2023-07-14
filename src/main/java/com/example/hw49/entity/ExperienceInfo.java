@@ -2,8 +2,10 @@ package com.example.hw49.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class Category {
+public class ExperienceInfo {
     private Long id;
-    private String title;
+    private Long experience;
 }

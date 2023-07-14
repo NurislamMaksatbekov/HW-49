@@ -1,18 +1,17 @@
 package com.example.hw49.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class Resume {
     private Long id;
-    private String jobTitle;
+    private String title;
     private double requiredSalary;
-    private String experience;
-    private String titleOfCompany;
-    private String responsibilities;
-    private String education;
     private boolean active;
-    private Long contacts;
     private String authorEmail;
+    private Long experienceInfoId;
+    private Long educationInfoId;
     private Long categoryId;
 }

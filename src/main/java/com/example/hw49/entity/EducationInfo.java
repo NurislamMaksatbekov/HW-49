@@ -3,7 +3,7 @@ package com.example.hw49.entity;
 import lombok.Data;
 
 @Data
-public class Category {
+public class EducationInfo {
     private Long id;
-    private String title;
+    private Long educationId;
 }
