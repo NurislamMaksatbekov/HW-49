@@ -1,6 +1,7 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.UserDao;
+import com.example.hw49.dto.UserDto;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,19 @@ public class UserService {
         return userDao.findUserByPhoneNumber(number);
     }
 
-    public Optional<User> findUserByEmail(String email){
+    public UserDto findUserByEmail(String email){
         // Поиск пользователей по адресу почты
-        return userDao.findUserByEmail(email);
+        User user = userDao.findUserByEmail(email);
+        return UserDto.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .photo(user.getPhoto())
+                .phoneNumber(user.getPhoneNumber())
+                .type(user.getType())
+                .build();
+
     }
 
     public boolean checkUser(String email){

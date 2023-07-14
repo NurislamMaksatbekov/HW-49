@@ -14,5 +14,5 @@ public class UserDto {
     private String email;
     private String photo;
     private String phoneNumber;
-    private TypeDto type;
+    private Long type;
 }

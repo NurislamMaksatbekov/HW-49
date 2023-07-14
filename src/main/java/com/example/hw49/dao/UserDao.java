@@ -2,6 +2,7 @@ package com.example.hw49.dao;
 
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,12 +29,18 @@ public class UserDao {
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), number)
         ));
     }
-
-    public Optional<User> findUserByEmail(String email){
+    @SneakyThrows
+    public User findUserByEmail(String email){
         String sql = "select * from users where email = ?";
-        return Optional.ofNullable(DataAccessUtils.singleResult(
+        Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
         ));
+
+        if (mayBeUser.isEmpty()) {
+            throw new Exception("User not found");
+        }
+
+        return mayBeUser.get();
     }
 
     public boolean checkUser(String email){
@@ -47,8 +54,8 @@ public class UserDao {
 
     public List<User> getUserByResponds(Long vacancyId){
         String sql = "select * from users u " +
-                "inner join responds r on u.email = r.respond " +
-                "where for_what_responded = ?";
+                "inner join responds r on u.email = r.RESPONDER_EMAIL " +
+                "where RESPONDED_VACANCY_ID = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), vacancyId);
     }
 }

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 public class Vacancy {
     private Long id;
-    private String jobTitle;
+    private String title;
     private double salary;
     private String jobDescription;
     private int requiredMinExp;

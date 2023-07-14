@@ -8,5 +8,4 @@ import lombok.Data;
 public class ContactDto {
     private Long id;
     private String value;
-    private ContactTypeDto contactType;
 }
