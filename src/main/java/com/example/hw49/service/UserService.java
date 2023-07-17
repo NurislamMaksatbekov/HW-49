@@ -24,10 +24,10 @@ public class UserService {
         return userDao.findUserByPhoneNumber(number);
     }
 
-    public UserDto findUserByEmail(String email){
+    public String findUserByEmail(String email){
         // Поиск пользователей по адресу почты
         User user = userDao.findUserByEmail(email);
-        return UserDto.builder()
+         return UserDto.builder()
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
@@ -35,7 +35,7 @@ public class UserService {
                 .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
                 .type(user.getType())
-                .build();
+                .build().toString();
 
     }
 

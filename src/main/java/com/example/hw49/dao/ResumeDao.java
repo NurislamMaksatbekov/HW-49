@@ -2,8 +2,10 @@ package com.example.hw49.dao;
 
 
 import com.example.hw49.dto.ResumeDto;
+import com.example.hw49.entity.Category;
 import com.example.hw49.entity.Resume;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,33 +34,32 @@ public class ResumeDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), authorEmail);
     }
 
-    public List<Resume> findResumesByAuthor(Long authorId){
-        String sql = "select * from " +
-                "resumes where " +
-                "author_email = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), authorId);
-    }
-
-    public Optional<Resume> findResumeById(Long resumeId){
+    @SneakyThrows
+    public Resume findResumeById(Long resumeId) {
         String sql = "select * from" +
                 " resumes where id = ?";
-        return Optional.ofNullable(DataAccessUtils.singleResult(
+        Optional<Resume> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), resumeId)
         ));
+
+        if (mayBeUser.isEmpty()) {
+            throw new Exception("Category not found");
+        }
+        return mayBeUser.get();
     }
 
     public void createNewResume(Resume resume){
-        String sql = "insert into resumes(TITLE, REQUIRED_SALARY, ACTIVE, AUTHOR_EMAIL, EXPERIENCE_INFO_ID, EDUCATION_INFO_ID, CATEGORY_ID) " +
+        String sql = "insert into resumes(TITLE, CATEGORY_ID, REQUIRED_SALARY, AUTHOR_EMAIL, EXPERIENCE_ID, EDUCATION_ID, ACTIVE) " +
                 "values (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, resume.getTitle());
-            ps.setDouble(2, resume.getRequiredSalary());
-            ps.setBoolean(3, resume.isActive());
-            ps.setString(4, resume.getAuthorEmail().toString());
-            ps.setLong(5, resume.getExperienceInfoId());
-            ps.setLong(6, resume.getEducationInfoId());
-            ps.setLong(7, resume.getCategoryId());
+            ps.setLong(2, resume.getCategoryId());
+            ps.setDouble(3, resume.getRequiredSalary());
+            ps.setString(4, resume.getAuthorEmail());
+            ps.setLong(5, resume.getExperienceId());
+            ps.setLong(6, resume.getEducationId());
+            ps.setBoolean(7, resume.isActive());
             return ps;
         });
     }

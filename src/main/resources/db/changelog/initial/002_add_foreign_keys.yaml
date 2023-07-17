@@ -42,16 +42,16 @@ databaseChangeLog:
 
         - addForeignKeyConstraint:
             baseTableName: resumes
-            baseColumnNames: experience_info_id
-            constraintName: fk_resumes_experience_info
-            referencedTableName: experiences_info
+            baseColumnNames: experience_id
+            constraintName: fk_resumes_experience_id
+            referencedTableName: experiences
             referencedColumnNames: id
 
         - addForeignKeyConstraint:
             baseTableName: resumes
-            baseColumnNames: education_info_id
-            constraintName: fk_resumes_education_info
-            referencedTableName: educations_info
+            baseColumnNames: education_id
+            constraintName: fk_resumes_education_id
+            referencedTableName: educations
             referencedColumnNames: id
 
         - addForeignKeyConstraint:
@@ -95,26 +95,4 @@ databaseChangeLog:
             baseColumnNames: responded_vacancy_id
             constraintName: fk_responds_responded_vacancy_id
             referencedTableName: vacancies
-            referencedColumnNames: id
-
-  - changeSet:
-      id: add-foreign-key-to-educations_info
-      author: Nurislam
-      changes:
-        - addForeignKeyConstraint:
-            baseTableName: educations_info
-            baseColumnNames: education_id
-            constraintName: fk_educations_info_education_id
-            referencedTableName: educations
-            referencedColumnNames: id
-
-  - changeSet:
-      id: add-foreign-key-to-experiences_info
-      author: Nurislam
-      changes:
-        - addForeignKeyConstraint:
-            baseTableName: experiences_info
-            baseColumnNames: experience_id
-            constraintName: fk_experiences_info_experience_id
-            referencedTableName: experiences
             referencedColumnNames: id
