@@ -64,5 +64,37 @@ public class ResumeDao {
         });
     }
 
+    public void changeResume(Resume resume) {
+        String sql = "UPDATE RESUMES " +
+                "SET TITLE = ?, CATEGORY_ID = ?, REQUIRED_SALARY = ?, " +
+                "    AUTHOR_EMAIL = ?, EXPERIENCE_ID = ?, EDUCATION_ID = ?, ACTIVE = ? " +
+                "WHERE ID = ?";
+
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, resume.getTitle());
+            ps.setLong(2, resume.getCategoryId());
+            ps.setDouble(3, resume.getRequiredSalary());
+            ps.setString(4, resume.getAuthorEmail());
+            ps.setLong(5, resume.getExperienceId());
+            ps.setLong(6, resume.getEducationId());
+            ps.setBoolean(7, resume.isActive());
+            ps.setLong(8, resume.getId());
+            return ps;
+        });
+    }
+
+    public void deleteResume(Long resumeId) {
+        String sql = "DELETE FROM RESUMES WHERE ID = ?";
+
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setLong(1, resumeId);
+            return ps;
+        });
+    }
+
+
+
 
 }

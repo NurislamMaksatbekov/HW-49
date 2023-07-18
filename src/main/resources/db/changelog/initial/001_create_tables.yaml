@@ -121,6 +121,7 @@ databaseChangeLog:
                   name: resume_id
                   type: long
                   constraints:
+                    deleteCascade: true
                     nullable: false
 
   - changeSet:
@@ -186,21 +187,25 @@ databaseChangeLog:
                   name: author_email
                   type: varchar(50)
                   constraints:
+                    deleteCascade: true
                     nullable: false
               - column:
                   name: experience_id
                   type: long
                   constraints:
+                    deleteCascade: true
                     nullable: false
               - column:
                   name: education_id
                   type: long
                   constraints:
+                    deleteCascade: true
                     nullable: false
               - column:
                   name: category_id
                   type: long
                   constraints:
+                    deleteCascade: true
                     nullable: false
 
   - changeSet:

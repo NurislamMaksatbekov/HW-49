@@ -15,6 +15,7 @@ databaseChangeLog:
             baseTableName: contacts
             baseColumnNames: resume_id
             constraintName: fk_resume_id
+            deleteCascade: true
             referencedTableName: resumes
             referencedColumnNames: id
 
@@ -37,6 +38,7 @@ databaseChangeLog:
             baseTableName: resumes
             baseColumnNames: author_email
             constraintName: fk_resumes_author_email
+            deleteCascade: true
             referencedTableName: users
             referencedColumnNames: email
 
@@ -44,6 +46,7 @@ databaseChangeLog:
             baseTableName: resumes
             baseColumnNames: experience_id
             constraintName: fk_resumes_experience_id
+            deleteCascade: true
             referencedTableName: experiences
             referencedColumnNames: id
 
@@ -51,6 +54,7 @@ databaseChangeLog:
             baseTableName: resumes
             baseColumnNames: education_id
             constraintName: fk_resumes_education_id
+            deleteCascade: true
             referencedTableName: educations
             referencedColumnNames: id
 
@@ -58,6 +62,7 @@ databaseChangeLog:
             baseTableName: resumes
             baseColumnNames: category_id
             constraintName: fk_resumes_category_id
+            deleteCascade: true
             referencedTableName: categories
             referencedColumnNames: id
 

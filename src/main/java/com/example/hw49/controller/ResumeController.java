@@ -30,5 +30,15 @@ public class ResumeController {
         resumeService.createResume(resume);
     }
 
+    @PostMapping("/changeResume")
+    public void changeResume(@RequestBody ResumeDto resume){
+        resumeService.changeResume(resume);
+    }
+
+    @DeleteMapping("/deleteResume/{resumeId}")
+    public void deleteResume(@PathVariable Long resumeId){
+        resumeService.deleteResume(resumeId);
+    }
+
 }
 
