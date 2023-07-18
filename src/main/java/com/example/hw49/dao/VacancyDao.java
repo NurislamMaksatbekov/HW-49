@@ -2,6 +2,7 @@ package com.example.hw49.dao;
 
 import com.example.hw49.entity.Vacancy;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 @Component
+@Slf4j
+
 @RequiredArgsConstructor
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;

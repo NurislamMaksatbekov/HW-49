@@ -6,6 +6,7 @@ import com.example.hw49.entity.Category;
 import com.example.hw49.entity.Resume;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Slf4j
+
 @RequiredArgsConstructor
 public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
