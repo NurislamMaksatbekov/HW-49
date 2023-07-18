@@ -16,19 +16,19 @@ public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
 
     public List<Vacancy> getVacancyByResponds(String authorEmail){
-        String sql = "select * from vacancy as v " +
+        String sql = "select * from vacancies as v " +
                 "inner join responds as r on v.id = r.for_what_responded " +
                 "where r.respond = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), authorEmail);
     }
 
     public List<Vacancy> getAllVacancy(){
-        String sql = "select * from vacancy";
+        String sql = "select * from vacancies";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class));
     }
 
     public List<Vacancy> getVacancyByCategory(Long categoryId){
-        String sql = "select * from vacancy " +
+        String sql = "select * from vacancies " +
                 "where category_id = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), categoryId);
     }

@@ -60,7 +60,7 @@ public class UserService {
     }
 
     public UserDto findApplicant(String email){
-        User user = userDao.findUserByEmail(email);
+        User user = userDao.findApplicant(email);
         return UserDto.builder()
                 .name(user.getName())
                 .surname(user.getSurname())
@@ -71,4 +71,19 @@ public class UserService {
                 .type(user.getType())
                 .build();
     }
+
+    public UserDto findEmployer(String email){
+        User user = userDao.findEmployer(email);
+        return UserDto.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .photo(user.getPhoto())
+                .phoneNumber(user.getPhoneNumber())
+                .type(user.getType())
+                .build();
+    }
+
+
 }

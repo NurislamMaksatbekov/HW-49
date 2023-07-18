@@ -23,5 +23,5 @@ public class VacancyDto {
     private LocalDate dateOfPosted;
     private LocalDate dateOfUpdated;
     private boolean active;
-    private Category category;
+    private CategoryDto category;
 }
