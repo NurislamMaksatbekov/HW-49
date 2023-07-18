@@ -1,10 +1,11 @@
 package com.example.hw49.entity;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
     private String name;
     private String surname;
@@ -13,5 +14,5 @@ public class User {
     private String password;
     private String photo;
     private String phoneNumber;
-    private Long type;
+    private String accountType;
 }

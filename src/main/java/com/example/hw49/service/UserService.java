@@ -14,17 +14,17 @@ import java.util.Optional;
 public class UserService {
     private final UserDao userDao;
 
-    public Optional<User> findUserByName(String name){
+    public Optional<User> findUserByName(String name) {
         // Поиск пользователей по имени
         return userDao.findUserByName(name);
     }
 
-    public Optional<User> findUserByPhoneNumber(String number){
+    public Optional<User> findUserByPhoneNumber(String number) {
         // Поиск пользователей по номеру телефона
         return userDao.findUserByPhoneNumber(number);
     }
 
-    public UserDto findUserByEmail(String email){
+    public String findUserByEmail(String email) {
         // Поиск пользователей по адресу почты
         User user = userDao.findUserByEmail(email);
         return UserDto.builder()
@@ -34,18 +34,69 @@ public class UserService {
                 .email(user.getEmail())
                 .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
-                .type(user.getType())
-                .build();
+                .accountType(user.getAccountType())
+                .build().toString();
 
     }
 
-    public boolean checkUser(String email){
+    public boolean checkUser(String email) {
         // Проверка на наличие пользователя в системе по email
         return userDao.checkUser(email);
     }
 
-    public List<User> getUserByResponds(Long vacancyId){
-        // Выборка откликнувшихся соискателей на вакансию.
-        return userDao.getUserByResponds(vacancyId);
+    public List<UserDto> getUserByResponds(Long vacancyId) {
+        List<User> users = userDao.getUserByResponds(vacancyId);
+
+        return users.stream()
+                .map(u -> UserDto.builder()
+                        .name(u.getName())
+                        .surname(u.getSurname())
+                        .username(u.getUsername())
+                        .email(u.getEmail())
+                        .photo(u.getPhoto())
+                        .phoneNumber(u.getPhoneNumber())
+                        .accountType(u.getAccountType())
+                        .build()).toList();
     }
+
+    public UserDto findApplicant(String email) {
+        User user = userDao.findApplicant(email);
+        return UserDto.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .photo(user.getPhoto())
+                .phoneNumber(user.getPhoneNumber())
+                .accountType(user.getAccountType())
+                .build();
+    }
+
+    public UserDto findEmployer(String email) {
+        User user = userDao.findEmployer(email);
+        return UserDto.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .photo(user.getPhoto())
+                .phoneNumber(user.getPhoneNumber())
+                .accountType(user.getAccountType())
+                .build();
+    }
+
+    public void addNewUser(UserDto user) {
+        userDao.addNewUser(User.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .photo(user.getPhoto())
+                .phoneNumber(user.getPhoneNumber())
+                .accountType(user.getAccountType())
+                .build());
+    }
+
+
 }

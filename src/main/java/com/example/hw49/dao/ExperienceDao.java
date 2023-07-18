@@ -1,6 +1,7 @@
 package com.example.hw49.dao;
 
-import com.example.hw49.entity.Category;
+import com.example.hw49.entity.Education;
+import com.example.hw49.entity.Experience;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -14,23 +15,21 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CategoryDao {
+
+public class ExperienceDao {
     private final JdbcTemplate jdbcTemplate;
 
     @SneakyThrows
-    public Category getCategoryById(Long id){
-        String sql = "select * from categories where id = ?";
-
-        Optional<Category> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class), id)
+    public Experience getExperienceById(Long id){
+        String sql = "select * from experiences where id = ?";
+        Optional<Experience> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Experience.class), id)
         ));
 
         if (mayBeUser.isEmpty()) {
-            throw new Exception("Category not found");
+            throw new Exception("Experience not found");
         }
 
         return mayBeUser.get();
     }
-
-
 }
