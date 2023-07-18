@@ -8,6 +8,7 @@ databaseChangeLog:
           baseTableName: contacts
           baseColumnNames: contact_type
           constraintName: fk_contacts_contact_type
+          deleteCascade: true
           referencedTableName: contacts_type
           referencedColumnNames: type
 
@@ -27,6 +28,7 @@ databaseChangeLog:
             baseTableName: users
             baseColumnNames: account_type
             constraintName: fk_users_account_type
+            deleteCascade: true
             referencedTableName: types_of_account
             referencedColumnNames: type
 
@@ -74,6 +76,7 @@ databaseChangeLog:
             baseTableName: vacancies
             baseColumnNames: category_id
             constraintName: fk_vacancies_category_id
+            deleteCascade: true
             referencedTableName: categories
             referencedColumnNames: id
 
@@ -81,6 +84,7 @@ databaseChangeLog:
             baseTableName: vacancies
             baseColumnNames: author_email
             constraintName: fk_vacancies_author_email
+            deleteCascade: true
             referencedTableName: users
             referencedColumnNames: email
 
@@ -92,6 +96,7 @@ databaseChangeLog:
             baseTableName: responds
             baseColumnNames: responder_email
             constraintName: fk_responds_responder_email
+            deleteCascade: true
             referencedTableName: users
             referencedColumnNames: email
 
@@ -99,5 +104,6 @@ databaseChangeLog:
             baseTableName: responds
             baseColumnNames: responded_vacancy_id
             constraintName: fk_responds_responded_vacancy_id
+            deleteCascade: true
             referencedTableName: vacancies
             referencedColumnNames: id
