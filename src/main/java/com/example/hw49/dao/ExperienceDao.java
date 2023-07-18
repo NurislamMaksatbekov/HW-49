@@ -4,6 +4,7 @@ import com.example.hw49.entity.Education;
 import com.example.hw49.entity.Experience;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
+
 public class ExperienceDao {
     private final JdbcTemplate jdbcTemplate;
 

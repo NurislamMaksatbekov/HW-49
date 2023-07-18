@@ -15,7 +15,6 @@ public class Resume {
     private Long experienceId;
     private Long educationId;
     private Long categoryId;
-
 }
 
 

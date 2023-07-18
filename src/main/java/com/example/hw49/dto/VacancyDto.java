@@ -1,24 +1,27 @@
-package com.example.hw49.entity;
+package com.example.hw49.dto;
 
-
-import lombok.*;
+import com.example.hw49.entity.Category;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Vacancy {
+@AllArgsConstructor
+@NoArgsConstructor
+public class VacancyDto {
     private Long id;
     private String title;
     private double salary;
+    private String authorEmail;
     private String jobDescription;
     private int requiredMinExp;
     private int requiredMaxExp;
     private LocalDate dateOfPosted;
     private LocalDate dateOfUpdated;
     private boolean active;
-    private Long categoryId;
-    private String authorEmail;
+    private CategoryDto category;
 }
