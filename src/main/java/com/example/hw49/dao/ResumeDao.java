@@ -27,6 +27,12 @@ public class ResumeDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), categoryId);
     }
 
+    public List<Resume> findResumeByTitle(String title){
+        String sql = "select * from " +
+                "resumes where title = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), title);
+    }
+
     public List<Resume> selectResumesByUser(String authorEmail){
         String sql = "select * from" +
                 " resumes where" +
@@ -46,6 +52,11 @@ public class ResumeDao {
             throw new Exception("Category not found");
         }
         return mayBeUser.get();
+    }
+
+    public List<Resume> findAllResumes(){
+        String sql = "select * from resumes";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
     }
 
     public void createNewResume(Resume resume){

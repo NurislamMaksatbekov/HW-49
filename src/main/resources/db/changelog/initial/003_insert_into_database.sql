@@ -27,7 +27,7 @@ insert into users(name, surname, username, email, password, photo, phone_number,
 values ('CWX.TRANSPORTATION', null, 'cwxxxx', 'cwx@mail.ru', 'qwerty', null, '+996502271004',
         (select TYPE from TYPES_OF_ACCOUNT where type = 'Employer')),
        ('Azidin', 'Amankulov', 'azidinn', 'azidin@mail.ru', 'azidinmanka', null, '+996555555555',
-        (select TYPE from TYPES_OF_ACCOUNT where type = 'Employer'));
+        (select TYPE from TYPES_OF_ACCOUNT where type = 'Applicant'));
 
 insert into VACANCIES(title, salary, job_description, required_min_experience, required_max_experience, date_of_posted,
                       date_of_updated, active, category_id, author_email)

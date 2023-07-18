@@ -24,6 +24,15 @@ public class ResumeController {
         return resumeService.findResumeById(resumeId);
     }
 
+    @GetMapping("/allResumes")
+    public List<ResumeDto> findAllResumes(){
+        return resumeService.findAllResumes();
+    }
+
+    @GetMapping("/findResumeByTitle{title}")
+    public List<ResumeDto> findResumeByTitle(@PathVariable String title){
+        return resumeService.findResumeByTitle(title);
+    }
 
     @PostMapping("/createResume")
     public void createResume(@RequestBody ResumeDto resume){

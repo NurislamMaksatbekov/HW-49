@@ -58,4 +58,20 @@ public class UserDao {
                 "where RESPONDED_VACANCY_ID = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), vacancyId);
     }
+
+    @SneakyThrows
+    public User findApplicant(String email){
+        String sql = "select * from USERS u\n" +
+                "where ACCOUNT_TYPE = 'Applicant'\n" +
+                "and EMAIL = 'azidin@mail.ru'";
+        Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
+        ));
+
+        if (mayBeUser.isEmpty()) {
+            throw new Exception("User not found");
+        }
+
+        return mayBeUser.get();
+    }
 }

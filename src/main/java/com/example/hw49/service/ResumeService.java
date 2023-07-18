@@ -23,6 +23,23 @@ public class ResumeService {
         return resumeDao.findResumeByCategory(id);
     }
 
+    public List<ResumeDto> findAllResumes(){
+        List<Resume> resumes  = resumeDao.findAllResumes();
+
+        return resumes.stream()
+                .map(e -> ResumeDto.builder()
+                        .id(e.getId())
+                        .title(e.getTitle())
+                        .requiredSalary(e.getRequiredSalary())
+                        .category(categoryService.getCategoryById(e.getCategoryId()))
+                        .authorEmail(userService.findUserByEmail(e.getAuthorEmail()))
+                        .educations(educationService.findEducationById(e.getEducationId()))
+                        .experiences(experienceService.findExperienceById(e.getExperienceId()))
+                        .active(e.isActive())
+                        .build())
+                .toList();
+    }
+
 
     public List<ResumeDto> selectResumeByUser(String authorEmail) {
         // Выборка созданных пользователем резюме
@@ -54,7 +71,22 @@ public class ResumeService {
                 .experiences(experienceService.findExperienceById(resume.getExperienceId()))
                 .active(resume.isActive())
                 .build();
+    }
 
+    public List<ResumeDto> findResumeByTitle(String title){
+        List<Resume> resumes = resumeDao.findResumeByTitle(title);
+        return resumes.stream()
+                .map(e -> ResumeDto.builder()
+                        .id(e.getId())
+                        .title(e.getTitle())
+                        .requiredSalary(e.getRequiredSalary())
+                        .category(categoryService.getCategoryById(e.getCategoryId()))
+                        .authorEmail(userService.findUserByEmail(e.getAuthorEmail()))
+                        .educations(educationService.findEducationById(e.getEducationId()))
+                        .experiences(experienceService.findExperienceById(e.getExperienceId()))
+                        .active(e.isActive())
+                        .build())
+                .toList();
     }
 
     public void createResume(ResumeDto resumeDto) {
