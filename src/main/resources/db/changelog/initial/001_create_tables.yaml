@@ -188,12 +188,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: experience_info_id
+                  name: experience_id
                   type: long
                   constraints:
                     nullable: false
               - column:
-                  name: education_info_id
+                  name: education_id
                   type: long
                   constraints:
                     nullable: false
@@ -325,44 +325,5 @@ databaseChangeLog:
               - column:
                   name: author_email
                   type: varchar(50)
-                  constraints:
-                    nullable: false
-  - changeSet:
-      id: create-education_info_table
-      author: Nurislam
-      changes:
-        - createTable:
-            tableName: educations_info
-            columns:
-              - column:
-                  name: id
-                  type: long
-                  autoIncrement: true
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-              - column:
-                  name: education_id
-                  type: long
-                  constraints:
-                    nullable: false
-
-  - changeSet:
-      id: create-experience_info_table
-      author: Nurislam
-      changes:
-        - createTable:
-            tableName: experiences_info
-            columns:
-              - column:
-                  name: id
-                  type: long
-                  autoIncrement: true
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-              - column:
-                  name: experience_id
-                  type: long
                   constraints:
                     nullable: false

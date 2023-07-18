@@ -23,18 +23,6 @@ insert into EXPERIENCES(COMPANY_NAME, WORK_PERIOD, RESPONSIBILITIES)
 values ('FastX', 'FROM 2018 TO 2023', 'BE FAST'),
        ('NYC.HOSPITAL', 'FROM 2022 TO 2023', 'BE CAREFULLY');
 
-
-insert into EDUCATIONS_INFO (EDUCATION_ID)
-values ((select id from EDUCATIONS where EDUCATION = 'DRIVER')),
-       ((select id from EDUCATIONS where EDUCATION = 'SERGENT'));
-
-
-insert into EXPERIENCES_INFO (EXPERIENCE_ID)
-values ((select id from EXPERIENCES where COMPANY_NAME = 'FastX')),
-       ((select id from EXPERIENCES where COMPANY_NAME = 'NYC.HOSPITAL'));
-
-
-
 insert into users(name, surname, username, email, password, photo, phone_number, ACCOUNT_TYPE)
 values ('CWX.TRANSPORTATION', null, 'cwxxxx', 'cwx@mail.ru', 'qwerty', null, '+996502271004',
         (select TYPE from TYPES_OF_ACCOUNT where type = 'Employer')),
@@ -53,14 +41,14 @@ insert into RESPONDS(time_of_responds, responder_email, responded_vacancy_id)
 VALUES (now(), (select email from users where name = 'Azidin'), (select id from VACANCIES where TITLE = 'Taxi')),
        (now(), (select email from users where name = 'Azidin'), (select id from VACANCIES where TITLE = 'Sergent'));
 
-insert into RESUMES(title, required_salary, active, author_email, experience_info_id, education_info_id, category_id)
+insert into RESUMES(title, required_salary, active, author_email, experience_id, education_id, category_id)
 VALUES ('TAXI', 1900, true, (select email from USERS where NAME = 'Azidin'),
-        (select id from EXPERIENCES_INFO where EXPERIENCE_ID = 1),
-        (select id from EDUCATIONS_INFO where EDUCATION_id = 1),
+        (select id from EXPERIENCES where company_name = 'FastX'),
+        (select id from EDUCATIONS where education = 'DRIVER'),
         (select id from CATEGORIES where TITLE = 'TAXI')),
        ('SERGENT', 3500, true, (select email from USERS where NAME = 'Azidin'),
-        (select id from EXPERIENCES_INFO where EXPERIENCE_ID = 2),
-        (select id from EDUCATIONS_INFO where EDUCATION_ID = 2),
+        (select id from EXPERIENCES where company_name = 'NYC.HOSPITAL'),
+        (select id from EDUCATIONS where education = 'SERGENT'),
         (select id from CATEGORIES where TITLE = 'SERGENT'));
 
 insert into CONTACTS ("value", contact_type, resume_id)

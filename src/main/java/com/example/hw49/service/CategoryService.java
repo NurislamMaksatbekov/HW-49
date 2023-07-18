@@ -14,6 +14,7 @@ public class CategoryService {
     public CategoryDto getCategoryById(Long id){
         Category category = categoryDao.getCategoryById(id);
         return CategoryDto.builder()
+                .id(category.getId())
                 .title(category.getTitle())
                 .build();
     }

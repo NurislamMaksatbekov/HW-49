@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
+
 public class EducationDto {
     private Long id;
     private String education;
