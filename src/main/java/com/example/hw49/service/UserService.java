@@ -34,7 +34,7 @@ public class UserService {
                 .email(user.getEmail())
                 .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
-                .type(user.getType())
+                .accountType(user.getAccountType())
                 .build().toString();
 
     }
@@ -55,11 +55,11 @@ public class UserService {
                         .email(u.getEmail())
                         .photo(u.getPhoto())
                         .phoneNumber(u.getPhoneNumber())
-                        .type(u.getType())
+                        .accountType(u.getAccountType())
                         .build()).toList();
     }
 
-    public UserDto findApplicant(String email){
+    public UserDto findApplicant(String email) {
         User user = userDao.findApplicant(email);
         return UserDto.builder()
                 .name(user.getName())
@@ -68,11 +68,11 @@ public class UserService {
                 .email(user.getEmail())
                 .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
-                .type(user.getType())
+                .accountType(user.getAccountType())
                 .build();
     }
 
-    public UserDto findEmployer(String email){
+    public UserDto findEmployer(String email) {
         User user = userDao.findEmployer(email);
         return UserDto.builder()
                 .name(user.getName())
@@ -81,8 +81,21 @@ public class UserService {
                 .email(user.getEmail())
                 .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
-                .type(user.getType())
+                .accountType(user.getAccountType())
                 .build();
+    }
+
+    public void addNewUser(UserDto user) {
+        userDao.addNewUser(User.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .photo(user.getPhoto())
+                .phoneNumber(user.getPhoneNumber())
+                .accountType(user.getAccountType())
+                .build());
     }
 
 

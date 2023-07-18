@@ -1,5 +1,6 @@
 package com.example.hw49.dao;
 
+import com.example.hw49.dto.UserDto;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,21 +18,22 @@ import java.util.Optional;
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public Optional<User> findUserByName(String name){
+    public Optional<User> findUserByName(String name) {
         String sql = "select * from users where name = ?";
-    return Optional.ofNullable(DataAccessUtils.singleResult(
-            jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), name)
-    ));
+        return Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), name)
+        ));
     }
 
-    public Optional<User> findUserByPhoneNumber(String number){
+    public Optional<User> findUserByPhoneNumber(String number) {
         String sql = "select * from users where phone_number = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), number)
         ));
     }
+
     @SneakyThrows
-    public User findUserByEmail(String email){
+    public User findUserByEmail(String email) {
         String sql = "select * from users where email = ?";
         Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
@@ -43,7 +46,7 @@ public class UserDao {
         return mayBeUser.get();
     }
 
-    public boolean checkUser(String email){
+    public boolean checkUser(String email) {
         String sql = "select case when exists(" +
                 "select * from users where email = ?) " +
                 "then true " +
@@ -52,7 +55,7 @@ public class UserDao {
         return jdbcTemplate.queryForObject(sql, Boolean.class, email);
     }
 
-    public List<User> getUserByResponds(Long vacancyId){
+    public List<User> getUserByResponds(Long vacancyId) {
         String sql = "select * from users u " +
                 "inner join responds r on u.email = r.RESPONDER_EMAIL " +
                 "where RESPONDED_VACANCY_ID = ?";
@@ -60,7 +63,7 @@ public class UserDao {
     }
 
     @SneakyThrows
-    public User findApplicant(String email){
+    public User findApplicant(String email) {
         String sql = "select * from USERS u\n" +
                 "where ACCOUNT_TYPE = 'Applicant'\n" +
                 "and EMAIL = ?";
@@ -76,7 +79,7 @@ public class UserDao {
     }
 
     @SneakyThrows
-    public User findEmployer(String email){
+    public User findEmployer(String email) {
         String sql = "select * from USERS u\n" +
                 "where ACCOUNT_TYPE = 'Employer'\n" +
                 "and EMAIL = ?";
@@ -89,5 +92,22 @@ public class UserDao {
         }
 
         return mayBeUser.get();
+    }
+
+    public void addNewUser(User user){
+        String sql = "insert into users(EMAIL, NAME, SURNAME, USERNAME, PASSWORD, PHOTO, PHONE_NUMBER, ACCOUNT_TYPE) " +
+                "values (?, ?, ?, ?, ?, ?, ?,?)";
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getSurname());
+            ps.setString(4, user.getUsername());
+            ps.setString(5, user.getPassword());
+            ps.setString(6, user.getPhoto());
+            ps.setString(7, user.getPhoneNumber());
+            ps.setString(8, user.getAccountType());
+            return ps;
+        });
     }
 }
