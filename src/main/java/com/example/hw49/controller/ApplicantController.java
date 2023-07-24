@@ -19,12 +19,12 @@ public class ApplicantController {
     private final VacancyService vacancyService;
     protected final UserService userService;
 
-    @GetMapping("/resume/{authorEmail}")
+    @GetMapping("/resume/email/{authorEmail}")
     public List<ResumeDto> selectResumeByUser(@PathVariable String authorEmail){
         return resumeService.selectResumeByUser(authorEmail);
     }
 
-    @GetMapping("/resume/{resumeId}")
+    @GetMapping("/resume/id/{resumeId}")
     public ResumeDto findResumeById(@PathVariable Long resumeId){
         return resumeService.findResumeById(resumeId);
     }
@@ -54,7 +54,7 @@ public class ApplicantController {
         return vacancyService.getVacancyByCategory(categoryId);
     }
 
-    @GetMapping("/employer/{email}")
+    @GetMapping("/employer/email/{email}")
     public UserDto findApplicant(@PathVariable String email) {
         return userService.findEmployer(email);
     }

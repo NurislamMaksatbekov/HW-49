@@ -19,12 +19,12 @@ public class EmployerController {
     private final ResumeService resumeService;
     private final UserService userService;
 
-    @GetMapping("/applicant{vacancyId}")
+    @GetMapping("/applicant/id/{vacancyId}")
     public List<UserDto> findUserByRespond(@PathVariable Long vacancyId) {
         return userService.getUserByResponds(vacancyId);
     }
 
-    @GetMapping("/applicant/{email}")
+    @GetMapping("/applicant/email/{email}")
     public UserDto findApplicant(@PathVariable String email) {
         return userService.findApplicant(email);
     }
@@ -34,7 +34,7 @@ public class EmployerController {
         return resumeService.findAllResumes();
     }
 
-    @GetMapping("/resume{title}")
+    @GetMapping("/resume/title/{title}")
     public List<ResumeDto> findResumeByTitle(@PathVariable String title) {
         return resumeService.findResumeByTitle(title);
     }
@@ -49,7 +49,7 @@ public class EmployerController {
         vacancyService.changeVacancy(vacancyDto);
     }
 
-    @DeleteMapping("/vacancy/{vacancyId}")
+    @DeleteMapping("/vacancy/id/{vacancyId}")
     public void deleteVacancy(@PathVariable Long vacancyId) {
         vacancyService.deleteVacancy(vacancyId);
     }

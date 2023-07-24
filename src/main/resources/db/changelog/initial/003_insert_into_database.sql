@@ -24,9 +24,9 @@ values ('FastX', 'FROM 2018 TO 2023', 'BE FAST'),
        ('NYC.HOSPITAL', 'FROM 2022 TO 2023', 'BE CAREFULLY');
 
 insert into users(name, surname, username, email, password, photo, phone_number, ACCOUNT_TYPE)
-values ('CWX.TRANSPORTATION', null, 'cwxxxx', 'cwx@mail.ru', 'qwerty', null, '+996502271004',
+values ('CWX.TRANSPORTATION', null, 'cwxxxx', 'cwx@mail.ru', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', null, '+996502271004',
         (select TYPE from TYPES_OF_ACCOUNT where type = 'Employer')),
-       ('Azidin', 'Amankulov', 'azidinn', 'azidin@mail.ru', 'azidinmanka', null, '+996555555555',
+       ('Azidin', 'Amankulov', 'azidinn', 'azidin@mail.ru', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', null, '+996555555555',
         (select TYPE from TYPES_OF_ACCOUNT where type = 'Applicant'));
 
 insert into VACANCIES(title, salary, job_description, required_min_experience, required_max_experience, date_of_posted,
