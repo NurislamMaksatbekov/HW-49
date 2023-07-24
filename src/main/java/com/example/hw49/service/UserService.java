@@ -24,18 +24,9 @@ public class UserService {
         return userDao.findUserByPhoneNumber(number);
     }
 
-    public String findUserByEmail(String email) {
+    public String findUserEmail(Long email) {
         // Поиск пользователей по адресу почты
-        User user = userDao.findUserByEmail(email);
-        return UserDto.builder()
-                .name(user.getName())
-                .surname(user.getSurname())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .photo(user.getPhoto())
-                .phoneNumber(user.getPhoneNumber())
-                .accountType(user.getAccountType())
-                .build().toString();
+        return userDao.findUserEmail(email);
 
     }
 

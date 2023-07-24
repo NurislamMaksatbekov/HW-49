@@ -38,10 +38,11 @@ public class UserDao {
     }
 
     @SneakyThrows
-    public User findUserByEmail(String email) {
-        String sql = "select * from users where email = ?";
-        Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
+    public String findUserEmail(Long id) {
+        String sql = "select AUTHOR_EMAIL from RESUMES " +
+                "where id = ?";
+        Optional<String> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(String.class), id)
         ));
 
         if (mayBeUser.isEmpty()) {

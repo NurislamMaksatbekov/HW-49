@@ -34,20 +34,20 @@ public class EmployerController {
         return resumeService.findAllResumes();
     }
 
-    @GetMapping("/resume/title/{title}")
-    public List<ResumeDto> findResumeByTitle(@PathVariable String title) {
-        return resumeService.findResumeByTitle(title);
-    }
+//    @GetMapping("/resume/title/{title}")
+//    public List<ResumeDto> findResumeByTitle(@PathVariable String title) {
+//        return resumeService.findResumeByTitle(title);
+//    }
 
-    @PostMapping("/newVacancy")
-    public void createVacancy(@RequestBody VacancyDto vacancy) {
-        vacancyService.createVacancy(vacancy);
-    }
-
-    @PostMapping("/vacancy")
-    public void changeVacancy(@RequestBody VacancyDto vacancyDto) {
-        vacancyService.changeVacancy(vacancyDto);
-    }
+//    @PostMapping("/newVacancy")
+//    public void createVacancy(@RequestBody VacancyDto vacancy) {
+//        vacancyService.createVacancy(vacancy);
+//    }
+//
+//    @PostMapping("/vacancy")
+//    public void changeVacancy(@RequestBody VacancyDto vacancyDto) {
+//        vacancyService.changeVacancy(vacancyDto);
+//    }
 
     @DeleteMapping("/vacancy/id/{vacancyId}")
     public void deleteVacancy(@PathVariable Long vacancyId) {

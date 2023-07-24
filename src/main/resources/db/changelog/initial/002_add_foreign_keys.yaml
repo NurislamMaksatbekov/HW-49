@@ -15,7 +15,7 @@ databaseChangeLog:
       - addForeignKeyConstraint:
             baseTableName: contacts
             baseColumnNames: resume_id
-            constraintName: fk_resume_id
+            constraintName: fkk_resume_id
             deleteCascade: true
             referencedTableName: resumes
             referencedColumnNames: id
@@ -43,22 +43,6 @@ databaseChangeLog:
             deleteCascade: true
             referencedTableName: users
             referencedColumnNames: email
-
-        - addForeignKeyConstraint:
-            baseTableName: resumes
-            baseColumnNames: experience_id
-            constraintName: fk_resumes_experience_id
-            deleteCascade: true
-            referencedTableName: experiences
-            referencedColumnNames: id
-
-        - addForeignKeyConstraint:
-            baseTableName: resumes
-            baseColumnNames: education_id
-            constraintName: fk_resumes_education_id
-            deleteCascade: true
-            referencedTableName: educations
-            referencedColumnNames: id
 
         - addForeignKeyConstraint:
             baseTableName: resumes
@@ -106,4 +90,28 @@ databaseChangeLog:
             constraintName: fk_responds_responded_vacancy_id
             deleteCascade: true
             referencedTableName: vacancies
+            referencedColumnNames: id
+
+  - changeSet:
+      id: add-foreign-key-to-educations
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: educations
+            baseColumnNames: resume_id
+            constraintName: fk_resume_id
+            deleteCascade: true
+            referencedTableName: resumes
+            referencedColumnNames: id
+
+  - changeSet:
+      id: add-foreign-key-to-experiences
+      author: Nurislam
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: experiences
+            baseColumnNames: resume_id
+            constraintName: fk_resumes_id
+            deleteCascade: true
+            referencedTableName: resumes
             referencedColumnNames: id

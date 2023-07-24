@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -18,17 +19,22 @@ import java.util.Optional;
 public class EducationDao {
     private final JdbcTemplate jdbcTemplate;
 
-    @SneakyThrows
-    public Education getEducationById(Long id){
-        String sql = "select * from educations where id = ?";
-        Optional<Education> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Education.class), id)
-        ));
+//    @SneakyThrows
+//    public List<Education> getEducationById(Long id){
+//        String sql = "select * from educations where id = ?";
+//        Optional<Education> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+//                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Education.class), id)
+//        ));
+//
+//        if (mayBeUser.isEmpty()) {
+//            throw new Exception("Education not found");
+//        }
+//
+//        return mayBeUser.get();
+//    }
 
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("Education not found");
-        }
-
-        return mayBeUser.get();
+    public List<Education> getEducationById(Long id){
+        String sql = "select * from educations where resume_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Education.class), id);
     }
 }
