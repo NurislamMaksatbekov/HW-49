@@ -1,12 +1,8 @@
 package com.example.hw49.dao;
 
-import com.example.hw49.dto.ExperienceDto;
-import com.example.hw49.entity.Education;
 import com.example.hw49.entity.Experience;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

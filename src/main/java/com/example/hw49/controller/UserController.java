@@ -14,7 +14,6 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    private final CategoryService categoryService;
 
     @PostMapping("/register")
     public void addNewUser(@RequestBody UserDto user){

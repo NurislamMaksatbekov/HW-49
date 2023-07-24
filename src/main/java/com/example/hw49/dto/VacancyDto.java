@@ -1,6 +1,6 @@
 package com.example.hw49.dto;
 
-import com.example.hw49.entity.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

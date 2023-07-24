@@ -14,13 +14,23 @@ public class EducationService {
 
     private final EducationDao educationDao;
 
-    public List<EducationDto> findEducationById(Long id){
+    public List<EducationDto> findEducationById(Long id) {
         List<Education> education = educationDao.getEducationById(id);
         return education.stream().map(e -> EducationDto.builder()
                 .education(e.getEducation())
                 .studyPeriod(e.getStudyPeriod())
                 .placeOfStudy(e.getPlaceOfStudy())
                 .build()).toList();
-
     }
+
+    public void createNewEducation(Education education) {
+        educationDao.createNewEducation(Education.builder()
+                .education(education.getEducation())
+                .studyPeriod(education.getStudyPeriod())
+                .placeOfStudy(education.getPlaceOfStudy())
+                .resumeId(education.getResumeId())
+                .build());
+    }
+
+
 }

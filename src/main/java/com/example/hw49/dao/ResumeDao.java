@@ -68,7 +68,7 @@ public class ResumeDao {
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, resume.getTitle());
-            ps.setLong(2, resume.getCategoryId());
+            ps.setLong(2, (resume.getId()));
             ps.setDouble(3, resume.getRequiredSalary());
             ps.setString(4, resume.getAuthorEmail());
             ps.setLong(5, resume.getExperienceId());

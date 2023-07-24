@@ -16,16 +16,9 @@ public class ResumeService {
     private final EducationService educationService;
     private final ExperienceService experienceService;
 
-    public List<Resume> findResumeByCategory(Long id) {
-        // Поиск резюме по категории
-        return resumeDao.findResumeByCategory(id);
-    }
 
-    public List<ResumeDto> findAllResumes(){
-        List<Resume> resumes  = resumeDao.findAllResumes();
-
-        return resumes.stream()
-                .map(e -> ResumeDto.builder()
+    public List<ResumeDto> resumeDtoList(List<Resume> resumes) {
+        return resumes.stream().map(e -> ResumeDto.builder()
                         .title(e.getTitle())
                         .requiredSalary(e.getRequiredSalary())
                         .category(categoryService.getCategoryById(e.getCategoryId()))
@@ -37,81 +30,60 @@ public class ResumeService {
                 .toList();
     }
 
+    public List<ResumeDto> findAllResumes() {
+        List<Resume> resumes = resumeDao.findAllResumes();
+        return resumeDtoList(resumes);
+    }
 
-//    public List<ResumeDto> selectResumeByUser(String authorEmail) {
-//        // Выборка созданных пользователем резюме
-//        List<Resume> resumes = resumeDao.selectResumesByUser(authorEmail);
-//        return resumes.stream()
-//                .map(e -> ResumeDto.builder()
-//                        .id(e.getId())
-//                        .title(e.getTitle())
-//                        .requiredSalary(e.getRequiredSalary())
-//                        .category(categoryService.getCategoryById(e.getCategoryId()))
-//                        .authorEmail(userService.findUserByEmail(e.getAuthorEmail()))
-//                        .educations(educationService.findEducationById(e.getEducationId()))
-//                        .experiences(experienceService.findExperienceById(e.getExperienceId()))
-//                        .active(e.isActive())
-//                        .build())
-//                .toList();
-//
-//    }
-//
-//    public ResumeDto findResumeById(Long resumeId) {
-//        Resume resume = resumeDao.findResumeById(resumeId);
-//        return ResumeDto.builder()
-//                .id(resume.getId())
-//                .title(resume.getTitle())
-//                .requiredSalary(resume.getRequiredSalary())
-//                .category(categoryService.getCategoryById(resume.getCategoryId()))
-//                .authorEmail(userService.findUserByEmail(resume.getAuthorEmail()))
-//                .educations(educationService.findEducationById(resume.getEducationId()))
-//                .experiences(experienceService.findExperienceById(resume.getExperienceId()))
-//                .active(resume.isActive())
-//                .build();
-//    }
-//
-//    public List<ResumeDto> findResumeByTitle(String title){
-//        List<Resume> resumes = resumeDao.findResumeByTitle(title);
-//        return resumes.stream()
-//                .map(e -> ResumeDto.builder()
-//                        .id(e.getId())
-//                        .title(e.getTitle())
-//                        .requiredSalary(e.getRequiredSalary())
-//                        .category(categoryService.getCategoryById(e.getCategoryId()))
-//                        .authorEmail(userService.findUserByEmail(e.getAuthorEmail()))
-//                        .educations(educationService.findEducationById(e.getEducationId()))
-//                        .experiences(experienceService.findExperienceById(e.getExperienceId()))
-//                        .active(e.isActive())
-//                        .build())
-//                .toList();
-//    }
-//
-//    public void createResume(ResumeDto resumeDto) {
-//        resumeDao.createNewResume(Resume.builder()
-//                .title(resumeDto.getTitle())
+
+    public List<ResumeDto> selectResumeByUser(String authorEmail) {
+        List<Resume> resumes = resumeDao.selectResumesByUser(authorEmail);
+        return resumeDtoList(resumes);
+    }
+
+    public List<ResumeDto> findResumeByTitle(String title) {
+        List<Resume> resumes = resumeDao.findResumeByTitle(title);
+        return resumeDtoList(resumes);
+    }
+
+    public ResumeDto findResumeById(Long resumeId) {
+        Resume resume = resumeDao.findResumeById(resumeId);
+        return ResumeDto.builder()
+                .title(resume.getTitle())
+                .requiredSalary(resume.getRequiredSalary())
+                .category(categoryService.getCategoryById(resume.getCategoryId()))
+                .authorEmail(resume.getAuthorEmail())
+                .educations(educationService.findEducationById(resume.getId()))
+                .experiences(experienceService.findExperienceById(resume.getId()))
+                .active(resume.isActive())
+                .build();
+    }
+
+    public void deleteResume(Long resumeId) {
+        resumeDao.deleteResume(resumeId);
+    }
+
+    public void createResume(ResumeDto resumeDto) {
+        Resume.builder()
+                .title(resumeDto.getTitle())
+                .requiredSalary(resumeDto.getRequiredSalary())
+                .authorEmail(resumeDto.getAuthorEmail())
+//                 .educations(educationService.createNewEducation();)
+//                  .experiences(experienceService)
+//                  .category(categoryService)
+                .build();
+    }
+
+    public void changeResume(ResumeDto resumeDto) {
+        resumeDao.changeResume(Resume.builder()
+                .title(resumeDto.getTitle())
 //                .categoryId(resumeDto.getCategory().getId())
-//                .requiredSalary(resumeDto.getRequiredSalary())
-//                .authorEmail(resumeDto.getAuthorEmail())
+                .requiredSalary(resumeDto.getRequiredSalary())
+                .authorEmail(resumeDto.getAuthorEmail())
 //                .experienceId(resumeDto.getExperiences().getId())
 //                .educationId(resumeDto.getEducations().getId())
-//                .active(resumeDto.isActive())
-//                .build());
-//    }
-//
-//    public void changeResume(ResumeDto resumeDto) {
-//        resumeDao.changeResume(Resume.builder()
-//                .title(resumeDto.getTitle())
-//                .categoryId(resumeDto.getCategory().getId())
-//                .requiredSalary(resumeDto.getRequiredSalary())
-//                .authorEmail(resumeDto.getAuthorEmail())
-//                .experienceId(resumeDto.getExperiences().getId())
-//                .educationId(resumeDto.getEducations().getId())
-//                .active(resumeDto.isActive())
-//                .id(resumeDto.getId())
-//                .build());
-//    }
-//
-//    public void deleteResume(Long resumeId) {
-//        resumeDao.deleteResume(resumeId);
-//    }
+                .active(resumeDto.isActive())
+                .id(resumeDto.getId())
+                .build());
+    }
 }

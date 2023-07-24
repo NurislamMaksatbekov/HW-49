@@ -18,11 +18,11 @@ public class CategoryDao {
     private final JdbcTemplate jdbcTemplate;
 
     @SneakyThrows
-    public String getCategoryById(Long id) {
+    public Category getCategoryById(Long id) {
         String sql = "select title from categories where id = ?";
 
-        Optional<String> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(String.class), id)
+        Optional<Category> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class), id)
         ));
 
         if (mayBeUser.isEmpty()) {
@@ -31,6 +31,4 @@ public class CategoryDao {
 
         return mayBeUser.get();
     }
-
-
 }

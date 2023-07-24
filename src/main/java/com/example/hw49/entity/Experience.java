@@ -13,5 +13,5 @@ public class Experience {
     private String companyName;
     private String workPeriod;
     private String responsibilities;
-
+    private Long resumeId;
 }

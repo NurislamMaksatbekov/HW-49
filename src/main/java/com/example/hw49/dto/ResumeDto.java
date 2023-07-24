@@ -1,9 +1,8 @@
 package com.example.hw49.dto;
 
-import com.example.hw49.entity.Resume;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,11 +10,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResumeDto {
+    @JsonIgnore
+    private Long id;
     private String title;
     private double requiredSalary;
     private boolean active;
     private String authorEmail;
-    private String category;
+    private CategoryDto category;
     private List<ExperienceDto> experiences;
     private List<EducationDto> educations;
 
