@@ -53,9 +53,22 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/**")).hasAuthority("Employer")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/**")).hasAuthority("Applicant")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/allResumes")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/vacancy**")).hasAuthority("Employer")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/newVacancy**")).hasAuthority("Employer")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/resume/title/**")).hasAuthority("Employer")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/applicant/id/**")).hasAuthority("Employer")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/applicant/email/**")).hasAuthority("Employer")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/vacancy/id/**")).hasAuthority("Employer")
+
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/resume/**")).hasAuthority("Applicant")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/newResume/**")).hasAuthority("Applicant")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/vacancyCategory/**")).hasAuthority("Applicant")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/resume/id/**")).hasAuthority("Applicant")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/resume/email/**")).hasAuthority("Applicant")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/employer/email/**")).hasAuthority("Applicant")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/resume/**")).hasAuthority("Applicant")
+
+
                         .anyRequest().permitAll()
                 );
         return http.build();
