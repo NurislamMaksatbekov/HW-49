@@ -14,8 +14,8 @@ public class Vacancy {
     private String title;
     private double salary;
     private String jobDescription;
-    private int requiredMinExp;
-    private int requiredMaxExp;
+    private int requiredMinExperience;
+    private int requiredMaxExperience;
     private LocalDate dateOfPosted;
     private LocalDate dateOfUpdated;
     private boolean active;

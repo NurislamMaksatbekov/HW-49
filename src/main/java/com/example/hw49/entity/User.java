@@ -15,4 +15,5 @@ public class User {
     private String photo;
     private String phoneNumber;
     private String accountType;
+    private boolean enabled;
 }

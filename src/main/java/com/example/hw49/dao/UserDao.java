@@ -1,13 +1,12 @@
 package com.example.hw49.dao;
 
-import com.example.hw49.dto.UserDto;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
@@ -15,11 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Slf4j
-
 @RequiredArgsConstructor
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
+    private final PasswordEncoder encoder;
 
     public Optional<User> findUserByName(String name) {
         String sql = "select * from users where name = ?";
@@ -36,10 +34,11 @@ public class UserDao {
     }
 
     @SneakyThrows
-    public User findUserByEmail(String email) {
-        String sql = "select * from users where email = ?";
-        Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
+    public String findUserEmail(Long id) {
+        String sql = "select AUTHOR_EMAIL from RESUMES " +
+                "where id = ?";
+        Optional<String> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(String.class), id)
         ));
 
         if (mayBeUser.isEmpty()) {
@@ -98,18 +97,19 @@ public class UserDao {
     }
 
     public void addNewUser(User user){
-        String sql = "insert into users(EMAIL, NAME, SURNAME, USERNAME, PASSWORD, PHOTO, PHONE_NUMBER, ACCOUNT_TYPE) " +
-                "values (?, ?, ?, ?, ?, ?, ?,?)";
+        String sql = "insert into users(EMAIL, NAME, SURNAME, USERNAME, PASSWORD, PHOTO, PHONE_NUMBER, ACCOUNT_TYPE, ENABLED) " +
+                "values (?, ?, ?, ?, ?, ?, ?,?,?)";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, user.getEmail());
+            ps.setString(1, user.getEmail().toLowerCase());
             ps.setString(2, user.getName());
             ps.setString(3, user.getSurname());
             ps.setString(4, user.getUsername());
-            ps.setString(5, user.getPassword());
+            ps.setString(5, encoder.encode(user.getPassword()));
             ps.setString(6, user.getPhoto());
             ps.setString(7, user.getPhoneNumber());
-            ps.setString(8, user.getAccountType());
+            ps.setString(8, user.getAccountType().toUpperCase());
+            ps.setBoolean(9,true);
             return ps;
         });
     }

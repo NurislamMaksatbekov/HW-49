@@ -1,35 +1,60 @@
 package com.example.hw49.dao;
 
-import com.example.hw49.entity.Education;
 import com.example.hw49.entity.Experience;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.sql.PreparedStatement;
+import java.util.List;
+import java.util.Objects;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 
-public class ExperienceDao {
-    private final JdbcTemplate jdbcTemplate;
+public class ExperienceDao extends BaseDao{
 
-    @SneakyThrows
-    public Experience getExperienceById(Long id){
-        String sql = "select * from experiences where id = ?";
-        Optional<Experience> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Experience.class), id)
-        ));
+    ExperienceDao(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        super(jdbcTemplate, namedParameterJdbcTemplate);
+    }
 
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("Experience not found");
-        }
+    public List<Experience> getExperienceByResumeId(Long id){
+        String sql = "select * from experiences where resume_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Experience.class), id);
+    }
 
-        return mayBeUser.get();
+    @Override
+    public Long save(Object obj) {
+        Experience e = (Experience) obj;
+        String sql = "insert into experiences(company_name, work_period, RESPONSIBILITIES, resume_id) " +
+                "values(?,?,?,?)";
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
+            ps.setString(1, e.getCompanyName());
+            ps.setString(2, e.getWorkPeriod());
+            ps.setString(3, e.getResponsibilities());
+            ps.setLong(4, e.getResumeId());
+            return ps;
+        }, keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    }
+
+    @Override
+    public void change(Object obj) {
+    Experience e = (Experience) obj;
+    String sql = "update experiences set(company_name = ?, work_period = ?, RESPONSIBILITIES = ? where id = ?)";
+    jdbcTemplate.update(con -> {
+        PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
+        ps.setString(1, e.getCompanyName());
+        ps.setString(2, e.getWorkPeriod());
+        ps.setString(3, e.getResponsibilities());
+        ps.setLong(4, e.getId());
+        return ps;
+    }, keyHolder);
+    }
+
+    @Override
+    public void delete(Long id) {
+
     }
 }

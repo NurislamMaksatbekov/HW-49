@@ -12,8 +12,6 @@ public class Resume {
     private double requiredSalary;
     private boolean active;
     private String authorEmail;
-    private Long experienceId;
-    private Long educationId;
     private Long categoryId;
 }
 
