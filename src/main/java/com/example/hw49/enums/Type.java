@@ -9,7 +9,7 @@ public enum Type {
     APPLICANT("Applicant"),
     EMPLOYER("Employer");
 
-    private String type;
+    private final String type;
 
 
 }

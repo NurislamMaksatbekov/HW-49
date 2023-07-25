@@ -4,100 +4,88 @@ import com.example.hw49.dao.VacancyDao;
 import com.example.hw49.dto.VacancyDto;
 import com.example.hw49.entity.Vacancy;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class VacancyService {
     private final VacancyDao vacancyDao;
     private final CategoryService categoryService;
-
-    public List<Vacancy> getVacancyByResponds(String authorEmail) {
-        // Выборка вакансий на которые откликнулся пользователь
-        return vacancyDao.getVacancyByResponds(authorEmail);
-    }
-
-
-
-    public List<Vacancy> getAllVacancy() {
-        // Выборка всех вакансий
-        return vacancyDao.getAllVacancy();
+    private List<VacancyDto> vacancyDtoList(List<Vacancy> vacancies) {
+        return vacancies.stream().map(e -> VacancyDto.builder()
+                .id(e.getId())
+                .title(e.getTitle())
+                .salary(e.getSalary())
+                .authorEmail(e.getAuthorEmail())
+                .jobDescription(e.getJobDescription())
+                .requiredMinExperience(e.getRequiredMinExperience())
+                .requiredMaxExperience(e.getRequiredMaxExperience())
+                .dateOfPosted(e.getDateOfPosted())
+                .dateOfUpdated(e.getDateOfUpdated())
+                .active(e.isActive())
+                .category(categoryService.getTitleById(e.getCategoryId()))
+                .build()).toList();
     }
 
     public List<VacancyDto> getVacancyByCategory(Long categoryId) {
         List<Vacancy> vacancies = vacancyDao.getVacancyByCategory(categoryId);
-
-        return vacancies.stream()
-                .map(v ->VacancyDto.builder()
-                        .id(v.getId())
-                        .title(v.getTitle())
-                        .salary(v.getSalary())
-                        .authorEmail(v.getAuthorEmail())
-                        .jobDescription(v.getJobDescription())
-                        .requiredMinExp(v.getRequiredMinExp())
-                        .requiredMaxExp(v.getRequiredMaxExp())
-                        .dateOfPosted(v.getDateOfPosted())
-                        .dateOfUpdated(v.getDateOfUpdated())
-                        .active(v.isActive())
-                        .category(categoryService.getCategoryById(v.getCategoryId()))
-                        .build()).toList();
+        log.info(categoryId.toString());
+        return vacancyDtoList(vacancies);
     }
 
-    public void createVacancy(VacancyDto vacancyDto) {
-        vacancyDao.createVacancy(Vacancy.builder()
-                .title(vacancyDto.getTitle())
-                .salary(vacancyDto.getSalary())
-                .authorEmail(vacancyDto.getAuthorEmail())
-                .jobDescription(vacancyDto.getJobDescription())
-                .requiredMinExp(vacancyDto.getRequiredMinExp())
-                .requiredMaxExp(vacancyDto.getRequiredMaxExp())
-                .dateOfPosted(vacancyDto.getDateOfPosted())
-                .dateOfUpdated(vacancyDto.getDateOfUpdated())
-                .active(vacancyDto.isActive())
-                .categoryId(vacancyDto.getCategory().getId())
-                .build());
-    }
-
-    public void changeVacancy(VacancyDto vacancyDto) {
-        vacancyDao.changeVacancy(Vacancy.builder()
-                .title(vacancyDto.getTitle())
-                .salary(vacancyDto.getSalary())
-                .authorEmail(vacancyDto.getAuthorEmail())
-                .jobDescription(vacancyDto.getJobDescription())
-                .requiredMinExp(vacancyDto.getRequiredMinExp())
-                .requiredMaxExp(vacancyDto.getRequiredMaxExp())
-                .dateOfPosted(vacancyDto.getDateOfPosted())
-                .dateOfUpdated(vacancyDto.getDateOfUpdated())
-                .active(vacancyDto.isActive())
-                .categoryId(vacancyDto.getCategory().getId())
-                .id(vacancyDto.getId())
-                .build());
-    }
-
-    public void deleteVacancy(Long vacancyId){
+    public void deleteVacancy(Long vacancyId) {
+        log.info("Вакансия удалена");
         vacancyDao.deleteVacancy(vacancyId);
     }
 
-    public List<VacancyDto> findAllVacancies(){
+    public List<VacancyDto> findAllVacancies() {
         List<Vacancy> vacancies = vacancyDao.getAllVacancy();
+        return vacancyDtoList(vacancies);
+    }
 
-        return vacancies.stream()
-                .map(v ->VacancyDto.builder()
-                        .id(v.getId())
-                        .title(v.getTitle())
-                        .salary(v.getSalary())
-                        .authorEmail(v.getAuthorEmail())
-                        .jobDescription(v.getJobDescription())
-                        .requiredMinExp(v.getRequiredMinExp())
-                        .requiredMaxExp(v.getRequiredMaxExp())
-                        .dateOfPosted(v.getDateOfPosted())
-                        .dateOfUpdated(v.getDateOfUpdated())
-                        .active(v.isActive())
-                        .category(categoryService.getCategoryById(v.getCategoryId()))
-                        .build()).toList();
+    public void saveVacancy(VacancyDto vacancyDto) {
+        var mayBeCategory = categoryService.getIdByTitle(vacancyDto.getCategory().toUpperCase());
+        log.info("Вакансия сохранена");
+        Long categoryId;
+        if (mayBeCategory.isPresent()) {
+            categoryId = mayBeCategory.get().getId();
+        } else {
+            categoryId = categoryService.save(vacancyDto.getCategory().toUpperCase());
+        }
+
+
+        vacancyDao.save(Vacancy.builder()
+                .title(vacancyDto.getTitle())
+                .salary(vacancyDto.getSalary())
+                .authorEmail(vacancyDto.getAuthorEmail())
+                .jobDescription(vacancyDto.getJobDescription())
+                .requiredMinExperience(vacancyDto.getRequiredMinExperience())
+                .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
+                .dateOfPosted(vacancyDto.getDateOfPosted())
+                .dateOfUpdated(vacancyDto.getDateOfUpdated())
+                .active(vacancyDto.isActive())
+                .categoryId(categoryId)
+                .build());
     }
 
 
+    public void change(VacancyDto vacancyDto) {
+        log.info("Вакансия изменена");
+        vacancyDao.change(Vacancy.builder()
+                .title(vacancyDto.getTitle())
+                .salary(vacancyDto.getSalary())
+                .authorEmail(vacancyDto.getAuthorEmail())
+                .jobDescription(vacancyDto.getJobDescription())
+                .requiredMinExperience(vacancyDto.getRequiredMinExperience())
+                .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
+                .dateOfPosted(vacancyDto.getDateOfPosted())
+                .dateOfUpdated(vacancyDto.getDateOfUpdated())
+                .active(vacancyDto.isActive())
+                .id(vacancyDto.getId())
+                .build());
+    }
 }

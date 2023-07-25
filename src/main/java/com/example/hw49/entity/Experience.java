@@ -1,11 +1,9 @@
 package com.example.hw49.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Experience {
@@ -13,5 +11,5 @@ public class Experience {
     private String companyName;
     private String workPeriod;
     private String responsibilities;
-
+    private Long resumeId;
 }

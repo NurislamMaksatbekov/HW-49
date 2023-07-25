@@ -1,9 +1,7 @@
 package com.example.hw49.dto;
 
-import com.example.hw49.entity.Resume;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,8 +14,8 @@ public class ResumeDto {
     private double requiredSalary;
     private boolean active;
     private String authorEmail;
-    private CategoryDto category;
-    private ExperienceDto experiences;
-    private EducationDto educations;
+    private String category;
+    private List<ExperienceDto> experiences;
+    private List<EducationDto> educations;
 
 }

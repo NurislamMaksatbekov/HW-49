@@ -62,7 +62,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: password
-                  type: varchar(50)
+                  type: text
                   constraints:
                     nullable: false
               - column:
@@ -190,23 +190,11 @@ databaseChangeLog:
                     deleteCascade: true
                     nullable: false
               - column:
-                  name: experience_id
-                  type: long
-                  constraints:
-                    deleteCascade: true
-                    nullable: false
-              - column:
-                  name: education_id
-                  type: long
-                  constraints:
-                    deleteCascade: true
-                    nullable: false
-              - column:
                   name: category_id
                   type: long
                   constraints:
-                    deleteCascade: true
                     nullable: false
+                    deleteCascade: true
 
   - changeSet:
       id: create-educations-table
@@ -237,6 +225,11 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: resume_id
+                  type: long
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: create-experiences-table
@@ -265,6 +258,11 @@ databaseChangeLog:
               - column:
                   name: responsibilities
                   type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resume_id
+                  type: long
                   constraints:
                     nullable: false
 

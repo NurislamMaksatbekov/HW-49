@@ -13,25 +13,25 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/resumes")
+@RequestMapping("/applicant")
 public class ApplicantController {
     private final ResumeService resumeService;
     private final VacancyService vacancyService;
     protected final UserService userService;
 
-    @GetMapping("/resume/{authorEmail}")
+    @GetMapping("/resume/email/{authorEmail}")
     public List<ResumeDto> selectResumeByUser(@PathVariable String authorEmail){
         return resumeService.selectResumeByUser(authorEmail);
     }
 
-    @GetMapping("/resume/{resumeId}")
+    @GetMapping("/resume/id/{resumeId}")
     public ResumeDto findResumeById(@PathVariable Long resumeId){
         return resumeService.findResumeById(resumeId);
     }
 
     @PostMapping("/newResume")
-    public void createResume(@RequestBody ResumeDto resume){
-        resumeService.createResume(resume);
+    public void createResume(@RequestBody ResumeDto resumeDto){
+        resumeService.saveResume(resumeDto);
     }
 
     @PostMapping("/resume")
@@ -54,7 +54,7 @@ public class ApplicantController {
         return vacancyService.getVacancyByCategory(categoryId);
     }
 
-    @GetMapping("/employer/{email}")
+    @GetMapping("/employer/email/{email}")
     public UserDto findApplicant(@PathVariable String email) {
         return userService.findEmployer(email);
     }
