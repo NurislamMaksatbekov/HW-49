@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/vacancies")
+@RequestMapping("/employer")
 public class EmployerController {
     private final VacancyService vacancyService;
     private final ResumeService resumeService;
@@ -41,12 +41,12 @@ public class EmployerController {
 
     @PostMapping("/newVacancy")
     public void createVacancy(@RequestBody VacancyDto vacancy) {
-        vacancyService.createVacancy(vacancy);
+        vacancyService.saveVacancy(vacancy);
     }
 
     @PostMapping("/vacancy")
     public void changeVacancy(@RequestBody VacancyDto vacancyDto) {
-        vacancyService.changeVacancy(vacancyDto);
+        vacancyService.change(vacancyDto);
     }
 
     @DeleteMapping("/vacancy/id/{vacancyId}")

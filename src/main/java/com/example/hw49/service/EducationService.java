@@ -23,14 +23,16 @@ public class EducationService {
                 .build()).toList();
     }
 
-    public void createNewEducation(Education education) {
-        educationDao.createNewEducation(Education.builder()
-                .education(education.getEducation())
-                .studyPeriod(education.getStudyPeriod())
-                .placeOfStudy(education.getPlaceOfStudy())
-                .resumeId(education.getResumeId())
-                .build());
+    public Long save(Education education) {
+        return educationDao.save(education);
     }
 
-
+    public void change(EducationDto educationDto) {
+        educationDao.change(Education.builder()
+                .education(educationDto.getEducation())
+                .studyPeriod(educationDto.getStudyPeriod())
+                .placeOfStudy(educationDto.getPlaceOfStudy())
+                .id(educationDto.getId())
+                .build());
+    }
 }

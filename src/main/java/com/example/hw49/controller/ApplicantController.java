@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/resumes")
+@RequestMapping("/applicant")
 public class ApplicantController {
     private final ResumeService resumeService;
     private final VacancyService vacancyService;
@@ -31,7 +31,7 @@ public class ApplicantController {
 
     @PostMapping("/newResume")
     public void createResume(@RequestBody ResumeDto resumeDto){
-        resumeService.createResume(resumeDto);
+        resumeService.saveResume(resumeDto);
     }
 
     @PostMapping("/resume")

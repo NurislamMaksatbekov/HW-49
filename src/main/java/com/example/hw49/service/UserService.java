@@ -4,12 +4,14 @@ import com.example.hw49.dao.UserDao;
 import com.example.hw49.dto.UserDto;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService {
     private final UserDao userDao;
@@ -81,12 +83,13 @@ public class UserService {
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
-                .email(user.getEmail())
+                .email(user.getEmail().toLowerCase())
                 .password(user.getPassword())
                 .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
-                .accountType(user.getAccountType())
+                .accountType(user.getAccountType().toUpperCase())
                 .build());
+        log.info("Пользователь сохранен");
     }
 
 

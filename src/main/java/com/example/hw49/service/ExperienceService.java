@@ -21,4 +21,17 @@ public class ExperienceService {
                 .responsibilities(e.getResponsibilities())
                 .build()).toList();
     }
+
+    public Long save(Experience experience) {
+        return experienceDao.save(experience);
+    }
+
+    public void change(ExperienceDto experienceDto){
+        experienceDao.change(Experience.builder()
+                .companyName(experienceDto.getCompanyName())
+                .workPeriod(experienceDto.getWorkPeriod())
+                .responsibilities(experienceDto.getResponsibilities())
+                .id(experienceDto.getId())
+                .build());
+    }
 }

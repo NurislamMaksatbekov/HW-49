@@ -21,5 +21,7 @@ public abstract class BaseDao {
 
     public abstract Long save(Object obj);
 
+    public abstract void change(Object obj);
+
     public abstract void delete(Long id);
 }

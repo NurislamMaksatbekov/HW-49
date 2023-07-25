@@ -1,6 +1,5 @@
 package com.example.hw49.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +17,10 @@ public class VacancyDto {
     private double salary;
     private String authorEmail;
     private String jobDescription;
-    private int requiredMinExp;
-    private int requiredMaxExp;
+    private int requiredMinExperience;
+    private int requiredMaxExperience;
     private LocalDate dateOfPosted;
     private LocalDate dateOfUpdated;
     private boolean active;
-    private CategoryDto category;
+    private String category;
 }

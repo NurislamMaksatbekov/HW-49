@@ -2,13 +2,17 @@ package com.example.hw49.service;
 
 import com.example.hw49.dao.ResumeDao;
 import com.example.hw49.dto.ResumeDto;
+import com.example.hw49.entity.Education;
+import com.example.hw49.entity.Experience;
 import com.example.hw49.entity.Resume;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ResumeService {
     private final ResumeDao resumeDao;
@@ -21,7 +25,7 @@ public class ResumeService {
         return resumes.stream().map(e -> ResumeDto.builder()
                         .title(e.getTitle())
                         .requiredSalary(e.getRequiredSalary())
-                        .category(categoryService.getCategoryById(e.getCategoryId()))
+                        .category(categoryService.getTitleById(e.getCategoryId()))
                         .authorEmail(e.getAuthorEmail())
                         .experiences(experienceService.findExperienceById(e.getId()))
                         .educations(educationService.findEducationById(e.getId()))
@@ -51,7 +55,7 @@ public class ResumeService {
         return ResumeDto.builder()
                 .title(resume.getTitle())
                 .requiredSalary(resume.getRequiredSalary())
-                .category(categoryService.getCategoryById(resume.getCategoryId()))
+                .category(categoryService.getTitleById(resume.getCategoryId()))
                 .authorEmail(resume.getAuthorEmail())
                 .educations(educationService.findEducationById(resume.getId()))
                 .experiences(experienceService.findExperienceById(resume.getId()))
@@ -60,30 +64,53 @@ public class ResumeService {
     }
 
     public void deleteResume(Long resumeId) {
-        resumeDao.deleteResume(resumeId);
+        log.info("Резюме удалено");
+        resumeDao.delete(resumeId);
     }
 
-    public void createResume(ResumeDto resumeDto) {
-        Resume.builder()
+    public void saveResume(ResumeDto resumeDto) {
+        log.info("Резюме сохранено");
+        var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory().toUpperCase());
+
+        Long categoryId;
+        if (mayBeCategory.isPresent()) {
+            categoryId = mayBeCategory.get().getId();
+        } else {
+            categoryId = categoryService.save(resumeDto.getCategory().toUpperCase());
+        }
+
+        Long resumeId = resumeDao.save(Resume.builder()
                 .title(resumeDto.getTitle())
                 .requiredSalary(resumeDto.getRequiredSalary())
                 .authorEmail(resumeDto.getAuthorEmail())
-//                 .educations(educationService.createNewEducation();)
-//                  .experiences(experienceService)
-//                  .category(categoryService)
-                .build();
+                .categoryId(categoryId)
+                .active(resumeDto.isActive())
+                .build());
+
+        resumeDto.getEducations().forEach(e -> educationService.save(Education.builder()
+                .education(e.getEducation())
+                .placeOfStudy(e.getPlaceOfStudy())
+                .studyPeriod(e.getStudyPeriod())
+                .resumeId(resumeId)
+                .build()));
+
+        resumeDto.getExperiences().forEach(e -> experienceService.save(Experience.builder()
+                .companyName(e.getCompanyName())
+                .workPeriod(e.getWorkPeriod())
+                .responsibilities(e.getResponsibilities())
+                .resumeId(resumeId)
+                .build()));
     }
 
     public void changeResume(ResumeDto resumeDto) {
-        resumeDao.changeResume(Resume.builder()
-                .title(resumeDto.getTitle())
-//                .categoryId(resumeDto.getCategory().getId())
+        log.info("Резюме изменено");
+        resumeDao.change(ResumeDto.builder()
+                .id(resumeDto.getId())
                 .requiredSalary(resumeDto.getRequiredSalary())
                 .authorEmail(resumeDto.getAuthorEmail())
-//                .experienceId(resumeDto.getExperiences().getId())
-//                .educationId(resumeDto.getEducations().getId())
                 .active(resumeDto.isActive())
-                .id(resumeDto.getId())
                 .build());
     }
 }
+
+
