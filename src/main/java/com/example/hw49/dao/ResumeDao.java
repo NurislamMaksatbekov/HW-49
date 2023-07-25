@@ -1,8 +1,6 @@
 package com.example.hw49.dao;
 
 
-import com.example.hw49.dto.ResumeDto;
-import com.example.hw49.entity.Category;
 import com.example.hw49.entity.Resume;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -10,18 +8,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
 @Slf4j
+public class ResumeDao extends BaseDao{
 
-@RequiredArgsConstructor
-public class ResumeDao {
-    private final JdbcTemplate jdbcTemplate;
+    ResumeDao(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate1) {
+        super(jdbcTemplate, namedParameterJdbcTemplate);
+    }
+
 
     public List<Resume> findResumeByCategory(Long categoryId){
         String sql = "select * from " +
@@ -62,20 +64,44 @@ public class ResumeDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
     }
 
-    public void createNewResume(Resume resume){
-        String sql = "insert into resumes(TITLE, CATEGORY_ID, REQUIRED_SALARY, AUTHOR_EMAIL, EXPERIENCE_ID, EDUCATION_ID, ACTIVE) " +
-                "values (?, ?, ?, ?, ?, ?, ?)";
+//    public void createNewResume(Resume resume){
+//        String sql = "insert into resumes(TITLE, CATEGORY_ID, REQUIRED_SALARY, AUTHOR_EMAIL, EXPERIENCE_ID, EDUCATION_ID, ACTIVE) " +
+//                "values (?, ?, ?, ?, ?, ?, ?)";
+//        jdbcTemplate.update(con -> {
+//            PreparedStatement ps = con.prepareStatement(sql);
+//            ps.setString(1, resume.getTitle());
+//            ps.setLong(2, (resume.getId()));
+//            ps.setDouble(3, resume.getRequiredSalary());
+//            ps.setString(4, resume.getAuthorEmail());
+//            ps.setLong(5, resume.getExperienceId());
+//            ps.setLong(6, resume.getEducationId());
+//            ps.setBoolean(7, resume.isActive());
+//            return ps;
+//        });
+//    }
+
+    @Override
+    public Long save(Object obj){
         jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, resume.getTitle());
-            ps.setLong(2, (resume.getId()));
-            ps.setDouble(3, resume.getRequiredSalary());
-            ps.setString(4, resume.getAuthorEmail());
-            ps.setLong(5, resume.getExperienceId());
-            ps.setLong(6, resume.getEducationId());
-            ps.setBoolean(7, resume.isActive());
-            return ps;
-        });
+            Resume r = (Resume) obj;
+            PreparedStatement ps = con.prepareStatement(
+                    "insert into resumes(TITLE, CATEGORY_ID, REQUIRED_SALARY, AUTHOR_EMAIL, ACTIVE) " +
+                "values (?, ?, ?, ?, ?)",
+            new String[]{"id"});
+                    ps.setString(1, r.getTitle());
+                    ps.setLong(2, r.getCategoryId());
+                    ps.setDouble(3, r.getRequiredSalary());
+                    ps.setString(4, r.getAuthorEmail());
+                    ps.setBoolean(5, r.isActive());
+             return ps;
+        }, keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM RESUMES WHERE ID = ?";
+        jdbcTemplate.update(sql, id);
     }
 
     public void changeResume(Resume resume) {

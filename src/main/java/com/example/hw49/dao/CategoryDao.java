@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Component
@@ -17,18 +18,10 @@ import java.util.Optional;
 public class CategoryDao {
     private final JdbcTemplate jdbcTemplate;
 
-    @SneakyThrows
-    public Category getCategoryById(Long id) {
-        String sql = "select title from categories where id = ?";
-
-        Optional<Category> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class), id)
-        ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("Category not found");
-        }
-
-        return mayBeUser.get();
+    public String getTitleById(Long id){
+        String sql = "select  TITLE from CATEGORIES where id = ?";
+        return DataAccessUtils.singleResult(Collections.singleton(jdbcTemplate.queryForObject(sql, String.class, id)));
     }
+
+
 }

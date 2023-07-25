@@ -16,7 +16,7 @@ public class ResumeDto {
     private double requiredSalary;
     private boolean active;
     private String authorEmail;
-    private CategoryDto category;
+    private String category;
     private List<ExperienceDto> experiences;
     private List<EducationDto> educations;
 
