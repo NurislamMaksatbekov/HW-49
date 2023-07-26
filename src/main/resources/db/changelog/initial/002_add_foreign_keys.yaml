@@ -101,6 +101,7 @@ databaseChangeLog:
             baseColumnNames: resume_id
             constraintName: fk_resume_id
             deleteCascade: true
+            onUpdate: CASCADE
             referencedTableName: resumes
             referencedColumnNames: id
 
@@ -113,5 +114,6 @@ databaseChangeLog:
             baseColumnNames: resume_id
             constraintName: fk_resumes_id
             deleteCascade: true
+            onUpdate: CASCADE
             referencedTableName: resumes
             referencedColumnNames: id

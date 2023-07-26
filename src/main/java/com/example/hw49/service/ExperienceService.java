@@ -13,9 +13,10 @@ import java.util.List;
 public class ExperienceService {
     private final ExperienceDao experienceDao;
 
-    public List<ExperienceDto> findExperienceById(Long id){
+    public List<ExperienceDto> findExperienceById(Long id) {
         List<Experience> experience = experienceDao.getExperienceByResumeId(id);
         return experience.stream().map(e -> ExperienceDto.builder()
+                .id(e.getId())
                 .companyName(e.getCompanyName())
                 .workPeriod(e.getWorkPeriod())
                 .responsibilities(e.getResponsibilities())
@@ -26,12 +27,13 @@ public class ExperienceService {
         return experienceDao.save(experience);
     }
 
-    public void change(ExperienceDto experienceDto){
-        experienceDao.change(Experience.builder()
-                .companyName(experienceDto.getCompanyName())
-                .workPeriod(experienceDto.getWorkPeriod())
-                .responsibilities(experienceDto.getResponsibilities())
-                .id(experienceDto.getId())
-                .build());
+    public void change(List<ExperienceDto> experienceDto) {
+        for (ExperienceDto e : experienceDto)
+            experienceDao.change(ExperienceDto.builder()
+                    .companyName(e.getCompanyName())
+                    .workPeriod(e.getWorkPeriod())
+                    .responsibilities(e.getResponsibilities())
+                    .id(e.getId())
+                    .build());
     }
 }

@@ -26,10 +26,4 @@ public class CategoryService {
                 .title(title)
                 .build());
     }
-
-    public void change(CategoryDto categoryDto) {
-        categoryDao.change(Category.builder()
-                .title(categoryDto.getTitle())
-                .build());
-    }
 }

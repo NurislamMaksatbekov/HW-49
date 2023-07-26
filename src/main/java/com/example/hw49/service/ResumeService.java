@@ -1,6 +1,9 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.ResumeDao;
+import com.example.hw49.dto.CategoryDto;
+import com.example.hw49.dto.EducationDto;
+import com.example.hw49.dto.ExperienceDto;
 import com.example.hw49.dto.ResumeDto;
 import com.example.hw49.entity.Education;
 import com.example.hw49.entity.Experience;
@@ -9,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -53,6 +58,7 @@ public class ResumeService {
     public ResumeDto findResumeById(Long resumeId) {
         Resume resume = resumeDao.findResumeById(resumeId);
         return ResumeDto.builder()
+                .id(resume.getId())
                 .title(resume.getTitle())
                 .requiredSalary(resume.getRequiredSalary())
                 .category(categoryService.getTitleById(resume.getCategoryId()))
@@ -104,12 +110,39 @@ public class ResumeService {
 
     public void changeResume(ResumeDto resumeDto) {
         log.info("Резюме изменено");
-        resumeDao.change(ResumeDto.builder()
-                .id(resumeDto.getId())
+
+        var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory().toUpperCase());
+        Long categoryId = mayBeCategory.get().getId();
+        resumeDao.change(Resume.builder()
+                .title(resumeDto.getTitle())
                 .requiredSalary(resumeDto.getRequiredSalary())
                 .authorEmail(resumeDto.getAuthorEmail())
                 .active(resumeDto.isActive())
+                .dateOfUpdated(LocalDateTime.now())
+                .categoryId(categoryId)
+                .id(resumeDto.getId())
                 .build());
+
+        Long resumeId = resumeDto.getId();
+
+
+        List<EducationDto> educationDtoList = educationService.findEducationById(resumeId);
+        educationService.change(educationDtoList.stream().map(e -> EducationDto.builder()
+                        .education(e.getEducation())
+                        .placeOfStudy(e.getPlaceOfStudy())
+                        .studyPeriod(e.getStudyPeriod())
+                        .id(e.getId())
+                        .build())
+                .toList());
+
+        List<ExperienceDto> experienceDtoList = experienceService.findExperienceById(resumeId);
+        experienceService.change( experienceDtoList.stream().map(e -> ExperienceDto.builder()
+                        .companyName(e.getCompanyName())
+                        .workPeriod(e.getWorkPeriod())
+                        .responsibilities(e.getResponsibilities())
+                        .id(e.getId())
+                        .build())
+                .collect(Collectors.toList()));
     }
 }
 

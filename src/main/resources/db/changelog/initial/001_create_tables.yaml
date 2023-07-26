@@ -195,6 +195,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     deleteCascade: true
+              - column:
+                  name: date_of_posted
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_of_updated
+                  type: datetime
 
   - changeSet:
       id: create-educations-table
@@ -313,8 +321,6 @@ databaseChangeLog:
               - column:
                   name: date_of_updated
                   type: date
-                  constraints:
-                    nullable: false
               - column:
                   name: active
                   type: boolean

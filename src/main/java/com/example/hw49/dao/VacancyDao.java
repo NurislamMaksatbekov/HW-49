@@ -71,8 +71,7 @@ public class VacancyDao extends BaseDao{
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    @Override
-    public void change(Object obj) {
+    public Long change(Object obj) {
         Vacancy v = (Vacancy) obj;
         String sql = "UPDATE vacancies " +
                 "SET title = ?, salary = ?, author_email = ?, job_description = ?, " +
@@ -87,6 +86,7 @@ public class VacancyDao extends BaseDao{
 
             return ps;
         });
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     private void daoSql(Vacancy v, PreparedStatement ps) throws SQLException {

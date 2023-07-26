@@ -1,5 +1,6 @@
 package com.example.hw49.dao;
 
+import com.example.hw49.dto.ExperienceDto;
 import com.example.hw49.entity.Experience;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,12 +40,10 @@ public class ExperienceDao extends BaseDao{
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    @Override
-    public void change(Object obj) {
-    Experience e = (Experience) obj;
-    String sql = "update experiences set(company_name = ?, work_period = ?, RESPONSIBILITIES = ? where id = ?)";
+    public void change(ExperienceDto e) {
+    String sql = "update experiences set company_name = ?, work_period = ?, RESPONSIBILITIES = ? where id = ?";
     jdbcTemplate.update(con -> {
-        PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
+        PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, e.getCompanyName());
         ps.setString(2, e.getWorkPeriod());
         ps.setString(3, e.getResponsibilities());

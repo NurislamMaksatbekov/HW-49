@@ -9,7 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -66,36 +69,55 @@ public class ResumeDao extends BaseDao {
         jdbcTemplate.update(con -> {
             Resume r = (Resume) obj;
             PreparedStatement ps = con.prepareStatement(
-                    "insert into resumes(TITLE, CATEGORY_ID, REQUIRED_SALARY, AUTHOR_EMAIL, ACTIVE) " +
-                            "values (?, ?, ?, ?, ?)",
+                    "insert into resumes(TITLE, CATEGORY_ID, REQUIRED_SALARY, AUTHOR_EMAIL, ACTIVE, DATE_OF_POSTED) " +
+                            "values (?, ?, ?, ?, ?, ?)",
                     new String[]{"id"});
             ps.setString(1, r.getTitle().toUpperCase());
             ps.setLong(2, r.getCategoryId());
             ps.setDouble(3, r.getRequiredSalary());
             ps.setString(4, r.getAuthorEmail());
             ps.setBoolean(5, r.isActive());
+            ps.setDate(6, Date.valueOf(String.valueOf(LocalDateTime.now())));
             return ps;
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    @Override
-    public void change(Object obj) {
-        Resume r = (Resume) obj;
+//    public Long change(Object obj) {
+////        Resume r = (Resume) obj;
+////        String sql = "UPDATE RESUMES " +
+////                "SET TITLE = ?, REQUIRED_SALARY = ?, " +
+////                "    AUTHOR_EMAIL = ?,  ACTIVE = ? " +
+////                "WHERE ID = ?";
+////
+////        jdbcTemplate.update(con -> {
+////            PreparedStatement ps = con.prepareStatement(sql);
+////            ps.setString(1, r.getTitle());
+////            ps.setDouble(2, r.getRequiredSalary());
+////            ps.setString(3, r.getAuthorEmail());
+////            ps.setBoolean(4, r.isActive());
+////            ps.setLong(5, r.getId());
+////            return ps;
+////        }, keyHolder);
+//        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+//    }
+
+    public void change(Resume r){
         String sql = "UPDATE RESUMES " +
                 "SET TITLE = ?, REQUIRED_SALARY = ?, " +
-                "    AUTHOR_EMAIL = ?,  ACTIVE = ? " +
+                "    AUTHOR_EMAIL = ?,  ACTIVE = ?, DATE_OF_UPDATED = ?, CATEGORY_ID = ?" +
                 "WHERE ID = ?";
-
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, r.getTitle());
             ps.setDouble(2, r.getRequiredSalary());
             ps.setString(3, r.getAuthorEmail());
             ps.setBoolean(4, r.isActive());
-            ps.setLong(5, r.getId());
+            ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setLong(6, r.getCategoryId());
+            ps.setLong(7, r.getId());
             return ps;
-        });
+        }, keyHolder);
     }
 
     @Override

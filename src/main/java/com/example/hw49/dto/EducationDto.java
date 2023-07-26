@@ -8,7 +8,6 @@ import lombok.Data;
 @Builder
 
 public class EducationDto {
-    @JsonIgnore
     private Long id;
     private String education;
     private String placeOfStudy;

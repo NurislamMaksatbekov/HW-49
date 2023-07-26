@@ -6,7 +6,7 @@ import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
-    private final PasswordEncoder encoder;
+//    private final PasswordEncoder encoder;
 
     public Optional<User> findUserByName(String name) {
         String sql = "select * from users where name = ?";
@@ -105,7 +105,7 @@ public class UserDao {
             ps.setString(2, user.getName());
             ps.setString(3, user.getSurname());
             ps.setString(4, user.getUsername());
-            ps.setString(5, encoder.encode(user.getPassword()));
+//            ps.setString(5, encoder.encode(user.getPassword()));
             ps.setString(6, user.getPhoto());
             ps.setString(7, user.getPhoneNumber());
             ps.setString(8, user.getAccountType().toUpperCase());

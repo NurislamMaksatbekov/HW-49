@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class ExperienceDto {
-    @JsonIgnore
     private Long id;
     private String workPeriod;
     private String responsibilities;

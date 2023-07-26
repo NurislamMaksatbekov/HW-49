@@ -2,6 +2,7 @@ package com.example.hw49.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,5 +18,6 @@ public class ResumeDto {
     private String category;
     private List<ExperienceDto> experiences;
     private List<EducationDto> educations;
-
+    private LocalDateTime dateOfPosted;
+    private LocalDateTime dateOfUpdated;
 }

@@ -39,10 +39,8 @@ public class EducationDao extends BaseDao{
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    @Override
-    public void change(Object obj) {
-    Education e = (Education) obj;
-    String sql = "update educations set(education = ?, place_of_study = ?, study_period = ? where id = ?)";
+    public void change(Education e) {
+    String sql = "update educations set education = ?, place_of_study = ?, study_period = ? where id = ? ";
     jdbcTemplate.update(con -> {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, e.getEducation());

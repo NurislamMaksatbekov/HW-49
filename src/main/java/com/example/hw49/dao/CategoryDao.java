@@ -52,18 +52,6 @@ public class CategoryDao extends BaseDao {
     }
 
     @Override
-    public void change(Object obj) {
-        String sql = "update CATEGORIES set (TITLE = ? where id = ?)";
-        jdbcTemplate.update(con -> {
-            Category c = (Category) obj;
-            PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, c.getTitle());
-            ps.setLong(2, c.getId());
-            return ps;
-        }, keyHolder);
-    }
-
-    @Override
     public void delete(Long id) {
     }
 
