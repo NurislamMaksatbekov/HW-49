@@ -1,21 +1,20 @@
 package com.example.hw49.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class VacancyDto {
     private Long id;
     private String title;
     private double salary;
+    @Email
     private String authorEmail;
     private String jobDescription;
     private int requiredMinExperience;

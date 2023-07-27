@@ -15,6 +15,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserDao userDao;
+    private final FileService fileService;
+    private static final String SUB_DIR = "images";
 
     public Optional<User> findUserByName(String name) {
         // Поиск пользователей по имени
@@ -46,7 +48,6 @@ public class UserService {
                         .surname(u.getSurname())
                         .username(u.getUsername())
                         .email(u.getEmail())
-                        .photo(u.getPhoto())
                         .phoneNumber(u.getPhoneNumber())
                         .accountType(u.getAccountType())
                         .build()).toList();
@@ -59,7 +60,6 @@ public class UserService {
                 .surname(user.getSurname())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
                 .accountType(user.getAccountType())
                 .build();
@@ -72,24 +72,31 @@ public class UserService {
                 .surname(user.getSurname())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
                 .accountType(user.getAccountType())
                 .build();
     }
 
-    public void addNewUser(UserDto user) {
-        userDao.addNewUser(User.builder()
+    public void saveUser(UserDto user) {
+        userDao.save(User.builder()
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
                 .email(user.getEmail().toLowerCase())
                 .password(user.getPassword())
-                .photo(user.getPhoto())
                 .phoneNumber(user.getPhoneNumber())
                 .accountType(user.getAccountType().toUpperCase())
                 .build());
         log.info("Пользователь сохранен");
+    }
+
+    public void uploadImage(UserDto userDto) {
+        String photo = fileService.saveUploadedFile(userDto.getPhoto(), SUB_DIR);
+        User user = User.builder()
+                .photo(photo)
+                .email(userDto.getEmail())
+                .build();
+        userDao.saveImage(user);
     }
 
 

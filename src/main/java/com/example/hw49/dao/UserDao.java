@@ -6,7 +6,7 @@ import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
@@ -15,9 +15,10 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class UserDao {
+public class UserDao{
     private final JdbcTemplate jdbcTemplate;
-//    private final PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
+
 
     public Optional<User> findUserByName(String name) {
         String sql = "select * from users where name = ?";
@@ -67,7 +68,7 @@ public class UserDao {
     @SneakyThrows
     public User findApplicant(String email) {
         String sql = "select * from USERS u\n" +
-                "where ACCOUNT_TYPE = 'Applicant'\n" +
+                "where ACCOUNT_TYPE = 'APPLICANT'\n" +
                 "and EMAIL = ?";
         Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
@@ -96,20 +97,30 @@ public class UserDao {
         return mayBeUser.get();
     }
 
-    public void addNewUser(User user){
-        String sql = "insert into users(EMAIL, NAME, SURNAME, USERNAME, PASSWORD, PHOTO, PHONE_NUMBER, ACCOUNT_TYPE, ENABLED) " +
-                "values (?, ?, ?, ?, ?, ?, ?,?,?)";
+    public void save(Object obj) {
+        jdbcTemplate.update(con -> {
+        User u = (User) obj;
+        PreparedStatement ps = con.prepareStatement(
+                "insert into users(EMAIL, NAME, SURNAME, USERNAME, PASSWORD, PHONE_NUMBER, ACCOUNT_TYPE, ENABLED) " +
+                        "values (?, ?, ?, ?, ?, ?, ?,?)"
+        );
+            ps.setString(1, u.getEmail().toLowerCase());
+            ps.setString(2, u.getName());
+            ps.setString(3, u.getSurname());
+            ps.setString(4, u.getUsername());
+            ps.setString(5, encoder.encode(u.getPassword()));
+            ps.setString(6, u.getPhoneNumber());
+            ps.setString(7, u.getAccountType().toUpperCase());
+            ps.setBoolean(8,true);
+            return ps;
+        });
+    }
+    public void saveImage(User user) {
+        String sql = "update users set photo = ? where email = ?";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, user.getEmail().toLowerCase());
-            ps.setString(2, user.getName());
-            ps.setString(3, user.getSurname());
-            ps.setString(4, user.getUsername());
-//            ps.setString(5, encoder.encode(user.getPassword()));
-            ps.setString(6, user.getPhoto());
-            ps.setString(7, user.getPhoneNumber());
-            ps.setString(8, user.getAccountType().toUpperCase());
-            ps.setBoolean(9,true);
+            ps.setBytes(1, user.getPhoto().getBytes());
+            ps.setString(2, user.getEmail());
             return ps;
         });
     }

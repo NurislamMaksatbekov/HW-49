@@ -2,11 +2,14 @@ package com.example.hw49.dao;
 
 
 import com.example.hw49.entity.Resume;
+import com.example.hw49.entity.User;
 import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -20,10 +23,10 @@ import java.util.Optional;
 @Component
 public class ResumeDao extends BaseDao {
 
-    ResumeDao(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate1) {
+
+    ResumeDao(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
-
 
     public List<Resume> findResumeByCategory(Long categoryId) {
         String sql = "select * from " +
@@ -64,7 +67,6 @@ public class ResumeDao extends BaseDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
     }
 
-    @Override
     public Long save(Object obj) {
         jdbcTemplate.update(con -> {
             Resume r = (Resume) obj;
@@ -82,25 +84,6 @@ public class ResumeDao extends BaseDao {
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
-
-//    public Long change(Object obj) {
-////        Resume r = (Resume) obj;
-////        String sql = "UPDATE RESUMES " +
-////                "SET TITLE = ?, REQUIRED_SALARY = ?, " +
-////                "    AUTHOR_EMAIL = ?,  ACTIVE = ? " +
-////                "WHERE ID = ?";
-////
-////        jdbcTemplate.update(con -> {
-////            PreparedStatement ps = con.prepareStatement(sql);
-////            ps.setString(1, r.getTitle());
-////            ps.setDouble(2, r.getRequiredSalary());
-////            ps.setString(3, r.getAuthorEmail());
-////            ps.setBoolean(4, r.isActive());
-////            ps.setLong(5, r.getId());
-////            return ps;
-////        }, keyHolder);
-//        return Objects.requireNonNull(keyHolder.getKey()).longValue();
-//    }
 
     public void change(Resume r){
         String sql = "UPDATE RESUMES " +

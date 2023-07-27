@@ -1,5 +1,6 @@
 package com.example.hw49.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class ResumeDto {
     private String title;
     private double requiredSalary;
     private boolean active;
+    @Email
     private String authorEmail;
     private String category;
     private ContactDto contact;

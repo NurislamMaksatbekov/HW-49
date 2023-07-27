@@ -1,13 +1,10 @@
 package com.example.hw49.controller;
 
 import com.example.hw49.dto.UserDto;
-import com.example.hw49.enums.ContactType;
-import com.example.hw49.service.ContactService;
 import com.example.hw49.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 
 @RestController
@@ -18,6 +15,13 @@ public class UserController {
 
     @PostMapping("/register")
     public void addNewUser(@RequestBody UserDto user) {
-        userService.addNewUser(user);
+        System.out.println(user.getPhoto());
+        userService.saveUser(user);
+    }
+
+    @PostMapping("/upload")
+    public HttpStatus uploadImage(UserDto userDto) {
+        userService.uploadImage(userDto);
+        return HttpStatus.OK;
     }
 }
