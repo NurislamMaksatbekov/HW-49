@@ -49,32 +49,27 @@ public class VacancyService {
 
     public void saveVacancy(VacancyDto vacancyDto) {
         var mayBeCategory = categoryService.getIdByTitle(vacancyDto.getCategory().toUpperCase());
-        log.info("Вакансия сохранена");
         Long categoryId;
-        if (mayBeCategory.isPresent()) {
-            categoryId = mayBeCategory.get().getId();
+        if (mayBeCategory.isEmpty()) {
+            log.error("Выберите категорию работы!");
         } else {
-            categoryId = categoryService.save(vacancyDto.getCategory().toUpperCase());
+            categoryId = mayBeCategory.get().getId();
+            vacancyDao.save(Vacancy.builder()
+                    .title(vacancyDto.getTitle())
+                    .salary(vacancyDto.getSalary())
+                    .authorEmail(vacancyDto.getAuthorEmail())
+                    .jobDescription(vacancyDto.getJobDescription())
+                    .requiredMinExperience(vacancyDto.getRequiredMinExperience())
+                    .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
+                    .active(vacancyDto.isActive())
+                    .categoryId(categoryId)
+                    .build());
+            log.info("Вакансия сохранена");
         }
-
-
-        vacancyDao.save(Vacancy.builder()
-                .title(vacancyDto.getTitle())
-                .salary(vacancyDto.getSalary())
-                .authorEmail(vacancyDto.getAuthorEmail())
-                .jobDescription(vacancyDto.getJobDescription())
-                .requiredMinExperience(vacancyDto.getRequiredMinExperience())
-                .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
-                .dateOfPosted(vacancyDto.getDateOfPosted())
-                .dateOfUpdated(vacancyDto.getDateOfUpdated())
-                .active(vacancyDto.isActive())
-                .categoryId(categoryId)
-                .build());
     }
 
 
     public void change(VacancyDto vacancyDto) {
-        log.info("Вакансия изменена");
         vacancyDao.change(Vacancy.builder()
                 .title(vacancyDto.getTitle())
                 .salary(vacancyDto.getSalary())
@@ -87,5 +82,6 @@ public class VacancyService {
                 .active(vacancyDto.isActive())
                 .id(vacancyDto.getId())
                 .build());
+        log.info("Вакансия изменена");
     }
 }

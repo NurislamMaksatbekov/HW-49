@@ -16,6 +16,7 @@ public class ResumeDto {
     private boolean active;
     private String authorEmail;
     private String category;
+    private ContactDto contact;
     private List<ExperienceDto> experiences;
     private List<EducationDto> educations;
     private LocalDateTime dateOfPosted;

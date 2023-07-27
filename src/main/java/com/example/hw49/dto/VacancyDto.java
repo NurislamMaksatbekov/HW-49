@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -19,8 +20,8 @@ public class VacancyDto {
     private String jobDescription;
     private int requiredMinExperience;
     private int requiredMaxExperience;
-    private LocalDate dateOfPosted;
-    private LocalDate dateOfUpdated;
+    private LocalDateTime dateOfPosted;
+    private LocalDateTime dateOfUpdated;
     private boolean active;
     private String category;
 }

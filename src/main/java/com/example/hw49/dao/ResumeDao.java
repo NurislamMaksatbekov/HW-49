@@ -77,7 +77,7 @@ public class ResumeDao extends BaseDao {
             ps.setDouble(3, r.getRequiredSalary());
             ps.setString(4, r.getAuthorEmail());
             ps.setBoolean(5, r.isActive());
-            ps.setDate(6, Date.valueOf(String.valueOf(LocalDateTime.now())));
+            ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
             return ps;
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();

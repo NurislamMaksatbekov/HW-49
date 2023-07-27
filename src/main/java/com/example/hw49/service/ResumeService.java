@@ -1,7 +1,6 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.ResumeDao;
-import com.example.hw49.dto.CategoryDto;
 import com.example.hw49.dto.EducationDto;
 import com.example.hw49.dto.ExperienceDto;
 import com.example.hw49.dto.ResumeDto;
@@ -28,12 +27,15 @@ public class ResumeService {
 
     public List<ResumeDto> resumeDtoList(List<Resume> resumes) {
         return resumes.stream().map(e -> ResumeDto.builder()
+                        .id(e.getId())
                         .title(e.getTitle())
                         .requiredSalary(e.getRequiredSalary())
                         .category(categoryService.getTitleById(e.getCategoryId()))
                         .authorEmail(e.getAuthorEmail())
                         .experiences(experienceService.findExperienceById(e.getId()))
                         .educations(educationService.findEducationById(e.getId()))
+                        .dateOfPosted(e.getDateOfPosted())
+                        .dateOfUpdated(e.getDateOfUpdated())
                         .active(e.isActive())
                         .build())
                 .toList();
@@ -65,6 +67,8 @@ public class ResumeService {
                 .authorEmail(resume.getAuthorEmail())
                 .educations(educationService.findEducationById(resume.getId()))
                 .experiences(experienceService.findExperienceById(resume.getId()))
+                .dateOfPosted(resume.getDateOfPosted())
+                .dateOfUpdated(resume.getDateOfUpdated())
                 .active(resume.isActive())
                 .build();
     }
@@ -75,37 +79,38 @@ public class ResumeService {
     }
 
     public void saveResume(ResumeDto resumeDto) {
-        log.info("Резюме сохранено");
         var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory().toUpperCase());
 
         Long categoryId;
-        if (mayBeCategory.isPresent()) {
-            categoryId = mayBeCategory.get().getId();
+        if (mayBeCategory.isEmpty()) {
+            log.error("Выберите катергорию работы!");
         } else {
-            categoryId = categoryService.save(resumeDto.getCategory().toUpperCase());
+            categoryId = mayBeCategory.get().getId();
+
+            Long resumeId = resumeDao.save(Resume.builder()
+                    .title(resumeDto.getTitle())
+                    .requiredSalary(resumeDto.getRequiredSalary())
+                    .authorEmail(resumeDto.getAuthorEmail())
+                    .categoryId(categoryId)
+                    .active(resumeDto.isActive())
+                    .build());
+
+            resumeDto.getEducations().forEach(e -> educationService.save(Education.builder()
+                    .education(e.getEducation())
+                    .placeOfStudy(e.getPlaceOfStudy())
+                    .studyPeriod(e.getStudyPeriod())
+                    .resumeId(resumeId)
+                    .build()));
+
+            resumeDto.getExperiences().forEach(e -> experienceService.save(Experience.builder()
+                    .companyName(e.getCompanyName())
+                    .workPeriod(e.getWorkPeriod())
+                    .responsibilities(e.getResponsibilities())
+                    .resumeId(resumeId)
+                    .build()));
+
+            log.info("Резюме сохранено");
         }
-
-        Long resumeId = resumeDao.save(Resume.builder()
-                .title(resumeDto.getTitle())
-                .requiredSalary(resumeDto.getRequiredSalary())
-                .authorEmail(resumeDto.getAuthorEmail())
-                .categoryId(categoryId)
-                .active(resumeDto.isActive())
-                .build());
-
-        resumeDto.getEducations().forEach(e -> educationService.save(Education.builder()
-                .education(e.getEducation())
-                .placeOfStudy(e.getPlaceOfStudy())
-                .studyPeriod(e.getStudyPeriod())
-                .resumeId(resumeId)
-                .build()));
-
-        resumeDto.getExperiences().forEach(e -> experienceService.save(Experience.builder()
-                .companyName(e.getCompanyName())
-                .workPeriod(e.getWorkPeriod())
-                .responsibilities(e.getResponsibilities())
-                .resumeId(resumeId)
-                .build()));
     }
 
     public void changeResume(ResumeDto resumeDto) {
@@ -116,7 +121,6 @@ public class ResumeService {
         resumeDao.change(Resume.builder()
                 .title(resumeDto.getTitle())
                 .requiredSalary(resumeDto.getRequiredSalary())
-                .authorEmail(resumeDto.getAuthorEmail())
                 .active(resumeDto.isActive())
                 .dateOfUpdated(LocalDateTime.now())
                 .categoryId(categoryId)
@@ -136,7 +140,7 @@ public class ResumeService {
                 .toList());
 
         List<ExperienceDto> experienceDtoList = experienceService.findExperienceById(resumeId);
-        experienceService.change( experienceDtoList.stream().map(e -> ExperienceDto.builder()
+        experienceService.change(experienceDtoList.stream().map(e -> ExperienceDto.builder()
                         .companyName(e.getCompanyName())
                         .workPeriod(e.getWorkPeriod())
                         .responsibilities(e.getResponsibilities())

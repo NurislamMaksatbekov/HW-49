@@ -3,11 +3,11 @@ values ('TAXI'),
        ('SERGENT');
 
 insert into CONTACTS_TYPE(TYPE)
-values ( 'Phone_number' ),
-        ( 'Telegram'),
-        ( 'Email'),
-        ( 'Facebook_Link'),
-        ( 'LinkedIn_Link');
+values ( 'PHONE_NUMBER' ),
+        ( 'TELEGRAM'),
+        ( 'EMAIL'),
+        ( 'FACEBOOK_LINK'),
+        ( 'LINKEDIN_LINK');
 
 insert into TYPES_OF_ACCOUNT(TYPE)
 values ('APPLICANT'),
@@ -39,8 +39,8 @@ VALUES ('TAXI', 1900, true, (select email from USERS where NAME = 'Azidin'),
         (select id from CATEGORIES where TITLE = 'SERGENT'), now(), now());
 
 insert into CONTACTS ("value", contact_type, resume_id)
-values('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'Phone_number'), (select id from RESUMES where title = 'TAXI')),
-    ('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'Phone_number'), (select id from RESUMES where title = 'SERGENT'));
+values('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'PHONE_NUMBER'), (select id from RESUMES where title = 'TAXI')),
+    ('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'PHONE_NUMBER'), (select id from RESUMES where title = 'SERGENT'));
 
 
 

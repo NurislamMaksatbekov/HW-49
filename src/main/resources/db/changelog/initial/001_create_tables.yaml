@@ -315,12 +315,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: date_of_posted
-                  type: date
+                  type: datetime
                   constraints:
                     nullable: false
               - column:
                   name: date_of_updated
-                  type: date
+                  type: datetime
               - column:
                   name: active
                   type: boolean

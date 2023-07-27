@@ -83,7 +83,7 @@ public class UserDao {
     @SneakyThrows
     public User findEmployer(String email) {
         String sql = "select * from USERS u\n" +
-                "where ACCOUNT_TYPE = 'Employer'\n" +
+                "where ACCOUNT_TYPE = 'EMPLOYER'\n" +
                 "and EMAIL = ?";
         Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,12 +63,19 @@ public class VacancyDao extends BaseDao{
         jdbcTemplate.update(con -> {
             Vacancy v = (Vacancy) obj;
             PreparedStatement ps = con.prepareStatement(
-                    "insert into vacancies(title, salary, author_email, job_description, REQUIRED_MIN_EXPERIENCE, REQUIRED_MAX_EXPERIENCE, DATE_OF_POSTED, DATE_OF_UPDATED, active, CATEGORY_ID) " +
-                            "values (?,?,?,?,?,?,?,?,?,?)",
+                    "insert into vacancies(title, salary, author_email, job_description, REQUIRED_MIN_EXPERIENCE, REQUIRED_MAX_EXPERIENCE, DATE_OF_POSTED,  active, CATEGORY_ID) " +
+                            "values (?,?,?,?,?,?,?,?,?)",
                     new String[]{"id"}
             );
-            daoSql(v, ps);
-            ps.setLong(10, v.getCategoryId());
+            ps.setString(1, v.getTitle());
+            ps.setDouble(2, v.getSalary());
+            ps.setString(3, v.getAuthorEmail());
+            ps.setString(4, v.getJobDescription());
+            ps.setInt(5, v.getRequiredMinExperience());
+            ps.setInt(6, v.getRequiredMaxExperience());
+            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setBoolean(8, v.isActive());
+            ps.setLong(9, v.getCategoryId());
             return ps;
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
@@ -75,30 +85,26 @@ public class VacancyDao extends BaseDao{
         Vacancy v = (Vacancy) obj;
         String sql = "UPDATE vacancies " +
                 "SET title = ?, salary = ?, author_email = ?, job_description = ?, " +
-                "    REQUIRED_MIN_EXPERIENCE = ?, REQUIRED_MAX_EXPERIENCE = ?, DATE_OF_POSTED = ?, " +
-                "    DATE_OF_UPDATED = ?, active = ? " +
+                "    REQUIRED_MIN_EXPERIENCE = ?, REQUIRED_MAX_EXPERIENCE = ?,  " +
+                "    DATE_OF_UPDATED = ?, active = ?, CATEGORY_ID = ? " +
                 "WHERE ID = ?";
 
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
-            daoSql(v, ps);
-            ps.setLong(10, v.getId());
+            ps.setString(1, v.getTitle());
+            ps.setDouble(2, v.getSalary());
+            ps.setString(3, v.getAuthorEmail());
+            ps.setString(4, v.getJobDescription());
+            ps.setInt(5, v.getRequiredMinExperience());
+            ps.setInt(6, v.getRequiredMaxExperience());
+            ps.setDate(7, Date.valueOf(LocalDate.now()));
+            ps.setBoolean(8, v.isActive());
+            ps.setLong(9, v.getCategoryId());
+            ps.setLong(9, v.getId());
 
             return ps;
         });
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
-    }
-
-    private void daoSql(Vacancy v, PreparedStatement ps) throws SQLException {
-        ps.setString(1, v.getTitle());
-        ps.setDouble(2, v.getSalary());
-        ps.setString(3, v.getAuthorEmail());
-        ps.setString(4, v.getJobDescription());
-        ps.setInt(5, v.getRequiredMinExperience());
-        ps.setInt(6, v.getRequiredMaxExperience());
-        ps.setDate(7, Date.valueOf(v.getDateOfPosted()));
-        ps.setDate(8, Date.valueOf(v.getDateOfUpdated()));
-        ps.setBoolean(9, v.isActive());
     }
 
     @Override
