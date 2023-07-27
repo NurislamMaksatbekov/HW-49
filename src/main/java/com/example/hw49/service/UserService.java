@@ -1,10 +1,13 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.UserDao;
+import com.example.hw49.dto.ImageDto;
 import com.example.hw49.dto.UserDto;
+import com.example.hw49.entity.Image;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -90,13 +93,15 @@ public class UserService {
         log.info("Пользователь сохранен");
     }
 
-    public void uploadImage(UserDto userDto) {
-        String photo = fileService.saveUploadedFile(userDto.getPhoto(), SUB_DIR);
-        User user = User.builder()
+    public void uploadImage(ImageDto imageDto, Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        String photo = fileService.saveUploadedFile(imageDto.getPhoto(), SUB_DIR);
+        Image image = Image.builder()
                 .photo(photo)
-                .email(userDto.getEmail())
+                .email(u.getEmail())
                 .build();
-        userDao.saveImage(user);
+        userDao.saveImage(image);
+        log.info(image.getEmail() + "загрузил(а) фото профиля");
     }
 
 

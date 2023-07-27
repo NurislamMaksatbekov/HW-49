@@ -63,6 +63,8 @@ public class SecurityConfig {
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/applicant/vacancyCategory/**")).hasAuthority("APPLICANT")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/applicant/employer/email/**")).hasAuthority("APPLICANT")
 
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/users/upload/**")).fullyAuthenticated()
+
 
                         .anyRequest().permitAll()
                 );

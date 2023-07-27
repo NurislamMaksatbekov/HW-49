@@ -1,11 +1,14 @@
 package com.example.hw49.dao;
 
+import com.example.hw49.dto.ImageDto;
+import com.example.hw49.entity.Image;
 import com.example.hw49.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +21,6 @@ import java.util.Optional;
 public class UserDao{
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder encoder;
-
 
     public Optional<User> findUserByName(String name) {
         String sql = "select * from users where name = ?";
@@ -115,12 +117,12 @@ public class UserDao{
             return ps;
         });
     }
-    public void saveImage(User user) {
+    public void saveImage(Image image) {
         String sql = "update users set photo = ? where email = ?";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setBytes(1, user.getPhoto().getBytes());
-            ps.setString(2, user.getEmail());
+            ps.setBytes(1, image.getPhoto().getBytes());
+            ps.setString(2, image.getEmail());
             return ps;
         });
     }

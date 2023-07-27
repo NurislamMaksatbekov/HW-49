@@ -1,9 +1,12 @@
 package com.example.hw49.controller;
 
+import com.example.hw49.dto.ImageDto;
 import com.example.hw49.dto.UserDto;
+import com.example.hw49.entity.Image;
 import com.example.hw49.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping("/upload")
-    public HttpStatus uploadImage(UserDto userDto) {
-        userService.uploadImage(userDto);
+    public HttpStatus uploadImage(ImageDto imageDto, Authentication auth) {
+        userService.uploadImage(imageDto, auth);
         return HttpStatus.OK;
     }
 }
