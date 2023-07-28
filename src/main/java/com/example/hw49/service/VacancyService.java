@@ -4,6 +4,7 @@ import com.example.hw49.dao.VacancyDao;
 import com.example.hw49.dto.ResumeDto;
 import com.example.hw49.dto.VacancyDto;
 import com.example.hw49.entity.Vacancy;
+import com.example.hw49.errors.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -37,7 +39,9 @@ public class VacancyService {
 
     public List<VacancyDto> getVacancyByCategory(Long categoryId) {
         List<Vacancy> vacancies = vacancyDao.getVacancyByCategory(categoryId);
-        log.info(categoryId.toString());
+        if(vacancies.isEmpty()){
+            throw new ResourceNotFoundException("Not Found");
+        }
         return vacancyDtoList(vacancies);
     }
 
@@ -112,5 +116,9 @@ public class VacancyService {
                     .build());
             log.info("Вакансия изменена");
         }else log.error("У вас нет этой вакансии");
+    }
+
+    public boolean checkVacancy(Long id){
+        return vacancyDao.checkVacancy(id);
     }
 }

@@ -65,7 +65,6 @@ public class UserDao{
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), vacancyId);
     }
 
-    @SneakyThrows
     public Usr findApplicant(String email) {
         String sql = "select * from USERS u\n" +
                 "where ACCOUNT_TYPE = 'APPLICANT'\n" +
@@ -73,15 +72,9 @@ public class UserDao{
         Optional<Usr> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), email)
         ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("User not found");
-        }
-
         return mayBeUser.get();
     }
 
-    @SneakyThrows
     public Usr findEmployer(String email) {
         String sql = "select * from USERS u\n" +
                 "where ACCOUNT_TYPE = 'EMPLOYER'\n" +
@@ -89,11 +82,6 @@ public class UserDao{
         Optional<Usr> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), email)
         ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("User not found");
-        }
-
         return mayBeUser.get();
     }
 

@@ -5,6 +5,7 @@ import com.example.hw49.dto.EducationDto;
 import com.example.hw49.dto.ExperienceDto;
 import com.example.hw49.dto.ResumeDto;
 import com.example.hw49.entity.*;
+import com.example.hw49.errors.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -67,11 +68,17 @@ public class ResumeService {
 
     public List<ResumeDto> selectResumeByUser(String authorEmail) {
         List<Resume> resumes = resumeDao.selectResumesByUser(authorEmail);
+        if(resumes.isEmpty()){
+            throw new ResourceNotFoundException("Not found");
+        }
         return resumeDtoList(resumes);
     }
 
     public List<ResumeDto> findResumeByTitle(String title) {
-        List<Resume> resumes = resumeDao.findResumeByTitle(title);
+        List<Resume> resumes = resumeDao.findResumeByTitle(title.toUpperCase());
+        if(resumes.isEmpty()){
+            throw new ResourceNotFoundException("Not found");
+        }
         return resumeDtoList(resumes);
     }
 

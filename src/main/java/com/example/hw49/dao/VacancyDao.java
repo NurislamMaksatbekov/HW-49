@@ -108,4 +108,11 @@ public class VacancyDao extends BaseDao{
                 "else false end;";
         return jdbcTemplate.queryForObject(sql, Boolean.class, id, email);
     }
+
+    public boolean checkVacancy(Long id){
+        String sql = "select case when exists(select * from vacancies where id = ?) " +
+                "then true " +
+                "else false end";
+        return jdbcTemplate.queryForObject(sql, Boolean.class, id);
+    }
 }

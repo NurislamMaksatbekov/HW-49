@@ -3,7 +3,7 @@ package com.example.hw49.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Dataa
+@Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

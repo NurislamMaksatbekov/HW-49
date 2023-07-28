@@ -44,17 +44,12 @@ public class ResumeDao extends BaseDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), authorEmail);
     }
 
-    @SneakyThrows
     public Resume findResumeById(Long resumeId) {
         String sql = "select * from" +
                 " resumes where id = ?";
         Optional<Resume> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), resumeId)
         ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("Category not found");
-        }
         return mayBeUser.get();
     }
 
