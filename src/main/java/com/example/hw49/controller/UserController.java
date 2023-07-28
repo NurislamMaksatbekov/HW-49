@@ -2,17 +2,14 @@ package com.example.hw49.controller;
 
 import com.example.hw49.dto.ImageDto;
 import com.example.hw49.dto.UserDto;
-import com.example.hw49.entity.Image;
-import com.example.hw49.enums.ContactType;
-import com.example.hw49.service.ContactService;
 import com.example.hw49.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -22,13 +19,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public void addNewUser(@RequestBody UserDto user) {
-        System.out.println(user.getPhoto());
+    public ResponseEntity<String> register(@Valid @RequestBody UserDto user) {
         userService.saveUser(user);
+        return ResponseEntity.ok("Вы успешно зарегистрировлись");
     }
 
     @GetMapping("/employer")
-    public UserDto fineEmployer(@RequestParam String email) {
+    public UserDto findEmployer(@RequestParam String email) {
         return userService.findEmployer(email);
     }
 
@@ -43,8 +40,8 @@ public class UserController {
     }
 
     @PostMapping("/upload")
-    public HttpStatus uploadImage(ImageDto imageDto, Authentication auth) {
+    public ResponseEntity<String> uploadImage(ImageDto imageDto, Authentication auth) {
         userService.uploadImage(imageDto, auth);
-        return HttpStatus.OK;
+        return ResponseEntity.ok("Фото профиля загружено");
     }
 }

@@ -70,35 +70,42 @@ public class VacancyDao extends BaseDao{
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    public Long change(Object obj) {
+    public void change(Object obj) {
         Vacancy v = (Vacancy) obj;
         String sql = "UPDATE vacancies " +
-                "SET title = ?, salary = ?, author_email = ?, job_description = ?, " +
+                "SET title = ?, salary = ?, job_description = ?, " +
                 "    REQUIRED_MIN_EXPERIENCE = ?, REQUIRED_MAX_EXPERIENCE = ?,  " +
                 "    DATE_OF_UPDATED = ?, active = ?, CATEGORY_ID = ? " +
-                "WHERE ID = ?";
+                "WHERE ID = ? and " +
+                "AUTHOR_EMAIL = ?";
 
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, v.getTitle());
             ps.setDouble(2, v.getSalary());
-            ps.setString(3, v.getAuthorEmail());
-            ps.setString(4, v.getJobDescription());
-            ps.setInt(5, v.getRequiredMinExperience());
-            ps.setInt(6, v.getRequiredMaxExperience());
-            ps.setDate(7, Date.valueOf(LocalDate.now()));
-            ps.setBoolean(8, v.isActive());
-            ps.setLong(9, v.getCategoryId());
+            ps.setString(3, v.getJobDescription());
+            ps.setInt(4, v.getRequiredMinExperience());
+            ps.setInt(5, v.getRequiredMaxExperience());
+            ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setBoolean(7, v.isActive());
+            ps.setLong(8, v.getCategoryId());
             ps.setLong(9, v.getId());
+            ps.setString(10, v.getAuthorEmail());
 
             return ps;
-        });
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        }, keyHolder );
     }
 
     @Override
     public void delete(Long id) {
         String sql = "DELETE FROM vacancies WHERE ID = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    public boolean check(Long id, String email){
+        String sql = "select case when exists(select * from vacancies where id = ? and AUTHOR_EMAIL = ?)\n" +
+                "then true\n" +
+                "else false end;";
+        return jdbcTemplate.queryForObject(sql, Boolean.class, id, email);
     }
 }

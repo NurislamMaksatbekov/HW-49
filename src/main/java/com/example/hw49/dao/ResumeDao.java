@@ -109,4 +109,11 @@ public class ResumeDao extends BaseDao {
         String sql = "DELETE FROM RESUMES WHERE ID = ?";
         jdbcTemplate.update(sql, id);
     }
+
+    public boolean check(Long id, String email){
+        String sql = "select case when exists(select * from resumes where id = ? and AUTHOR_EMAIL = ?)\n" +
+                "then true\n" +
+                "else false end;";
+        return jdbcTemplate.queryForObject(sql, Boolean.class, id, email);
+    }
 }

@@ -2,7 +2,9 @@ package com.example.hw49.controller;
 
 import com.example.hw49.dto.ResumeDto;
 import com.example.hw49.service.ResumeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,18 +28,21 @@ public class ResumeController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteResume(@RequestParam Long resumeId) {
-        resumeService.deleteResume(resumeId);
+    public ResponseEntity<String> deleteResume(@RequestParam Long resumeId, Authentication auth) {
+        resumeService.deleteResume(resumeId, auth);
+        return ResponseEntity.ok("Вы успешно удалили резюме");
     }
 
     @PostMapping("/change")
-    public void changeResume(@RequestBody ResumeDto resume) {
-        resumeService.changeResume(resume);
+    public ResponseEntity<String> changeResume(@Valid @RequestBody ResumeDto resume, Authentication auth) {
+        resumeService.changeResume(resume, auth);
+        return ResponseEntity.ok("Вы успешно изменили резюме");
     }
 
     @PostMapping("/create")
-    public void createResume(@RequestBody ResumeDto resumeDto, Authentication auth) {
+    public ResponseEntity<String> createResume(@Valid @RequestBody ResumeDto resumeDto, Authentication auth) {
         resumeService.saveResume(resumeDto, auth);
+        return ResponseEntity.ok("Вы успешно добавили новое резюме");
     }
 
     @GetMapping("/id")

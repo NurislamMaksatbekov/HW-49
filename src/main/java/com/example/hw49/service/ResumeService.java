@@ -92,9 +92,12 @@ public class ResumeService {
                 .build();
     }
 
-    public void deleteResume(Long resumeId) {
-        log.info("Резюме удалено");
-        resumeDao.delete(resumeId);
+    public void deleteResume(Long resumeId, Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        if(resumeDao.check(resumeId, u.getUsername())) {
+            log.info("Резюме удалено");
+            resumeDao.delete(resumeId);
+        } else log.error("У вас нет резюме с таким id");
     }
 
     public void saveResume(ResumeDto resumeDto, Authentication auth) {
@@ -139,40 +142,42 @@ public class ResumeService {
         }
     }
 
-    public void changeResume(ResumeDto resumeDto) {
-        log.info("Резюме изменено");
+    public void changeResume(ResumeDto resumeDto, Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        if(resumeDao.check(resumeDto.getId(),u.getUsername())) {
+            var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory());
+            Long categoryId = mayBeCategory.get().getId();
+            resumeDao.change(Resume.builder()
+                    .title(resumeDto.getTitle())
+                    .requiredSalary(resumeDto.getRequiredSalary())
+                    .active(resumeDto.isActive())
+                    .dateOfUpdated(LocalDateTime.now())
+                    .categoryId(categoryId)
+                    .id(resumeDto.getId())
+                    .build());
 
-        var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory());
-        Long categoryId = mayBeCategory.get().getId();
-        resumeDao.change(Resume.builder()
-                .title(resumeDto.getTitle())
-                .requiredSalary(resumeDto.getRequiredSalary())
-                .active(resumeDto.isActive())
-                .dateOfUpdated(LocalDateTime.now())
-                .categoryId(categoryId)
-                .id(resumeDto.getId())
-                .build());
-
-        Long resumeId = resumeDto.getId();
+            Long resumeId = resumeDto.getId();
 
 
-        List<EducationDto> educationDtoList = educationService.findEducationById(resumeId);
-        educationService.change(educationDtoList.stream().map(e -> EducationDto.builder()
-                        .education(e.getEducation())
-                        .placeOfStudy(e.getPlaceOfStudy())
-                        .studyPeriod(e.getStudyPeriod())
-                        .id(e.getId())
-                        .build())
-                .toList());
+            List<EducationDto> educationDtoList = educationService.findEducationById(resumeId);
+            educationService.change(educationDtoList.stream().map(e -> EducationDto.builder()
+                            .education(e.getEducation())
+                            .placeOfStudy(e.getPlaceOfStudy())
+                            .studyPeriod(e.getStudyPeriod())
+                            .id(e.getId())
+                            .build())
+                    .toList());
 
-        List<ExperienceDto> experienceDtoList = experienceService.findExperienceById(resumeId);
-        experienceService.change(experienceDtoList.stream().map(e -> ExperienceDto.builder()
-                        .companyName(e.getCompanyName())
-                        .workPeriod(e.getWorkPeriod())
-                        .responsibilities(e.getResponsibilities())
-                        .id(e.getId())
-                        .build())
-                .collect(Collectors.toList()));
+            List<ExperienceDto> experienceDtoList = experienceService.findExperienceById(resumeId);
+            experienceService.change(experienceDtoList.stream().map(e -> ExperienceDto.builder()
+                            .companyName(e.getCompanyName())
+                            .workPeriod(e.getWorkPeriod())
+                            .responsibilities(e.getResponsibilities())
+                            .id(e.getId())
+                            .build())
+                    .collect(Collectors.toList()));
+            log.info("Резюме изменено");
+        }else log.error("У вас нет резюме с таким id");
     }
 }
 

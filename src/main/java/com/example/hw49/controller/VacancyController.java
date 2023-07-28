@@ -2,7 +2,9 @@ package com.example.hw49.controller;
 
 import com.example.hw49.dto.VacancyDto;
 import com.example.hw49.service.VacancyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,18 +27,21 @@ public class VacancyController {
     }
 
     @PostMapping("/create")
-    public void createVacancy(@RequestBody VacancyDto vacancy, Authentication auth) {
+    public ResponseEntity<String> createVacancy(@Valid @RequestBody VacancyDto vacancy, Authentication auth) {
         vacancyService.saveVacancy(vacancy, auth);
+        return ResponseEntity.ok("Вы успешно добавили вакансию");
     }
 
     @PostMapping("/change")
-    public void changeVacancy(@RequestBody VacancyDto vacancyDto) {
-        vacancyService.change(vacancyDto);
+    public ResponseEntity<String> changeVacancy(@Valid @RequestBody VacancyDto vacancyDto, Authentication auth) {
+        vacancyService.change(vacancyDto, auth);
+        return ResponseEntity.ok("Вы успешно изменили вакансию");
     }
 
     @DeleteMapping("/delete")
-    public void deleteVacancy(@RequestParam Long vacancyId) {
-        vacancyService.deleteVacancy(vacancyId);
+    public ResponseEntity<String> deleteVacancy(@RequestParam Long vacancyId, Authentication auth) {
+        vacancyService.deleteVacancy(vacancyId, auth);
+        return ResponseEntity.ok("Вы успешно удалили вакансию");
     }
 
     @GetMapping("/my-vacancies")

@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -21,27 +20,6 @@ public class UserService {
     private final UserDao userDao;
     private final FileService fileService;
     private static final String SUB_DIR = "images";
-
-    public Optional<Usr> findUserByName(String name) {
-        // Поиск пользователей по имени
-        return userDao.findUserByName(name);
-    }
-
-    public Optional<Usr> findUserByPhoneNumber(String number) {
-        // Поиск пользователей по номеру телефона
-        return userDao.findUserByPhoneNumber(number);
-    }
-
-    public String findUserEmail(Long email) {
-        // Поиск пользователей по адресу почты
-        return userDao.findUserEmail(email);
-
-    }
-
-    public boolean checkUser(String email) {
-        // Проверка на наличие пользователя в системе по email
-        return userDao.checkUser(email);
-    }
 
     public List<UserDto> getUserByResponds(Long vacancyId) {
         List<Usr> usrs = userDao.getUserByResponds(vacancyId);
