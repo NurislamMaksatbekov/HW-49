@@ -1,15 +1,13 @@
 package com.example.hw49.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CategoryDto {
-    @JsonIgnore
-    private Long id;
-    private String title;
-
+public class ImageDto {
+    private MultipartFile photo;
+    private String email;
 }

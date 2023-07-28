@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ContactType {
 
     EMAIL("Email"),
-    TELEGRAM("Telegram"),
+    TELEGRAM("TELEGRAM"),
     PHONE_NUMBER("Phone number"),
     FACEBOOK_LINK("Facebook link"),
     LINKEDIN_LINK("Linkedin link");

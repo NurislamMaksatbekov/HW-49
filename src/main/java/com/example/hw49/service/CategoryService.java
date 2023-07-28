@@ -1,7 +1,6 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.CategoryDao;
-import com.example.hw49.dto.CategoryDto;
 import com.example.hw49.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,18 +17,7 @@ public class CategoryService {
     }
 
     public Optional<Category> getIdByTitle(String title) {
-        return categoryDao.getIdByTitle(title);
+        return categoryDao.getIdByTitle(title.toUpperCase());
     }
 
-    public Long save(String title) {
-        return categoryDao.save(Category.builder()
-                .title(title)
-                .build());
-    }
-
-    public void change(CategoryDto categoryDto) {
-        categoryDao.change(Category.builder()
-                .title(categoryDto.getTitle())
-                .build());
-    }
 }

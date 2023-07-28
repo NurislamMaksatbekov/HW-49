@@ -1,4 +1,4 @@
-package com.example.hw49.entity;
+package com.example.hw49.dto;
 
 import lombok.*;
 
@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class WhoResponded {
+public class RespondDto {
     private Long id;
+    private LocalDateTime timeOfRespond;
     private String responderEmail;
     private Long respondedVacancyId;
-    private LocalDateTime dateTime;
 }

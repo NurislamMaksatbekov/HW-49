@@ -4,6 +4,7 @@ package com.example.hw49.entity;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -16,8 +17,8 @@ public class Vacancy {
     private String jobDescription;
     private int requiredMinExperience;
     private int requiredMaxExperience;
-    private LocalDate dateOfPosted;
-    private LocalDate dateOfUpdated;
+    private LocalDateTime dateOfPosted;
+    private LocalDateTime dateOfUpdated;
     private boolean active;
     private Long categoryId;
     private String authorEmail;
