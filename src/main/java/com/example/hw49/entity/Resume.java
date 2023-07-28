@@ -2,6 +2,8 @@ package com.example.hw49.entity;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -13,6 +15,8 @@ public class Resume {
     private boolean active;
     private String authorEmail;
     private Long categoryId;
+    private LocalDateTime dateOfPosted;
+    private LocalDateTime dateOfUpdated;
 }
 
 

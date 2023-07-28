@@ -3,11 +3,11 @@ values ('TAXI'),
        ('SERGENT');
 
 insert into CONTACTS_TYPE(TYPE)
-values ( 'Phone_number' ),
-        ( 'Telegram'),
-        ( 'Email'),
-        ( 'Facebook_Link'),
-        ( 'LinkedIn_Link');
+values ( 'PHONE_NUMBER' ),
+        ( 'TELEGRAM'),
+        ( 'EMAIL'),
+        ( 'FACEBOOK_LINK'),
+        ( 'LINKEDIN_LINK');
 
 insert into TYPES_OF_ACCOUNT(TYPE)
 values ('APPLICANT'),
@@ -32,15 +32,15 @@ insert into RESPONDS(time_of_responds, responder_email, responded_vacancy_id)
 VALUES (now(), (select email from users where name = 'Azidin'), (select id from VACANCIES where TITLE = 'Taxi')),
        (now(), (select email from users where name = 'Azidin'), (select id from VACANCIES where TITLE = 'Sergent'));
 
-insert into RESUMES(title, required_salary, active, author_email, category_id)
+insert into RESUMES(title, required_salary, active, author_email, category_id, date_of_posted, date_of_updated)
 VALUES ('TAXI', 1900, true, (select email from USERS where NAME = 'Azidin'),
-        (select id from CATEGORIES where TITLE = 'TAXI')),
+        (select id from CATEGORIES where TITLE = 'TAXI'), now(), now()),
        ('SERGENT', 3500, true, (select email from USERS where NAME = 'Azidin'),
-        (select id from CATEGORIES where TITLE = 'SERGENT'));
+        (select id from CATEGORIES where TITLE = 'SERGENT'), now(), now());
 
-insert into CONTACTS ("value", contact_type, resume_id)
-values('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'Phone_number'), (select id from RESUMES where title = 'TAXI')),
-    ('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'Phone_number'), (select id from RESUMES where title = 'SERGENT'));
+insert into CONTACTS (contact_value, contact_type, resume_id)
+values('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'PHONE_NUMBER'), (select id from RESUMES where title = 'TAXI')),
+    ('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'PHONE_NUMBER'), (select id from RESUMES where title = 'SERGENT'));
 
 
 

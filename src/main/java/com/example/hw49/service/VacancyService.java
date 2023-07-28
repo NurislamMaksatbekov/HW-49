@@ -3,8 +3,11 @@ package com.example.hw49.service;
 import com.example.hw49.dao.VacancyDao;
 import com.example.hw49.dto.VacancyDto;
 import com.example.hw49.entity.Vacancy;
+import com.example.hw49.errors.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 public class VacancyService {
     private final VacancyDao vacancyDao;
     private final CategoryService categoryService;
+
     private List<VacancyDto> vacancyDtoList(List<Vacancy> vacancies) {
         return vacancies.stream().map(e -> VacancyDto.builder()
                 .id(e.getId())
@@ -33,13 +37,18 @@ public class VacancyService {
 
     public List<VacancyDto> getVacancyByCategory(Long categoryId) {
         List<Vacancy> vacancies = vacancyDao.getVacancyByCategory(categoryId);
-        log.info(categoryId.toString());
+        if(vacancies.isEmpty()){
+            throw new ResourceNotFoundException("Not Found");
+        }
         return vacancyDtoList(vacancies);
     }
 
-    public void deleteVacancy(Long vacancyId) {
-        log.info("Вакансия удалена");
-        vacancyDao.deleteVacancy(vacancyId);
+    public void deleteVacancy(Long vacancyId, Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        if(vacancyDao.check(vacancyId, u.getUsername())){
+            vacancyDao.delete(vacancyId);
+            log.info("Вакансия удалена");
+        }else log.error("У вас нет этой вакансии");
     }
 
     public List<VacancyDto> findAllVacancies() {
@@ -47,45 +56,67 @@ public class VacancyService {
         return vacancyDtoList(vacancies);
     }
 
-    public void saveVacancy(VacancyDto vacancyDto) {
+    public List<VacancyDto> myVacancies(Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        List<Vacancy> vacancies = vacancyDao.myVacancies(u.getUsername());
+        return vacancies.stream().map(e -> VacancyDto.builder()
+                .title(e.getTitle())
+                .salary(e.getSalary())
+                .jobDescription(e.getJobDescription())
+                .requiredMinExperience(e.getRequiredMinExperience())
+                .requiredMaxExperience(e.getRequiredMaxExperience())
+                .dateOfPosted(e.getDateOfPosted())
+                .dateOfUpdated(e.getDateOfUpdated())
+                .active(e.isActive())
+                .category(categoryService.getTitleById(e.getCategoryId()))
+                .build()).toList();
+    }
+
+    public void saveVacancy(VacancyDto vacancyDto, Authentication auth) {
+        User u = (User) auth.getPrincipal();
         var mayBeCategory = categoryService.getIdByTitle(vacancyDto.getCategory().toUpperCase());
-        log.info("Вакансия сохранена");
         Long categoryId;
-        if (mayBeCategory.isPresent()) {
-            categoryId = mayBeCategory.get().getId();
+        if (mayBeCategory.isEmpty()) {
+            log.error("Выберите категорию работы!");
         } else {
-            categoryId = categoryService.save(vacancyDto.getCategory().toUpperCase());
+            categoryId = mayBeCategory.get().getId();
+            vacancyDao.save(Vacancy.builder()
+                    .title(vacancyDto.getTitle())
+                    .salary(vacancyDto.getSalary())
+                    .authorEmail(u.getUsername())
+                    .jobDescription(vacancyDto.getJobDescription())
+                    .requiredMinExperience(vacancyDto.getRequiredMinExperience())
+                    .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
+                    .active(vacancyDto.isActive())
+                    .categoryId(categoryId)
+                    .build());
+            log.info(u.getUsername() + " добавил(а) вакансию");
         }
-
-
-        vacancyDao.save(Vacancy.builder()
-                .title(vacancyDto.getTitle())
-                .salary(vacancyDto.getSalary())
-                .authorEmail(vacancyDto.getAuthorEmail())
-                .jobDescription(vacancyDto.getJobDescription())
-                .requiredMinExperience(vacancyDto.getRequiredMinExperience())
-                .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
-                .dateOfPosted(vacancyDto.getDateOfPosted())
-                .dateOfUpdated(vacancyDto.getDateOfUpdated())
-                .active(vacancyDto.isActive())
-                .categoryId(categoryId)
-                .build());
     }
 
 
-    public void change(VacancyDto vacancyDto) {
-        log.info("Вакансия изменена");
-        vacancyDao.change(Vacancy.builder()
-                .title(vacancyDto.getTitle())
-                .salary(vacancyDto.getSalary())
-                .authorEmail(vacancyDto.getAuthorEmail())
-                .jobDescription(vacancyDto.getJobDescription())
-                .requiredMinExperience(vacancyDto.getRequiredMinExperience())
-                .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
-                .dateOfPosted(vacancyDto.getDateOfPosted())
-                .dateOfUpdated(vacancyDto.getDateOfUpdated())
-                .active(vacancyDto.isActive())
-                .id(vacancyDto.getId())
-                .build());
+    public void change(VacancyDto vacancyDto, Authentication auth) {
+        User u = (User) auth.getPrincipal();
+
+        if(vacancyDao.check(vacancyDto. getId(), u.getUsername())) {
+            var categoryId = categoryService.getIdByTitle(vacancyDto.getCategory().toUpperCase());
+            vacancyDao.change(Vacancy.builder()
+                    .title(vacancyDto.getTitle())
+                    .salary(vacancyDto.getSalary())
+                    .authorEmail(u.getUsername())
+                    .jobDescription(vacancyDto.getJobDescription())
+                    .requiredMinExperience(vacancyDto.getRequiredMinExperience())
+                    .requiredMaxExperience(vacancyDto.getRequiredMaxExperience())
+                    .dateOfUpdated(vacancyDto.getDateOfUpdated())
+                    .categoryId(categoryId.get().getId())
+                    .active(vacancyDto.isActive())
+                    .id(vacancyDto.getId())
+                    .build());
+            log.info("Вакансия изменена");
+        }else log.error("У вас нет этой вакансии");
+    }
+
+    public boolean checkVacancy(Long id){
+        return vacancyDao.checkVacancy(id);
     }
 }

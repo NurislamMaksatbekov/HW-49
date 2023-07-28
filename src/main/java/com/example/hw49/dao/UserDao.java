@@ -1,6 +1,7 @@
 package com.example.hw49.dao;
 
-import com.example.hw49.entity.User;
+import com.example.hw49.entity.Image;
+import com.example.hw49.entity.Usr;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
@@ -15,38 +16,24 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class UserDao {
+public class UserDao{
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder encoder;
 
-    public Optional<User> findUserByName(String name) {
+    public Optional<Usr> findUserByName(String name) {
         String sql = "select * from users where name = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), name)
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), name)
         ));
     }
 
-    public Optional<User> findUserByPhoneNumber(String number) {
+    public Optional<Usr> findUserByPhoneNumber(String number) {
         String sql = "select * from users where phone_number = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), number)
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), number)
         ));
     }
 
-    @SneakyThrows
-    public String findUserEmail(Long id) {
-        String sql = "select AUTHOR_EMAIL from RESUMES " +
-                "where id = ?";
-        Optional<String> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(String.class), id)
-        ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("User not found");
-        }
-
-        return mayBeUser.get();
-    }
 
     public boolean checkUser(String email) {
         String sql = "select case when exists(" +
@@ -57,59 +44,57 @@ public class UserDao {
         return jdbcTemplate.queryForObject(sql, Boolean.class, email);
     }
 
-    public List<User> getUserByResponds(Long vacancyId) {
+    public List<Usr> getUserByResponds(Long vacancyId) {
         String sql = "select * from users u " +
                 "inner join responds r on u.email = r.RESPONDER_EMAIL " +
                 "where RESPONDED_VACANCY_ID = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), vacancyId);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), vacancyId);
     }
 
-    @SneakyThrows
-    public User findApplicant(String email) {
+    public Usr findApplicant(String email) {
         String sql = "select * from USERS u\n" +
-                "where ACCOUNT_TYPE = 'Applicant'\n" +
+                "where ACCOUNT_TYPE = 'APPLICANT'\n" +
                 "and EMAIL = ?";
-        Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
+        Optional<Usr> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), email)
         ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("User not found");
-        }
-
         return mayBeUser.get();
     }
 
-    @SneakyThrows
-    public User findEmployer(String email) {
+    public Usr findEmployer(String email) {
         String sql = "select * from USERS u\n" +
-                "where ACCOUNT_TYPE = 'Employer'\n" +
+                "where ACCOUNT_TYPE = 'EMPLOYER'\n" +
                 "and EMAIL = ?";
-        Optional<User> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email)
+        Optional<Usr> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), email)
         ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("User not found");
-        }
-
         return mayBeUser.get();
     }
 
-    public void addNewUser(User user){
-        String sql = "insert into users(EMAIL, NAME, SURNAME, USERNAME, PASSWORD, PHOTO, PHONE_NUMBER, ACCOUNT_TYPE, ENABLED) " +
-                "values (?, ?, ?, ?, ?, ?, ?,?,?)";
+    public void save(Object obj) {
+        jdbcTemplate.update(con -> {
+        Usr u = (Usr) obj;
+        PreparedStatement ps = con.prepareStatement(
+                "insert into users(EMAIL, NAME, SURNAME, USERNAME, PASSWORD, PHONE_NUMBER, ACCOUNT_TYPE, ENABLED) " +
+                        "values (?, ?, ?, ?, ?, ?, ?,?)"
+        );
+            ps.setString(1, u.getEmail());
+            ps.setString(2, u.getName());
+            ps.setString(3, u.getSurname());
+            ps.setString(4, u.getUsername());
+            ps.setString(5, encoder.encode(u.getPassword()));
+            ps.setString(6, u.getPhoneNumber());
+            ps.setString(7, u.getAccountType());
+            ps.setBoolean(8,true);
+            return ps;
+        });
+    }
+    public void saveImage(Image image) {
+        String sql = "update users set photo = ? where email = ?";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, user.getEmail().toLowerCase());
-            ps.setString(2, user.getName());
-            ps.setString(3, user.getSurname());
-            ps.setString(4, user.getUsername());
-            ps.setString(5, encoder.encode(user.getPassword()));
-            ps.setString(6, user.getPhoto());
-            ps.setString(7, user.getPhoneNumber());
-            ps.setString(8, user.getAccountType().toUpperCase());
-            ps.setBoolean(9,true);
+            ps.setBytes(1, image.getPhoto().getBytes());
+            ps.setString(2, image.getEmail());
             return ps;
         });
     }

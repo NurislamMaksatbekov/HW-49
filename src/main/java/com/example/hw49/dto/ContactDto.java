@@ -1,11 +1,16 @@
 package com.example.hw49.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ContactDto {
-    private Long id;
-    private String value;
+    @NotBlank(message = "Контактные данные не могут быть пустыми")
+    private String contactValue;
+    @NotBlank(message = "Контактные данные не могут быть пустыми")
+    private String contactType;
+    private Long resumeId;
 }

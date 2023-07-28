@@ -6,10 +6,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Contact {
-    private int id;
-    private String contactValue;
-    private String contactType;
-    private Long resumeId;
-
+public class Image {
+    private String photo;
+    private String email;
 }
