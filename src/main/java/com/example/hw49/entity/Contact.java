@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Contact {
     private int id;
-    private String value;
+    private String contactValue;
     private String contactType;
     private Long resumeId;
 

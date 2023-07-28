@@ -4,11 +4,11 @@ import com.example.hw49.dao.ResumeDao;
 import com.example.hw49.dto.EducationDto;
 import com.example.hw49.dto.ExperienceDto;
 import com.example.hw49.dto.ResumeDto;
-import com.example.hw49.entity.Education;
-import com.example.hw49.entity.Experience;
-import com.example.hw49.entity.Resume;
+import com.example.hw49.entity.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +23,7 @@ public class ResumeService {
     private final CategoryService categoryService;
     private final EducationService educationService;
     private final ExperienceService experienceService;
+    private final ContactService contactService;
 
 
     public List<ResumeDto> resumeDtoList(List<Resume> resumes) {
@@ -34,6 +35,24 @@ public class ResumeService {
                         .authorEmail(e.getAuthorEmail())
                         .experiences(experienceService.findExperienceById(e.getId()))
                         .educations(educationService.findEducationById(e.getId()))
+                        .contact(contactService.getContactByResumeId(e.getId()))
+                        .dateOfPosted(e.getDateOfPosted())
+                        .dateOfUpdated(e.getDateOfUpdated())
+                        .active(e.isActive())
+                        .build())
+                .toList();
+    }
+
+    public List<ResumeDto> myResumes(Authentication auth){
+        User u = (User) auth.getPrincipal();
+        List<Resume> resumes = resumeDao.myResumes(u.getUsername());
+        return resumes.stream().map(e -> ResumeDto.builder()
+                        .title(e.getTitle())
+                        .requiredSalary(e.getRequiredSalary())
+                        .category(categoryService.getTitleById(e.getCategoryId()))
+                        .experiences(experienceService.findExperienceById(e.getId()))
+                        .educations(educationService.findEducationById(e.getId()))
+                        .contact(contactService.getContactByResumeId(e.getId()))
                         .dateOfPosted(e.getDateOfPosted())
                         .dateOfUpdated(e.getDateOfUpdated())
                         .active(e.isActive())
@@ -45,7 +64,6 @@ public class ResumeService {
         List<Resume> resumes = resumeDao.findAllResumes();
         return resumeDtoList(resumes);
     }
-
 
     public List<ResumeDto> selectResumeByUser(String authorEmail) {
         List<Resume> resumes = resumeDao.selectResumesByUser(authorEmail);
@@ -67,6 +85,7 @@ public class ResumeService {
                 .authorEmail(resume.getAuthorEmail())
                 .educations(educationService.findEducationById(resume.getId()))
                 .experiences(experienceService.findExperienceById(resume.getId()))
+                .contact(contactService.getContactByResumeId(resumeId))
                 .dateOfPosted(resume.getDateOfPosted())
                 .dateOfUpdated(resume.getDateOfUpdated())
                 .active(resume.isActive())
@@ -78,8 +97,9 @@ public class ResumeService {
         resumeDao.delete(resumeId);
     }
 
-    public void saveResume(ResumeDto resumeDto) {
-        var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory().toUpperCase());
+    public void saveResume(ResumeDto resumeDto, Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory());
 
         Long categoryId;
         if (mayBeCategory.isEmpty()) {
@@ -88,9 +108,9 @@ public class ResumeService {
             categoryId = mayBeCategory.get().getId();
 
             Long resumeId = resumeDao.save(Resume.builder()
-                    .title(resumeDto.getTitle())
+                    .title(resumeDto.getTitle().toUpperCase())
                     .requiredSalary(resumeDto.getRequiredSalary())
-                    .authorEmail(resumeDto.getAuthorEmail())
+                    .authorEmail(u.getUsername())
                     .categoryId(categoryId)
                     .active(resumeDto.isActive())
                     .build());
@@ -109,14 +129,20 @@ public class ResumeService {
                     .resumeId(resumeId)
                     .build()));
 
-            log.info("Резюме сохранено");
+            contactService.save(Contact.builder()
+                    .contactValue(resumeDto.getContact().getContactValue())
+                    .contactType(resumeDto.getContact().getContactType().toUpperCase())
+                    .resumeId(resumeId)
+                    .build());
+
+            log.info(u.getUsername() + " добавил(а) резюме");
         }
     }
 
     public void changeResume(ResumeDto resumeDto) {
         log.info("Резюме изменено");
 
-        var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory().toUpperCase());
+        var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory());
         Long categoryId = mayBeCategory.get().getId();
         resumeDao.change(Resume.builder()
                 .title(resumeDto.getTitle())

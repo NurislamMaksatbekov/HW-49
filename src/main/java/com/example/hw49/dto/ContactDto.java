@@ -7,7 +7,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ContactDto {
-    private Long id;
-    private String value;
+    private String contactValue;
     private String contactType;
 }

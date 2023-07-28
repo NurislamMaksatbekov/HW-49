@@ -38,7 +38,7 @@ VALUES ('TAXI', 1900, true, (select email from USERS where NAME = 'Azidin'),
        ('SERGENT', 3500, true, (select email from USERS where NAME = 'Azidin'),
         (select id from CATEGORIES where TITLE = 'SERGENT'), now(), now());
 
-insert into CONTACTS ("value", contact_type, resume_id)
+insert into CONTACTS (contact_value, contact_type, resume_id)
 values('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'PHONE_NUMBER'), (select id from RESUMES where title = 'TAXI')),
     ('+996555555555', (select TYPE from CONTACTS_TYPE where TYPE = 'PHONE_NUMBER'), (select id from RESUMES where title = 'SERGENT'));
 

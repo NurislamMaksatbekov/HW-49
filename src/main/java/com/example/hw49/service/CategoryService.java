@@ -18,12 +18,7 @@ public class CategoryService {
     }
 
     public Optional<Category> getIdByTitle(String title) {
-        return categoryDao.getIdByTitle(title);
+        return categoryDao.getIdByTitle(title.toUpperCase());
     }
 
-    public Long save(String title) {
-        return categoryDao.save(Category.builder()
-                .title(title)
-                .build());
-    }
 }

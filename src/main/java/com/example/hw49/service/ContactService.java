@@ -2,11 +2,12 @@ package com.example.hw49.service;
 
 import com.example.hw49.dao.ContactDao;
 import com.example.hw49.dto.ContactDto;
-import com.example.hw49.enums.ContactType;
+import com.example.hw49.entity.Contact;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,15 +15,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ContactService {
     private final ContactDao contactDao;
-
-    public void save(ContactDto contactDto) {
-        contactDao.save(ContactDto.builder()
-                        .value(contactDto.getValue())
-                        .contactType(contactDto.getContactType())
-                .build());
+    public void save(Contact contact){
+        contactDao.save(contact);
     }
 
-    public String contactType(String type){
-        return contactDao.getType(type);
+    public ContactDto getContactByResumeId(Long id){
+        return ContactDto.builder()
+                .contactValue(contactDao.getContactsByResumeId(id).getContactValue())
+                .contactType(contactDao.getContactsByResumeId(id).getContactType())
+                .build();
     }
 }

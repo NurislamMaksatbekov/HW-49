@@ -2,17 +2,13 @@ package com.example.hw49.dao;
 
 
 import com.example.hw49.entity.Resume;
-import com.example.hw49.entity.User;
 import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -67,6 +63,11 @@ public class ResumeDao extends BaseDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
     }
 
+    public List<Resume> myResumes(String email){
+        String sql = "select * from resumes where author_email = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), email);
+    }
+
     public Long save(Object obj) {
         jdbcTemplate.update(con -> {
             Resume r = (Resume) obj;
@@ -74,7 +75,7 @@ public class ResumeDao extends BaseDao {
                     "insert into resumes(TITLE, CATEGORY_ID, REQUIRED_SALARY, AUTHOR_EMAIL, ACTIVE, DATE_OF_POSTED) " +
                             "values (?, ?, ?, ?, ?, ?)",
                     new String[]{"id"});
-            ps.setString(1, r.getTitle().toUpperCase());
+            ps.setString(1, r.getTitle());
             ps.setLong(2, r.getCategoryId());
             ps.setDouble(3, r.getRequiredSalary());
             ps.setString(4, r.getAuthorEmail());

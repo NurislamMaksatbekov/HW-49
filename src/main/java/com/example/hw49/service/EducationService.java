@@ -28,14 +28,6 @@ public class EducationService {
         return educationDao.save(education);
     }
 
-//    public void change(EducationDto educationDto) {
-//         educationDao.change(Education.builder()
-//                .education(educationDto.getEducation())
-//                .studyPeriod(educationDto.getStudyPeriod())
-//                .placeOfStudy(educationDto.getPlaceOfStudy())
-//                .id(educationDto.getId())
-//                .build());
-//    }
 
     public void change(List<EducationDto> educationDto) {
         for (EducationDto e : educationDto) {

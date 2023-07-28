@@ -41,20 +41,9 @@ public class VacancyDao extends BaseDao{
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), categoryId);
     }
 
-
-
-    public void changeVacancy(Vacancy vacancy) {
-
-    }
-
-    public void deleteVacancy(Long vacancyId) {
-        String sql = "DELETE FROM vacancies WHERE ID = ?";
-
-        jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setLong(1, vacancyId);
-            return ps;
-        });
+    public List<Vacancy> myVacancies(String email){
+        String sql = "select * from vacancies where author_email = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), email);
     }
 
 
@@ -109,6 +98,7 @@ public class VacancyDao extends BaseDao{
 
     @Override
     public void delete(Long id) {
-
+        String sql = "DELETE FROM vacancies WHERE ID = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

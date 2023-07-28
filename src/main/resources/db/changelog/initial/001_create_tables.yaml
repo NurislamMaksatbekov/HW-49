@@ -108,7 +108,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: value
+                  name: contact_value
                   type: varchar(150)
                   constraints:
                     nullable: false

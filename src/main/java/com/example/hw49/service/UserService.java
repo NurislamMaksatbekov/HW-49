@@ -4,10 +4,11 @@ import com.example.hw49.dao.UserDao;
 import com.example.hw49.dto.ImageDto;
 import com.example.hw49.dto.UserDto;
 import com.example.hw49.entity.Image;
-import com.example.hw49.entity.User;
+import com.example.hw49.entity.Usr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +22,12 @@ public class UserService {
     private final FileService fileService;
     private static final String SUB_DIR = "images";
 
-    public Optional<User> findUserByName(String name) {
+    public Optional<Usr> findUserByName(String name) {
         // Поиск пользователей по имени
         return userDao.findUserByName(name);
     }
 
-    public Optional<User> findUserByPhoneNumber(String number) {
+    public Optional<Usr> findUserByPhoneNumber(String number) {
         // Поиск пользователей по номеру телефона
         return userDao.findUserByPhoneNumber(number);
     }
@@ -43,9 +44,9 @@ public class UserService {
     }
 
     public List<UserDto> getUserByResponds(Long vacancyId) {
-        List<User> users = userDao.getUserByResponds(vacancyId);
+        List<Usr> usrs = userDao.getUserByResponds(vacancyId);
 
-        return users.stream()
+        return usrs.stream()
                 .map(u -> UserDto.builder()
                         .name(u.getName())
                         .surname(u.getSurname())
@@ -57,31 +58,31 @@ public class UserService {
     }
 
     public UserDto findApplicant(String email) {
-        User user = userDao.findApplicant(email);
+        Usr usr = userDao.findApplicant(email);
         return UserDto.builder()
-                .name(user.getName())
-                .surname(user.getSurname())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .accountType(user.getAccountType())
+                .name(usr.getName())
+                .surname(usr.getSurname())
+                .username(usr.getUsername())
+                .email(usr.getEmail())
+                .phoneNumber(usr.getPhoneNumber())
+                .accountType(usr.getAccountType())
                 .build();
     }
 
     public UserDto findEmployer(String email) {
-        User user = userDao.findEmployer(email);
+        Usr usr = userDao.findEmployer(email);
         return UserDto.builder()
-                .name(user.getName())
-                .surname(user.getSurname())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .accountType(user.getAccountType())
+                .name(usr.getName())
+                .surname(usr.getSurname())
+                .username(usr.getUsername())
+                .email(usr.getEmail())
+                .phoneNumber(usr.getPhoneNumber())
+                .accountType(usr.getAccountType())
                 .build();
     }
 
     public void saveUser(UserDto user) {
-        userDao.save(User.builder()
+        userDao.save(Usr.builder()
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
@@ -98,10 +99,10 @@ public class UserService {
         String photo = fileService.saveUploadedFile(imageDto.getPhoto(), SUB_DIR);
         Image image = Image.builder()
                 .photo(photo)
-                .email(u.getEmail())
+                .email(u.getUsername())
                 .build();
         userDao.saveImage(image);
-        log.info(image.getEmail() + "загрузил(а) фото профиля");
+        log.info(image.getEmail() + " загрузил(а) фото профиля");
     }
 
 
