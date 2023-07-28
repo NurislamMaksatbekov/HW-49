@@ -5,13 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.sql.PreparedStatement;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -30,10 +27,5 @@ public class CategoryDao{
         return Optional.ofNullable(DataAccessUtils.singleResult(
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class), title)
         ));
-    }
-
-    public List<Category> getAllCategories() {
-        String sql = "select * from categories";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class));
     }
 }

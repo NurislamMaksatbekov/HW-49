@@ -1,6 +1,5 @@
 package com.example.hw49.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -16,4 +15,5 @@ public class EducationDto {
     private String placeOfStudy;
     @NotBlank(message = "Заполните поле")
     private String studyPeriod;
+    private Long resumeId;
 }

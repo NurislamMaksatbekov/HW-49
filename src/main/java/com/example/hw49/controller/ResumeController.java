@@ -59,4 +59,9 @@ public class ResumeController {
     public List<ResumeDto> myResumes(Authentication auth){
         return resumeService.myResumes(auth);
     }
+
+    @GetMapping("/category")
+    public List<ResumeDto> getResumeByCategory(Long id){
+        return resumeService.getResumeByCategory(id);
+    }
 }

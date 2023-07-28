@@ -41,13 +41,14 @@ public class ExperienceDao extends BaseDao{
     }
 
     public void change(ExperienceDto e) {
-    String sql = "update experiences set company_name = ?, work_period = ?, RESPONSIBILITIES = ? where id = ?";
+    String sql = "update experiences set company_name = ?, work_period = ?, RESPONSIBILITIES = ? where id = ? and RESUME_ID = ?";
     jdbcTemplate.update(con -> {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, e.getCompanyName());
         ps.setString(2, e.getWorkPeriod());
         ps.setString(3, e.getResponsibilities());
         ps.setLong(4, e.getId());
+        ps.setLong(5, e.getResumeId());
         return ps;
     }, keyHolder);
     }

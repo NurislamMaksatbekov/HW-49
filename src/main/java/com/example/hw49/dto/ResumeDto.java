@@ -18,7 +18,6 @@ public class ResumeDto {
     private String title;
     @Min(value = 1)
     private double requiredSalary;
-    @NotBlank(message = "Заполните поле")
     private boolean active;
     private String authorEmail;
     @NotBlank(message = "Категория не может быть пустой")

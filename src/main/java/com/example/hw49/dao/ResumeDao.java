@@ -2,7 +2,6 @@ package com.example.hw49.dao;
 
 
 import com.example.hw49.entity.Resume;
-import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

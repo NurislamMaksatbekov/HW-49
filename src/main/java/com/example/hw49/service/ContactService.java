@@ -7,22 +7,30 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ContactService {
     private final ContactDao contactDao;
-    public void save(Contact contact){
+
+    public void save(Contact contact) {
         contactDao.save(contact);
     }
 
-    public ContactDto getContactByResumeId(Long id){
+    public ContactDto getContactByResumeId(Long id) {
         return ContactDto.builder()
                 .contactValue(contactDao.getContactsByResumeId(id).getContactValue())
                 .contactType(contactDao.getContactsByResumeId(id).getContactType())
                 .build();
+    }
+
+    public void change(ContactDto contactDto) {
+        contactDao.change(Contact
+                .builder()
+                .contactValue(contactDto.getContactValue())
+                .contactType(contactDto.getContactType())
+                .resumeId(contactDto.getResumeId())
+                .build());
     }
 }

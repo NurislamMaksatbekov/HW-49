@@ -1,7 +1,6 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.VacancyDao;
-import com.example.hw49.dto.ResumeDto;
 import com.example.hw49.dto.VacancyDto;
 import com.example.hw49.entity.Vacancy;
 import com.example.hw49.errors.ResourceNotFoundException;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j

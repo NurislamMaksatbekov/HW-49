@@ -1,6 +1,7 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.ResumeDao;
+import com.example.hw49.dto.ContactDto;
 import com.example.hw49.dto.EducationDto;
 import com.example.hw49.dto.ExperienceDto;
 import com.example.hw49.dto.ResumeDto;
@@ -44,7 +45,7 @@ public class ResumeService {
                 .toList();
     }
 
-    public List<ResumeDto> myResumes(Authentication auth){
+    public List<ResumeDto> myResumes(Authentication auth) {
         User u = (User) auth.getPrincipal();
         List<Resume> resumes = resumeDao.myResumes(u.getUsername());
         return resumes.stream().map(e -> ResumeDto.builder()
@@ -68,7 +69,7 @@ public class ResumeService {
 
     public List<ResumeDto> selectResumeByUser(String authorEmail) {
         List<Resume> resumes = resumeDao.selectResumesByUser(authorEmail);
-        if(resumes.isEmpty()){
+        if (resumes.isEmpty()) {
             throw new ResourceNotFoundException("Not found");
         }
         return resumeDtoList(resumes);
@@ -76,7 +77,7 @@ public class ResumeService {
 
     public List<ResumeDto> findResumeByTitle(String title) {
         List<Resume> resumes = resumeDao.findResumeByTitle(title.toUpperCase());
-        if(resumes.isEmpty()){
+        if (resumes.isEmpty()) {
             throw new ResourceNotFoundException("Not found");
         }
         return resumeDtoList(resumes);
@@ -101,7 +102,7 @@ public class ResumeService {
 
     public void deleteResume(Long resumeId, Authentication auth) {
         User u = (User) auth.getPrincipal();
-        if(resumeDao.check(resumeId, u.getUsername())) {
+        if (resumeDao.check(resumeId, u.getUsername())) {
             log.info("Резюме удалено");
             resumeDao.delete(resumeId);
         } else log.error("У вас нет резюме с таким id");
@@ -151,13 +152,14 @@ public class ResumeService {
 
     public void changeResume(ResumeDto resumeDto, Authentication auth) {
         User u = (User) auth.getPrincipal();
-        if(resumeDao.check(resumeDto.getId(),u.getUsername())) {
+        if (resumeDao.check(resumeDto.getId(), u.getUsername())) {
             var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory());
             Long categoryId = mayBeCategory.get().getId();
             resumeDao.change(Resume.builder()
                     .title(resumeDto.getTitle())
                     .requiredSalary(resumeDto.getRequiredSalary())
                     .active(resumeDto.isActive())
+                    .authorEmail(u.getUsername())
                     .dateOfUpdated(LocalDateTime.now())
                     .categoryId(categoryId)
                     .id(resumeDto.getId())
@@ -165,6 +167,11 @@ public class ResumeService {
 
             Long resumeId = resumeDto.getId();
 
+            contactService.change(ContactDto.builder()
+                    .contactValue(resumeDto.getContact().getContactValue())
+                    .contactType(resumeDto.getContact().getContactType())
+                    .resumeId(resumeId)
+                    .build());
 
             List<EducationDto> educationDtoList = educationService.findEducationById(resumeId);
             educationService.change(educationDtoList.stream().map(e -> EducationDto.builder()
@@ -172,6 +179,7 @@ public class ResumeService {
                             .placeOfStudy(e.getPlaceOfStudy())
                             .studyPeriod(e.getStudyPeriod())
                             .id(e.getId())
+                            .resumeId(resumeId)
                             .build())
                     .toList());
 
@@ -181,10 +189,19 @@ public class ResumeService {
                             .workPeriod(e.getWorkPeriod())
                             .responsibilities(e.getResponsibilities())
                             .id(e.getId())
+                            .resumeId(resumeId)
                             .build())
                     .collect(Collectors.toList()));
             log.info("Резюме изменено");
-        }else log.error("У вас нет резюме с таким id");
+        } else log.error("У вас нет резюме с таким id");
+    }
+
+    public List<ResumeDto> getResumeByCategory(Long id) {
+        List<Resume> resumes = resumeDao.findResumeByCategory(id);
+        if (resumes.isEmpty()) {
+            throw new ResourceNotFoundException("Not found");
+        }
+        return resumeDtoList(resumes);
     }
 }
 

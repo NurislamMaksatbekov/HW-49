@@ -62,6 +62,7 @@ public class SecurityConfig {
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/title")).hasAuthority("EMPLOYER")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/email")).hasAuthority("EMPLOYER")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/id")).hasAuthority("EMPLOYER")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/category")).hasAuthority("EMPLOYER")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/users/respond")).hasAuthority("EMPLOYER")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/users/applicant")).hasAuthority("EMPLOYER")
 

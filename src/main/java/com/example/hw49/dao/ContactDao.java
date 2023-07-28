@@ -1,16 +1,13 @@
 package com.example.hw49.dao;
 
 import com.example.hw49.entity.Contact;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 public class ContactDao extends BaseDao{
@@ -33,6 +30,17 @@ public class ContactDao extends BaseDao{
             return ps;
         },keyHolder);
     return (Objects.requireNonNull(keyHolder.getKey())).longValue();
+    }
+
+    public void change(Contact contact){
+        String sql = "update contacts set contact_value = ?, contact_type = ? where resume_id = ?";
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, contact.getContactValue());
+            ps.setString(2, contact.getContactType());
+            ps.setLong(3, contact.getResumeId());
+            return ps;
+        }, keyHolder);
     }
 
     public Contact getContactsByResumeId(Long id){

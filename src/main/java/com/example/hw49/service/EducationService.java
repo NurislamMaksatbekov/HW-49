@@ -36,6 +36,7 @@ public class EducationService {
                     .studyPeriod(e.getStudyPeriod())
                     .placeOfStudy(e.getPlaceOfStudy())
                     .id(e.getId())
+                    .resumeId(e.getResumeId())
                     .build());
         }
     }

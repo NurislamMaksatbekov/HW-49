@@ -34,20 +34,6 @@ public class UserDao{
         ));
     }
 
-    @SneakyThrows
-    public String findUserEmail(Long id) {
-        String sql = "select AUTHOR_EMAIL from RESUMES " +
-                "where id = ?";
-        Optional<String> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
-                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(String.class), id)
-        ));
-
-        if (mayBeUser.isEmpty()) {
-            throw new Exception("User not found");
-        }
-
-        return mayBeUser.get();
-    }
 
     public boolean checkUser(String email) {
         String sql = "select case when exists(" +

@@ -34,6 +34,7 @@ public class ExperienceService {
                     .workPeriod(e.getWorkPeriod())
                     .responsibilities(e.getResponsibilities())
                     .id(e.getId())
+                    .resumeId(e.getResumeId())
                     .build());
     }
 }

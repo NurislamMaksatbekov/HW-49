@@ -12,4 +12,5 @@ public class ContactDto {
     private String contactValue;
     @NotBlank(message = "Контактные данные не могут быть пустыми")
     private String contactType;
+    private Long resumeId;
 }
