@@ -6,19 +6,22 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
-@RequestMapping("/vacancies")
+@RequestMapping
 public class VacancyController {
     private final VacancyService vacancyService;
 
-    @GetMapping
-    public List<VacancyDto> getAllVacancies() {
-        return vacancyService.findAllVacancies();
+    @GetMapping("/vacancies")
+    public String getAllVacancies(Model model) {
+        model.addAttribute("vacancies", vacancyService.findAllVacancies());
+        return "vacancies/vacancies";
     }
 
     @GetMapping("/category")

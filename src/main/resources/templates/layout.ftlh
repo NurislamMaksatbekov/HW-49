@@ -22,7 +22,7 @@
 
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Navbar</a>
+        <a class="navbar-brand" href="/vacancies">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -34,21 +34,10 @@
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Books</a>
+                    <a class="nav-link" href="/users/profile">Profile</a>
                 </li>
             </ul>
-            <#--            <a href="/profile" class="btn btn-outline-success my-2 my-sm-0">Profile</a>-->
-            <#--            <#if user?has_content>-->
-            <#--                <i class="btn btn-outline-success my-2 my-sm-0">${user.email}</i>-->
-            <#--            <#else>-->
-            <#--                <a href="/login" class="btn btn-outline-success my-2 my-sm-0">LogIn</a>-->
-            <#--            </#if>-->
-            <#--            <#if user?has_content>-->
-            <#--                <i></i>-->
-            <#--            <#else>-->
-            <#--                <a href="/register" class="btn btn-outline-success my-2 my-sm-0">Sign up</a>-->
-            <#--            </#if>-->
-            <#--            <a href="/exit" class="btn btn-outline-success my-2 my-sm-0">Exit</a>-->
+            <a href="users/register" class="btn btn-outline-success my-2 my-sm-0">Sign up</a>
         </div>
     </nav>
     <i class="m-5"></i>
