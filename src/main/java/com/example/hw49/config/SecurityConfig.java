@@ -75,6 +75,7 @@ public class SecurityConfig {
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/respond")).hasAuthority("APPLICANT")
 
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/users/upload")).fullyAuthenticated()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/users/profile")).fullyAuthenticated()
                         .anyRequest().permitAll()
                 );
         return http.build();

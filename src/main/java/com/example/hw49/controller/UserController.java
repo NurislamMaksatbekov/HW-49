@@ -2,14 +2,16 @@ package com.example.hw49.controller;
 
 import com.example.hw49.dto.ImageDto;
 import com.example.hw49.dto.UserDto;
+import com.example.hw49.service.ResumeService;
 import com.example.hw49.service.UserService;
+import com.example.hw49.service.VacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,11 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final ResumeService resumeService;
+    private final VacancyService vacancyService;
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Model model) {
         return "users/register";
     }
 
@@ -32,6 +36,14 @@ public class UserController {
     public String register(@Valid UserDto user) {
         userService.saveUser(user);
         return "redirect:/";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model, Authentication auth){
+        model.addAttribute("user", userService.profile(auth));
+        model.addAttribute("resumes" ,resumeService.lastResumes(auth));
+        model.addAttribute("vacancies", vacancyService.lastVacancies(auth));
+        return "users/profile";
     }
 
     @GetMapping("/employer")

@@ -37,7 +37,7 @@ public class VacancyService {
 
     public List<VacancyDto> getVacancyByCategory(Long categoryId) {
         List<Vacancy> vacancies = vacancyDao.getVacancyByCategory(categoryId);
-        if(vacancies.isEmpty()){
+        if (vacancies.isEmpty()) {
             throw new ResourceNotFoundException("Not Found");
         }
         return vacancyDtoList(vacancies);
@@ -45,10 +45,10 @@ public class VacancyService {
 
     public void deleteVacancy(Long vacancyId, Authentication auth) {
         User u = (User) auth.getPrincipal();
-        if(vacancyDao.check(vacancyId, u.getUsername())){
+        if (vacancyDao.check(vacancyId, u.getUsername())) {
             vacancyDao.delete(vacancyId);
             log.info("Вакансия удалена");
-        }else log.error("У вас нет этой вакансии");
+        } else log.error("У вас нет этой вакансии");
     }
 
     public List<VacancyDto> findAllVacancies() {
@@ -70,6 +70,17 @@ public class VacancyService {
                 .active(e.isActive())
                 .category(categoryService.getTitleById(e.getCategoryId()))
                 .build()).toList();
+    }
+
+    public List<VacancyDto> lastVacancies(Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        List<Vacancy> vacancies = vacancyDao.myVacancies(u.getUsername());
+        return vacancies.stream().map(e -> VacancyDto.builder()
+                        .title(e.getTitle())
+                        .dateOfPosted(e.getDateOfPosted())
+                        .dateOfUpdated(e.getDateOfUpdated())
+                        .build())
+                .toList();
     }
 
     public void saveVacancy(VacancyDto vacancyDto, Authentication auth) {
@@ -98,7 +109,7 @@ public class VacancyService {
     public void change(VacancyDto vacancyDto, Authentication auth) {
         User u = (User) auth.getPrincipal();
 
-        if(vacancyDao.check(vacancyDto. getId(), u.getUsername())) {
+        if (vacancyDao.check(vacancyDto.getId(), u.getUsername())) {
             var categoryId = categoryService.getIdByTitle(vacancyDto.getCategory().toUpperCase());
             vacancyDao.change(Vacancy.builder()
                     .title(vacancyDto.getTitle())
@@ -113,10 +124,10 @@ public class VacancyService {
                     .id(vacancyDto.getId())
                     .build());
             log.info("Вакансия изменена");
-        }else log.error("У вас нет этой вакансии");
+        } else log.error("У вас нет этой вакансии");
     }
 
-    public boolean checkVacancy(Long id){
+    public boolean checkVacancy(Long id) {
         return vacancyDao.checkVacancy(id);
     }
 }

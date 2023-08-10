@@ -2,6 +2,7 @@ package com.example.hw49.service;
 
 import com.example.hw49.dao.UserDao;
 import com.example.hw49.dto.ImageDto;
+import com.example.hw49.dto.ProfileDto;
 import com.example.hw49.dto.UserDto;
 import com.example.hw49.entity.Image;
 import com.example.hw49.entity.Usr;
@@ -36,6 +37,18 @@ public class UserService {
                         .phoneNumber(u.getPhoneNumber())
                         .accountType(u.getAccountType())
                         .build()).toList();
+    }
+
+    public ProfileDto profile(Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        Usr user = userDao.userProfile(u.getUsername());
+        return ProfileDto.builder()
+                .email(u.getUsername())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .photo(user.getPhoto())
+                .accountType(user.getAccountType())
+                .build();
     }
 
     public UserDto findApplicant(String email) {

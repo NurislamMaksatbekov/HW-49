@@ -60,6 +60,15 @@ public class UserDao{
         return mayBeUser.get();
     }
 
+    public Usr userProfile(String email) {
+        String sql = "select email, name, SURNAME, ACCOUNT_TYPE, PHOTO" +
+                " from USERS where EMAIL = ?;";
+        Optional<Usr> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), email)
+        ));
+        return mayBeUser.get();
+    }
+
     public Usr findEmployer(String email) {
         String sql = "select * from USERS u\n" +
                 "where ACCOUNT_TYPE = 'EMPLOYER'\n" +

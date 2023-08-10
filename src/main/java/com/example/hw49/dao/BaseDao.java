@@ -19,6 +19,8 @@ public abstract class BaseDao {
         this.keyHolder = new GeneratedKeyHolder();
     }
 
+
+
     public abstract Long save(Object obj);
 
     public abstract void delete(Long id);

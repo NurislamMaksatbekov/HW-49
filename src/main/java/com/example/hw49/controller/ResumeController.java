@@ -6,11 +6,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/resumes")
 public class ResumeController {
@@ -59,6 +61,14 @@ public class ResumeController {
     public List<ResumeDto> myResumes(Authentication auth){
         return resumeService.myResumes(auth);
     }
+
+//    @GetMapping("last-resumes")
+//    public String lastResumes(Model model, Authentication auth){
+//        var resumes = resumeService.lastResumes(auth);
+//        model.addAttribute("resumes", resumes);
+//        return "users/profile";
+//    }
+
 
     @GetMapping("/category")
     public List<ResumeDto> getResumeByCategory(Long id){
