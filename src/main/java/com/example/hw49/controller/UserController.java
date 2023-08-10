@@ -5,6 +5,7 @@ import com.example.hw49.dto.UserDto;
 import com.example.hw49.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,16 +29,8 @@ public class UserController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.SEE_OTHER)
-    public String register(@Valid @RequestBody UserDto user) {
-        userService.saveUser(UserDto.builder()
-                .name(user.getName())
-                .surname(user.getSurname())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .phoneNumber(user.getPhoneNumber())
-                .accountType(user.getAccountType())
-                .build());
+    public String register(@Valid UserDto user) {
+        userService.saveUser(user);
         return "redirect:/";
     }
 

@@ -18,7 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserDao{
     private final JdbcTemplate jdbcTemplate;
-    private final PasswordEncoder encoder;
 
     public Optional<Usr> findUserByName(String name) {
         String sql = "select * from users where name = ?";
@@ -82,7 +81,7 @@ public class UserDao{
             ps.setString(2, u.getName());
             ps.setString(3, u.getSurname());
             ps.setString(4, u.getUsername());
-            ps.setString(5, encoder.encode(u.getPassword()));
+            ps.setString(5, u.getPassword());
             ps.setString(6, u.getPhoneNumber());
             ps.setString(7, u.getAccountType());
             ps.setBoolean(8,true);

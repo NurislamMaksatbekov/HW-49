@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,8 @@ import java.util.List;
 public class UserService {
     private final UserDao userDao;
     private final FileService fileService;
+    private final PasswordEncoder encoder;
+
     private static final String SUB_DIR = "images";
 
     public List<UserDto> getUserByResponds(Long vacancyId) {
@@ -65,7 +68,7 @@ public class UserService {
                 .surname(user.getSurname())
                 .username(user.getUsername())
                 .email(user.getEmail().toLowerCase())
-                .password(user.getPassword())
+                .password(encoder.encode(user.getPassword()))
                 .phoneNumber(user.getPhoneNumber())
                 .accountType(user.getAccountType().toUpperCase())
                 .build());
