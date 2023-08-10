@@ -5,22 +5,40 @@ import com.example.hw49.dto.UserDto;
 import com.example.hw49.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/register")
+    public String register() {
+        return "users/register";
+    }
+
+
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody UserDto user) {
-        userService.saveUser(user);
-        return ResponseEntity.ok("Вы успешно зарегистрировлись");
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    public String register(@Valid @RequestBody UserDto user) {
+        userService.saveUser(UserDto.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
+                .accountType(user.getAccountType())
+                .build());
+        return "redirect:/";
     }
 
     @GetMapping("/employer")
