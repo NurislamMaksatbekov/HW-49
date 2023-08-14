@@ -2,13 +2,17 @@ package com.example.hw49.service;
 
 import com.example.hw49.dao.UserDao;
 import com.example.hw49.dto.ImageDto;
+import com.example.hw49.dto.ProfileDto;
 import com.example.hw49.dto.UserDto;
 import com.example.hw49.entity.Image;
 import com.example.hw49.entity.Usr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,8 @@ import java.util.List;
 public class UserService {
     private final UserDao userDao;
     private final FileService fileService;
+    private final PasswordEncoder encoder;
+
     private static final String SUB_DIR = "images";
 
     public List<UserDto> getUserByResponds(Long vacancyId) {
@@ -33,6 +39,18 @@ public class UserService {
                         .phoneNumber(u.getPhoneNumber())
                         .accountType(u.getAccountType())
                         .build()).toList();
+    }
+
+    public ProfileDto profile(Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        Usr user = userDao.userProfile(u.getUsername());
+        return ProfileDto.builder()
+                .email(u.getUsername())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .photo(user.getPhoto())
+                .accountType(user.getAccountType())
+                .build();
     }
 
     public UserDto findApplicant(String email) {
@@ -65,7 +83,7 @@ public class UserService {
                 .surname(user.getSurname())
                 .username(user.getUsername())
                 .email(user.getEmail().toLowerCase())
-                .password(user.getPassword())
+                .password(encoder.encode(user.getPassword()))
                 .phoneNumber(user.getPhoneNumber())
                 .accountType(user.getAccountType().toUpperCase())
                 .build());
@@ -82,6 +100,4 @@ public class UserService {
         userDao.saveImage(image);
         log.info(image.getEmail() + " загрузил(а) фото профиля");
     }
-
-
 }

@@ -62,6 +62,7 @@ public class ResumeDao extends BaseDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), email);
     }
 
+
     public Long save(Object obj) {
         jdbcTemplate.update(con -> {
             Resume r = (Resume) obj;

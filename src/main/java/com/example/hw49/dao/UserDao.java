@@ -18,7 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserDao{
     private final JdbcTemplate jdbcTemplate;
-    private final PasswordEncoder encoder;
 
     public Optional<Usr> findUserByName(String name) {
         String sql = "select * from users where name = ?";
@@ -61,6 +60,15 @@ public class UserDao{
         return mayBeUser.get();
     }
 
+    public Usr userProfile(String email) {
+        String sql = "select email, name, SURNAME, ACCOUNT_TYPE, PHOTO" +
+                " from USERS where EMAIL = ?;";
+        Optional<Usr> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Usr.class), email)
+        ));
+        return mayBeUser.get();
+    }
+
     public Usr findEmployer(String email) {
         String sql = "select * from USERS u\n" +
                 "where ACCOUNT_TYPE = 'EMPLOYER'\n" +
@@ -82,7 +90,7 @@ public class UserDao{
             ps.setString(2, u.getName());
             ps.setString(3, u.getSurname());
             ps.setString(4, u.getUsername());
-            ps.setString(5, encoder.encode(u.getPassword()));
+            ps.setString(5, u.getPassword());
             ps.setString(6, u.getPhoneNumber());
             ps.setString(7, u.getAccountType());
             ps.setBoolean(8,true);

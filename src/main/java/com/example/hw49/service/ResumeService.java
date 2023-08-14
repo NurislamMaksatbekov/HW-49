@@ -1,14 +1,14 @@
 package com.example.hw49.service;
 
 import com.example.hw49.dao.ResumeDao;
-import com.example.hw49.dto.ContactDto;
-import com.example.hw49.dto.EducationDto;
-import com.example.hw49.dto.ExperienceDto;
-import com.example.hw49.dto.ResumeDto;
+import com.example.hw49.dto.*;
 import com.example.hw49.entity.*;
 import com.example.hw49.errors.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,18 @@ public class ResumeService {
                         .build())
                 .toList();
     }
+
+    public List<ResumeDto> lastResumes(Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        List<Resume> resumes = resumeDao.myResumes(u.getUsername());
+        return resumes.stream().map(e -> ResumeDto.builder()
+                        .title(e.getTitle())
+                        .dateOfPosted(e.getDateOfPosted())
+                        .dateOfUpdated(e.getDateOfUpdated())
+                        .build())
+                .toList();
+    }
+
 
     public List<ResumeDto> myResumes(Authentication auth) {
         User u = (User) auth.getPrincipal();

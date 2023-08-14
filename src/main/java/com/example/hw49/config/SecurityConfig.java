@@ -54,27 +54,15 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/my-vacancies")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/create")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/change")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/delete")).hasAuthority("EMPLOYER")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancy/**")).hasAuthority("EMPLOYER")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/title")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/email")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/id")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/category")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/users/respond")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/users/applicant")).hasAuthority("EMPLOYER")
-
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/my-resumes")).hasAuthority("APPLICANT")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/create")).hasAuthority("APPLICANT")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/delete")).hasAuthority("APPLICANT")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes/change")).hasAuthority("APPLICANT")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancies/category")).hasAuthority("APPLICANT")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/users/employer")).hasAuthority("APPLICANT")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/summary/**")).hasAuthority("EMPLOYER")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resume/**")).hasAuthority("APPLICANT")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancy/category")).hasAuthority("APPLICANT")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/respond")).hasAuthority("APPLICANT")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/users/**")).fullyAuthenticated()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/profile")).fullyAuthenticated()
 
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/users/upload")).fullyAuthenticated()
                         .anyRequest().permitAll()
                 );
         return http.build();
