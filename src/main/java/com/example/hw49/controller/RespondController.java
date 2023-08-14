@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/responds")
+@RequestMapping
 public class RespondController {
     private final RespondService respondService;
 
-    @PostMapping
+    @PostMapping("respond")
     public void respond(@RequestBody RespondDto respondDto, Authentication auth) {
         respondService.respondVacancy(respondDto, auth);
     }

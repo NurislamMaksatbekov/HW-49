@@ -19,19 +19,19 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping
 public class UserController {
     private final UserService userService;
     private final ResumeService resumeService;
     private final VacancyService vacancyService;
 
-    @GetMapping("/register")
+    @GetMapping("auth/register")
     public String register(Model model) {
         return "users/register";
     }
 
 
-    @PostMapping("/register")
+    @PostMapping("auth/register")
     @ResponseStatus(HttpStatus.SEE_OTHER)
     public String register(@Valid UserDto user) {
         userService.saveUser(user);
@@ -46,22 +46,22 @@ public class UserController {
         return "users/profile";
     }
 
-    @GetMapping("/employer")
+    @GetMapping("users/employer")
     public UserDto findEmployer(@RequestParam String email) {
         return userService.findEmployer(email);
     }
 
-    @GetMapping("/respond")
+    @GetMapping("users/respond")
     public List<UserDto> findUserByRespond(@RequestParam Long vacancyId) {
         return userService.getUserByResponds(vacancyId);
     }
 
-    @GetMapping("/applicant")
+    @GetMapping("users/applicant")
     public UserDto findApplicant(@RequestParam String email) {
         return userService.findApplicant(email);
     }
 
-    @PostMapping("/upload")
+    @PostMapping("users/upload")
     public ResponseEntity<String> uploadImage(ImageDto imageDto, Authentication auth) {
         userService.uploadImage(imageDto, auth);
         return ResponseEntity.ok("Фото профиля загружено");

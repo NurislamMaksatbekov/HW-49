@@ -14,63 +14,57 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/resumes")
+@RequestMapping
 public class ResumeController {
 
     private final ResumeService resumeService;
 
-    @GetMapping
-    public List<ResumeDto> findAllResumes() {
-        return resumeService.findAllResumes();
+    @GetMapping("/resumes")
+    public String findAllResumes(Model model) {
+        model.addAttribute("resumes", resumeService.findAllResumes());
+        return "resumes/resumes";
     }
 
-    @GetMapping("/title")
-    public List<ResumeDto> findResumeByTitle(@RequestParam String title) {
-        return resumeService.findResumeByTitle(title);
-    }
-
-    @DeleteMapping("/delete")
+    @DeleteMapping("resume/delete")
     public ResponseEntity<String> deleteResume(@RequestParam Long resumeId, Authentication auth) {
         resumeService.deleteResume(resumeId, auth);
         return ResponseEntity.ok("Вы успешно удалили резюме");
     }
 
-    @PostMapping("/change")
+    @PostMapping("resume/change")
     public ResponseEntity<String> changeResume(@Valid @RequestBody ResumeDto resume, Authentication auth) {
         resumeService.changeResume(resume, auth);
         return ResponseEntity.ok("Вы успешно изменили резюме");
     }
 
-    @PostMapping("/create")
+    @PostMapping("resume/create")
     public ResponseEntity<String> createResume(@Valid @RequestBody ResumeDto resumeDto, Authentication auth) {
         resumeService.saveResume(resumeDto, auth);
         return ResponseEntity.ok("Вы успешно добавили новое резюме");
     }
 
-    @GetMapping("/id")
-    public ResumeDto findResumeById(@RequestParam Long resumeId) {
-        return resumeService.findResumeById(resumeId);
-    }
-
-    @GetMapping("/email")
-    public List<ResumeDto> selectResumeByUser(@RequestParam String authorEmail) {
-        return resumeService.selectResumeByUser(authorEmail);
-    }
-
-    @GetMapping("my-resumes")
+    @GetMapping("resume/my-resumes")
     public List<ResumeDto> myResumes(Authentication auth){
         return resumeService.myResumes(auth);
     }
 
-//    @GetMapping("last-resumes")
-//    public String lastResumes(Model model, Authentication auth){
-//        var resumes = resumeService.lastResumes(auth);
-//        model.addAttribute("resumes", resumes);
-//        return "users/profile";
-//    }
+    @GetMapping("summary/title")
+    public List<ResumeDto> findResumeByTitle(@RequestParam String title) {
+        return resumeService.findResumeByTitle(title);
+    }
+
+    @GetMapping("summary/id")
+    public ResumeDto findResumeById(@RequestParam Long resumeId) {
+        return resumeService.findResumeById(resumeId);
+    }
+
+    @GetMapping("summary/email")
+    public List<ResumeDto> selectResumeByUser(@RequestParam String authorEmail) {
+        return resumeService.selectResumeByUser(authorEmail);
+    }
 
 
-    @GetMapping("/category")
+    @GetMapping("summary/category")
     public List<ResumeDto> getResumeByCategory(Long id){
         return resumeService.getResumeByCategory(id);
     }

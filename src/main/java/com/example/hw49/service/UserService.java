@@ -8,6 +8,8 @@ import com.example.hw49.entity.Image;
 import com.example.hw49.entity.Usr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -98,6 +100,4 @@ public class UserService {
         userDao.saveImage(image);
         log.info(image.getEmail() + " загрузил(а) фото профиля");
     }
-
-
 }

@@ -18,38 +18,37 @@ import java.util.List;
 public class VacancyController {
     private final VacancyService vacancyService;
 
-    @GetMapping("/vacancies")
+    @GetMapping("vacancies")
     public String getAllVacancies(Model model) {
         model.addAttribute("vacancies", vacancyService.findAllVacancies());
         return "vacancies/vacancies";
     }
 
-    @GetMapping("/category")
+    @GetMapping("vacancy/by/category")
     public List<VacancyDto> findVacancyByCategory(@RequestParam Long categoryId) {
         return vacancyService.getVacancyByCategory(categoryId);
     }
 
-    @PostMapping("/create")
+    @PostMapping("vacancy/create")
     public ResponseEntity<String> createVacancy(@Valid @RequestBody VacancyDto vacancy, Authentication auth) {
         vacancyService.saveVacancy(vacancy, auth);
         return ResponseEntity.ok("Вы успешно добавили вакансию");
     }
 
-    @PostMapping("/change")
+    @PostMapping("vacancy/change")
     public ResponseEntity<String> changeVacancy(@Valid @RequestBody VacancyDto vacancyDto, Authentication auth) {
         vacancyService.change(vacancyDto, auth);
         return ResponseEntity.ok("Вы успешно изменили вакансию");
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("vacancy/delete")
     public ResponseEntity<String> deleteVacancy(@RequestParam Long vacancyId, Authentication auth) {
         vacancyService.deleteVacancy(vacancyId, auth);
         return ResponseEntity.ok("Вы успешно удалили вакансию");
     }
 
-    @GetMapping("/my-vacancies")
+    @GetMapping("vacancy/my-vacancies")
     public List<VacancyDto> myVacancies(Authentication auth) {
         return vacancyService.myVacancies(auth);
     }
-
 }

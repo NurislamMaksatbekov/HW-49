@@ -1,9 +1,13 @@
 <#import "../layout.ftlh" as main>
 <@main.layout>
-    <div class="card mb-3">
+    <div class="card mb-3" style="background-color: gray">
         <div class="row no-gutters">
             <div class="col-md-4">
-                <img src="" alt="...">
+                <#if user.photo??>
+                    <img src="/images/${user.photo}" alt="#">
+                <#else>
+                    <img src="https://avatars.mds.yandex.net/i?id=aa2d33e5863eed0726403a139bfee0b288676a41-7757532-images-thumbs&n=13" alt="photo" style="max-height: 200px; max-width: 300px;">
+                </#if>
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -15,7 +19,8 @@
                     <#else>
                         <h5 class="card-title">${user.name}</h5>
                         <a href="" class="btn btn-dark">Редактировать</a>
-                        <a href="" class="btn btn-dark" style="margin-left: 250px">Создать вакансию</a>
+                        <a href="/resumes" class="btn btn-dark" style="margin-left: 180px">Посмотреть резюме</a>
+                        <a href="" class="btn btn-dark">Создать вакансию</a>
                     </#if>
                 </div>
             </div>
