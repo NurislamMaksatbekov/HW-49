@@ -14,8 +14,8 @@ public class EducationService {
 
     private final EducationDao educationDao;
 
-    public List<EducationDto> findEducationById(Long id) {
-        List<Education> education = educationDao.getEducationById(id);
+    public List<EducationDto> findEducationsById(Long id) {
+        List<Education> education = educationDao.getEducationsById(id);
         return education.stream().map(e -> EducationDto.builder()
                 .id(e.getId())
                 .education(e.getEducation())
@@ -24,20 +24,29 @@ public class EducationService {
                 .build()).toList();
     }
 
+    public EducationDto findEducationById(Long id){
+        Education education = educationDao.getEducationById(id);
+        return EducationDto.builder()
+                .id(education.getId())
+                .education(education.getEducation())
+                .studyPeriod(education.getStudyPeriod())
+                .placeOfStudy(education.getPlaceOfStudy())
+                .build();
+    }
+
     public Long save(Education education) {
         return educationDao.save(education);
     }
 
 
-    public void change(List<EducationDto> educationDto) {
-        for (EducationDto e : educationDto) {
+    public void change(EducationDto educationDto) {
+        educationDao.getEducationById(educationDto.getResumeId());
             educationDao.change(Education.builder()
-                    .education(e.getEducation())
-                    .studyPeriod(e.getStudyPeriod())
-                    .placeOfStudy(e.getPlaceOfStudy())
-                    .id(e.getId())
-                    .resumeId(e.getResumeId())
+                    .education(educationDto.getEducation())
+                    .studyPeriod(educationDto.getStudyPeriod())
+                    .placeOfStudy(educationDto.getPlaceOfStudy())
+                    .id(educationDto.getId())
+                    .resumeId(educationDto.getResumeId())
                     .build());
-        }
     }
 }
