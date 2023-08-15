@@ -6,9 +6,6 @@ import com.example.hw49.entity.*;
 import com.example.hw49.errors.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -36,7 +33,7 @@ public class ResumeService {
                         .category(categoryService.getTitleById(e.getCategoryId()))
                         .authorEmail(e.getAuthorEmail())
                         .experiences(experienceService.findExperienceById(e.getId()))
-                        .educations(educationService.findEducationById(e.getId()))
+                        .educations(educationService.findEducationsById(e.getId()))
                         .contact(contactService.getContactByResumeId(e.getId()))
                         .dateOfPosted(e.getDateOfPosted())
                         .dateOfUpdated(e.getDateOfUpdated())
@@ -65,7 +62,7 @@ public class ResumeService {
                         .requiredSalary(e.getRequiredSalary())
                         .category(categoryService.getTitleById(e.getCategoryId()))
                         .experiences(experienceService.findExperienceById(e.getId()))
-                        .educations(educationService.findEducationById(e.getId()))
+                        .educations(educationService.findEducationsById(e.getId()))
                         .contact(contactService.getContactByResumeId(e.getId()))
                         .dateOfPosted(e.getDateOfPosted())
                         .dateOfUpdated(e.getDateOfUpdated())
@@ -103,7 +100,7 @@ public class ResumeService {
                 .requiredSalary(resume.getRequiredSalary())
                 .category(categoryService.getTitleById(resume.getCategoryId()))
                 .authorEmail(resume.getAuthorEmail())
-                .educations(educationService.findEducationById(resume.getId()))
+                .educations(educationService.findEducationsById(resume.getId()))
                 .experiences(experienceService.findExperienceById(resume.getId()))
                 .contact(contactService.getContactByResumeId(resumeId))
                 .dateOfPosted(resume.getDateOfPosted())
@@ -181,19 +178,20 @@ public class ResumeService {
 
             contactService.change(ContactDto.builder()
                     .contactValue(resumeDto.getContact().getContactValue())
-                    .contactType(resumeDto.getContact().getContactType())
+                    .contactType(resumeDto.getContact().getContactType().toUpperCase())
                     .resumeId(resumeId)
                     .build());
 
-            List<EducationDto> educationDtoList = educationService.findEducationById(resumeId);
-            educationService.change(educationDtoList.stream().map(e -> EducationDto.builder()
-                            .education(e.getEducation())
-                            .placeOfStudy(e.getPlaceOfStudy())
-                            .studyPeriod(e.getStudyPeriod())
-                            .id(e.getId())
-                            .resumeId(resumeId)
-                            .build())
-                    .toList());
+            EducationDto education = educationService.findEducationById(resumeId);
+            educationService.change(EducationDto.builder().build());
+//            educationService.change(educationDtoList.stream().map(e -> EducationDto.builder()
+//                            .id(e.getId())
+//                            .education(e.getEducation())
+//                            .placeOfStudy(e.getPlaceOfStudy())
+//                            .studyPeriod(e.getStudyPeriod())
+//                            .resumeId(resumeId)
+//                            .build())
+//                    .toList());
 
             List<ExperienceDto> experienceDtoList = experienceService.findExperienceById(resumeId);
             experienceService.change(experienceDtoList.stream().map(e -> ExperienceDto.builder()

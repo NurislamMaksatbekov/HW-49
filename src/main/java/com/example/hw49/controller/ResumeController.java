@@ -37,6 +37,11 @@ public class ResumeController {
         return ResponseEntity.ok("Вы успешно изменили резюме");
     }
 
+    @GetMapping("resume/create")
+    public String createResume(){
+        return "resumes/add_resume";
+    }
+
     @PostMapping("resume/create")
     public ResponseEntity<String> createResume(@Valid @RequestBody ResumeDto resumeDto, Authentication auth) {
         resumeService.saveResume(resumeDto, auth);

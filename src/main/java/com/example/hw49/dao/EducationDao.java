@@ -1,6 +1,8 @@
 package com.example.hw49.dao;
 
 import com.example.hw49.entity.Education;
+import com.example.hw49.entity.Usr;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 
@@ -18,9 +21,17 @@ public class EducationDao extends BaseDao{
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
-    public List<Education> getEducationById(Long id){
+    public List<Education> getEducationsById(Long id){
         String sql = "select * from educations where resume_id = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Education.class), id);
+    }
+
+    public Education getEducationById(Long id){
+        String sql = "select * from educations where resume_id = ?";
+        Optional<Education> mayBeUser = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Education.class), id)
+        ));
+        return mayBeUser.get();
     }
 
     @Override
