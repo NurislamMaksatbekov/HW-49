@@ -26,10 +26,9 @@ public class UserController {
     private final VacancyService vacancyService;
 
     @GetMapping("auth/register")
-    public String register(Model model) {
+    public String register() {
         return "users/register";
     }
-
 
     @PostMapping("auth/register")
     @ResponseStatus(HttpStatus.SEE_OTHER)
@@ -38,10 +37,22 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/users/change")
+    public String change() {
+        return "users/change_user_info";
+    }
+
+    @PostMapping("users/change")
+    public String change(UserDto user, Authentication auth) {
+        userService.changeUser(user, auth);
+        return "redirect:/profile";
+    }
+
+
     @GetMapping("/profile")
-    public String profile(Model model, Authentication auth){
+    public String profile(Model model, Authentication auth, Long resumeId) {
         model.addAttribute("user", userService.profile(auth));
-        model.addAttribute("resumes" ,resumeService.lastResumes(auth));
+        model.addAttribute("resumes", resumeService.lastResumes(auth));
         model.addAttribute("vacancies", vacancyService.lastVacancies(auth));
         return "users/profile";
     }

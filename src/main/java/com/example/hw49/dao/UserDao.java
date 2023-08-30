@@ -3,11 +3,9 @@ package com.example.hw49.dao;
 import com.example.hw49.entity.Image;
 import com.example.hw49.entity.Usr;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
@@ -94,6 +92,22 @@ public class UserDao{
             ps.setString(6, u.getPhoneNumber());
             ps.setString(7, u.getAccountType());
             ps.setBoolean(8,true);
+            return ps;
+        });
+    }
+
+    public void change(Object obj) {
+        Usr u = (Usr) obj;
+        String sql = "UPDATE users " +
+                "SET name = ?, surname = ?, username = ? " +
+                "WHERE email = ?";
+
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, u.getName());
+            ps.setString(2, u.getSurname());
+            ps.setString(3, u.getUsername());
+            ps.setString(4, u.getEmail());
             return ps;
         });
     }

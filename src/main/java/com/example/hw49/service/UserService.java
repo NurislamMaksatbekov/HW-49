@@ -8,8 +8,6 @@ import com.example.hw49.entity.Image;
 import com.example.hw49.entity.Usr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,6 +86,16 @@ public class UserService {
                 .accountType(user.getAccountType().toUpperCase())
                 .build());
         log.info("Пользователь сохранен");
+    }
+
+    public void changeUser(UserDto user, Authentication auth) {
+        User u = (User) auth.getPrincipal();
+        userDao.change(Usr.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .email(u.getUsername())
+                .build());
     }
 
     public void uploadImage(ImageDto imageDto, Authentication auth) {

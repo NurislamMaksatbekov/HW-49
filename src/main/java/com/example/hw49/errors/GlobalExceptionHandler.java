@@ -2,6 +2,7 @@ package com.example.hw49.errors;
 
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import lombok.extern.slf4j.Slf4j;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -37,4 +38,15 @@ public class GlobalExceptionHandler {
         log.error("Exception message: {}", exception.getMessage());
         return ErrorResponse.builder(exception, HttpStatus.NOT_FOUND, exception.getMessage()).build();
     }
+
+    @ExceptionHandler(JdbcSQLIntegrityConstraintViolationException.class)
+    private ErrorResponse noSuchElementHandler(JdbcSQLIntegrityConstraintViolationException exception) {
+        log.error("Exception message: {}", exception.getMessage());
+        return ErrorResponse.builder(exception, HttpStatus.NOT_FOUND, exception.getMessage()).build();
+    }
+//    @ExceptionHandler(NoSuchMethodException.class)
+//    private ErrorResponse noSuchElementHandler(NoSuchMethodException exception) {
+//        log.error("Exception message: {}", exception.getMessage());
+//        return ErrorResponse.builder(exception, HttpStatus.NOT_FOUND, exception.getMessage()).build();
+//    }
 }

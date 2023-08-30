@@ -46,6 +46,7 @@ public class ResumeService {
         User u = (User) auth.getPrincipal();
         List<Resume> resumes = resumeDao.myResumes(u.getUsername());
         return resumes.stream().map(e -> ResumeDto.builder()
+                        .id(e.getId())
                         .title(e.getTitle())
                         .dateOfPosted(e.getDateOfPosted())
                         .dateOfUpdated(e.getDateOfUpdated())
@@ -132,26 +133,13 @@ public class ResumeService {
                     .requiredSalary(resumeDto.getRequiredSalary())
                     .authorEmail(u.getUsername())
                     .categoryId(categoryId)
+                    .dateOfPosted(LocalDateTime.now())
                     .active(resumeDto.isActive())
                     .build());
 
-            resumeDto.getEducations().forEach(e -> educationService.save(Education.builder()
-                    .education(e.getEducation())
-                    .placeOfStudy(e.getPlaceOfStudy())
-                    .studyPeriod(e.getStudyPeriod())
-                    .resumeId(resumeId)
-                    .build()));
-
-            resumeDto.getExperiences().forEach(e -> experienceService.save(Experience.builder()
-                    .companyName(e.getCompanyName())
-                    .workPeriod(e.getWorkPeriod())
-                    .responsibilities(e.getResponsibilities())
-                    .resumeId(resumeId)
-                    .build()));
-
             contactService.save(Contact.builder()
-                    .contactValue(resumeDto.getContact().getContactValue())
                     .contactType(resumeDto.getContact().getContactType().toUpperCase())
+                    .contactValue(resumeDto.getContact().getContactValue())
                     .resumeId(resumeId)
                     .build());
 
@@ -159,9 +147,9 @@ public class ResumeService {
         }
     }
 
-    public void changeResume(ResumeDto resumeDto, Authentication auth) {
+    public void changeResume(Long resumeId, ResumeDto resumeDto, Authentication auth) {
         User u = (User) auth.getPrincipal();
-        if (resumeDao.check(resumeDto.getId(), u.getUsername())) {
+        if (resumeDao.check(resumeId, u.getUsername())) {
             var mayBeCategory = categoryService.getIdByTitle(resumeDto.getCategory());
             Long categoryId = mayBeCategory.get().getId();
             resumeDao.change(Resume.builder()
@@ -169,12 +157,10 @@ public class ResumeService {
                     .requiredSalary(resumeDto.getRequiredSalary())
                     .active(resumeDto.isActive())
                     .authorEmail(u.getUsername())
-                    .dateOfUpdated(LocalDateTime.now())
                     .categoryId(categoryId)
-                    .id(resumeDto.getId())
+                    .id(resumeId)
                     .build());
 
-            Long resumeId = resumeDto.getId();
 
             contactService.change(ContactDto.builder()
                     .contactValue(resumeDto.getContact().getContactValue())
@@ -182,8 +168,9 @@ public class ResumeService {
                     .resumeId(resumeId)
                     .build());
 
-            EducationDto education = educationService.findEducationById(resumeId);
-            educationService.change(EducationDto.builder().build());
+//            EducationDto education = educationService.findEducationById(resumeId);
+
+//            educationService.change(EducationDto.builder().build());
 //            educationService.change(educationDtoList.stream().map(e -> EducationDto.builder()
 //                            .id(e.getId())
 //                            .education(e.getEducation())
@@ -193,15 +180,15 @@ public class ResumeService {
 //                            .build())
 //                    .toList());
 
-            List<ExperienceDto> experienceDtoList = experienceService.findExperienceById(resumeId);
-            experienceService.change(experienceDtoList.stream().map(e -> ExperienceDto.builder()
-                            .companyName(e.getCompanyName())
-                            .workPeriod(e.getWorkPeriod())
-                            .responsibilities(e.getResponsibilities())
-                            .id(e.getId())
-                            .resumeId(resumeId)
-                            .build())
-                    .collect(Collectors.toList()));
+//            List<ExperienceDto> experienceDtoList = experienceService.findExperienceById(resumeId);
+//            experienceService.change(experienceDtoList.stream().map(e -> ExperienceDto.builder()
+//                            .companyName(e.getCompanyName())
+//                            .workPeriod(e.getWorkPeriod())
+//                            .responsibilities(e.getResponsibilities())
+//                            .id(e.getId())
+//                            .resumeId(resumeId)
+//                            .build())
+//                    .collect(Collectors.toList()));
             log.info("Резюме изменено");
         } else log.error("У вас нет резюме с таким id");
     }
@@ -212,6 +199,13 @@ public class ResumeService {
             throw new ResourceNotFoundException("Not found");
         }
         return resumeDtoList(resumes);
+    }
+
+    public void updateResume(Long resumeId) {
+        resumeDao.update(Resume.builder()
+                .dateOfUpdated(LocalDateTime.now())
+                .id(resumeId)
+                .build());
     }
 }
 

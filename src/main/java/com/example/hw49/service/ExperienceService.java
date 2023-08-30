@@ -23,8 +23,13 @@ public class ExperienceService {
                 .build()).toList();
     }
 
-    public Long save(Experience experience) {
-        return experienceDao.save(experience);
+    public void save(Long resumeId, ExperienceDto experience) {
+        experienceDao.save(Experience.builder()
+                .companyName(experience.getCompanyName())
+                .workPeriod(experience.getWorkPeriod())
+                .responsibilities(experience.getResponsibilities())
+                .resumeId(resumeId)
+                .build());
     }
 
     public void change(List<ExperienceDto> experienceDto) {

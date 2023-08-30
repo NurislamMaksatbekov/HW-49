@@ -75,16 +75,19 @@ public class ResumeDao extends BaseDao {
             ps.setDouble(3, r.getRequiredSalary());
             ps.setString(4, r.getAuthorEmail());
             ps.setBoolean(5, r.isActive());
-            ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setTimestamp(6, Timestamp.valueOf(r.getDateOfPosted()));
             return ps;
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     public void change(Resume r){
-        String sql = "UPDATE RESUMES " +
-                "SET TITLE = ?, REQUIRED_SALARY = ?, " +
-                "    AUTHOR_EMAIL = ?,  ACTIVE = ?, DATE_OF_UPDATED = ?, CATEGORY_ID = ?" +
+        String sql = "UPDATE RESUMES\n" +
+                "SET TITLE           = ?,\n" +
+                "    REQUIRED_SALARY = ?,\n" +
+                "    AUTHOR_EMAIL    = ?,\n" +
+                "    ACTIVE          = ?,\n" +
+                "    CATEGORY_ID     = ?\n" +
                 "WHERE ID = ?";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -92,9 +95,18 @@ public class ResumeDao extends BaseDao {
             ps.setDouble(2, r.getRequiredSalary());
             ps.setString(3, r.getAuthorEmail());
             ps.setBoolean(4, r.isActive());
-            ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
-            ps.setLong(6, r.getCategoryId());
-            ps.setLong(7, r.getId());
+            ps.setLong(5, r.getCategoryId());
+            ps.setLong(6, r.getId());
+            return ps;
+        }, keyHolder);
+    }
+
+    public void update(Resume r){
+        String sql = "update resumes set date_of_updated = ? where id = ?";
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setTimestamp(1, Timestamp.valueOf(r.getDateOfUpdated()));
+            ps.setLong(2, r.getId());
             return ps;
         }, keyHolder);
     }

@@ -34,9 +34,15 @@ public class EducationService {
                 .build();
     }
 
-    public Long save(Education education) {
-        return educationDao.save(education);
+    public void save(Long resumeId, EducationDto educationDto) {
+        educationDao.save(Education.builder()
+                .education(educationDto.getEducation())
+                .studyPeriod(educationDto.getStudyPeriod())
+                .placeOfStudy(educationDto.getPlaceOfStudy())
+                .resumeId(resumeId)
+                .build());
     }
+
 
 
     public void change(EducationDto educationDto) {

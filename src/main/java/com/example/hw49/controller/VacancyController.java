@@ -29,6 +29,11 @@ public class VacancyController {
         return vacancyService.getVacancyByCategory(categoryId);
     }
 
+    @GetMapping("vacancy/create")
+    public String createVacancy(){
+        return "vacancies/add_vacancy";
+    }
+
     @PostMapping("vacancy/create")
     public ResponseEntity<String> createVacancy(@Valid @RequestBody VacancyDto vacancy, Authentication auth) {
         vacancyService.saveVacancy(vacancy, auth);
@@ -51,4 +56,11 @@ public class VacancyController {
     public List<VacancyDto> myVacancies(Authentication auth) {
         return vacancyService.myVacancies(auth);
     }
+
+    @GetMapping("vacancy/{id}")
+    public String getVacancy(@PathVariable Long id, Model model){
+        model.addAttribute("vacancy", vacancyService.getVacancy(id));
+        return "vacancies/vacancy_info";
+    }
 }
+

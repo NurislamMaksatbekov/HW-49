@@ -18,7 +18,7 @@
             <input type="password" class="form-control required" name="password" id="password" placeholder="Password" required>
         </div>
         <div class="form-group">
-            <input type="number" class="form-control required" name="phoneNumber" id="phoneNumber" placeholder="Phone number" required>
+            <input type="tel" class="form-control required" name="phoneNumber" id="phoneNumber" placeholder="Phone number" required>
         </div>
 
         <div class="form-group required">

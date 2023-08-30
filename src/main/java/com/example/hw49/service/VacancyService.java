@@ -53,7 +53,13 @@ public class VacancyService {
 
     public List<VacancyDto> findAllVacancies() {
         List<Vacancy> vacancies = vacancyDao.getAllVacancy();
-        return vacancyDtoList(vacancies);
+        return vacancies.stream().map(e -> VacancyDto.builder()
+                .id(e.getId())
+                .title(e.getTitle())
+                .salary(e.getSalary())
+                .dateOfUpdated(e.getDateOfUpdated())
+                .dateOfPosted(e.getDateOfPosted())
+                .build()).toList();
     }
 
     public List<VacancyDto> myVacancies(Authentication auth) {
@@ -129,5 +135,22 @@ public class VacancyService {
 
     public boolean checkVacancy(Long id) {
         return vacancyDao.checkVacancy(id);
+    }
+
+    public VacancyDto getVacancy(Long id) {
+        Vacancy vacancy = vacancyDao.getVacancy(id);
+        return VacancyDto.builder()
+                .id(vacancy.getId())
+                .title(vacancy.getTitle())
+                .salary(vacancy.getSalary())
+                .authorEmail(vacancy.getAuthorEmail())
+                .jobDescription(vacancy.getJobDescription())
+                .requiredMinExperience(vacancy.getRequiredMinExperience())
+                .requiredMaxExperience(vacancy.getRequiredMaxExperience())
+                .dateOfPosted(vacancy.getDateOfPosted())
+                .dateOfUpdated(vacancy.getDateOfUpdated())
+                .active(vacancy.isActive())
+                .category(categoryService.getTitleById(vacancy.getCategoryId()))
+                .build();
     }
 }

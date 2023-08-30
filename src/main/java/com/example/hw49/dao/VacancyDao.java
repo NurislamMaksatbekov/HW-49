@@ -1,6 +1,7 @@
 package com.example.hw49.dao;
 
 import com.example.hw49.entity.Vacancy;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 
@@ -18,6 +20,15 @@ public class VacancyDao extends BaseDao{
 
     VacancyDao(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
+    }
+
+    public Vacancy getVacancy(Long id){
+        String sql = "select * from vacancies where id = ?";
+
+        Optional<Vacancy> mayBeVacancy = Optional.ofNullable(DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), id)
+        ));
+        return mayBeVacancy.get();
     }
 
     public List<Vacancy> getVacancyByResponds(String authorEmail){
@@ -28,7 +39,7 @@ public class VacancyDao extends BaseDao{
     }
 
     public List<Vacancy> getAllVacancy(){
-        String sql = "select * from vacancies";
+        String sql = "select id, title, salary, DATE_OF_POSTED, DATE_OF_UPDATED from vacancies";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class));
     }
 
@@ -59,7 +70,7 @@ public class VacancyDao extends BaseDao{
             ps.setString(4, v.getJobDescription());
             ps.setInt(5, v.getRequiredMinExperience());
             ps.setInt(6, v.getRequiredMaxExperience());
-            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setTimestamp(7, Timestamp.valueOf(v.getDateOfPosted()));
             ps.setBoolean(8, v.isActive());
             ps.setLong(9, v.getCategoryId());
             return ps;

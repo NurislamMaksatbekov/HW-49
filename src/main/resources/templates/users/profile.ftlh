@@ -13,14 +13,14 @@
                 <div class="card-body">
                     <#if user.accountType == "APPLICANT">
                         <h5 class="card-title">${user.name} ${user.surname}</h5>
-                        <a href="" class="btn btn-dark">Редактировать</a>
-                        <a href="" class="btn btn-dark" style="margin-left: 250px">Создать резюме</a>
+                            <a href="/users/change" class="btn btn-dark">Редактировать</a>
+                        <a href="/resume/create" class="btn btn-dark" style="margin-left: 250px">Создать резюме</a>
                         <a href="" class="btn btn-dark" style="margin-left: 20px">Отклики</a>
                     <#else>
                         <h5 class="card-title">${user.name}</h5>
-                        <a href="" class="btn btn-dark">Редактировать</a>
+                        <a href="/users/change" class="btn btn-dark">Редактировать</a>
                         <a href="/resumes" class="btn btn-dark" style="margin-left: 180px">Посмотреть резюме</a>
-                        <a href="" class="btn btn-dark">Создать вакансию</a>
+                        <a href="/vacancy/create" class="btn btn-dark">Создать вакансию</a>
                     </#if>
                 </div>
             </div>
@@ -31,13 +31,16 @@
                             <h5 class="card-title">${resume.title}</h5>
                             <#if resume.dateOfUpdated??>
                                 <p class="card-text"><small class="text-muted">Дата
-                                        обновления: ${resume.dateOfUpdated}</small></p>
+                                        обновления: ${resume.dateOfUpdated.getMonth()} ${resume.dateOfUpdated.getDayOfMonth()}</small></p>
                             <#else>
                                 <p class="card-text"><small class="text-muted">Дата
-                                        добавления: ${resume.dateOfPosted}</small></p>
+                                        добавления: ${resume.dateOfPosted.getMonth()} ${resume.dateOfPosted.getDayOfMonth()}</small></p>
                             </#if>
-                            <a href="" class="btn btn-dark">Обновить</a>
-                            <a href="" class="btn btn-dark">Редактировать</a>
+                            <form action="/resume/update/${resume.id}" method="post">
+                                <input type="hidden" name="id" value="${resume.id}">
+                                <button type="submit" class="btn btn-dark">Обновить</button>
+                            </form>
+                            <a href="/resume/change/${resume.id}" style="margin-top: 5px" class="btn btn-dark">Редактировать</a>
                         </div>
                     </div>
                 </#list>
@@ -48,10 +51,10 @@
                             <h5 class="card-title">${vacancy.title}</h5>
                             <#if vacancy.dateOfUpdated??>
                                 <p class="card-text"><small class="text-muted">Дата
-                                        обновления: ${vacancy.dateOfUpdated}</small></p>
+                                        обновления: ${vacancy.dateOfUpdated.getMonth()} ${vacancy.dateOfUpdated.getDayOfMonth()}</small></p>
                             <#else>
                                 <p class="card-text"><small class="text-muted">Дата
-                                        добавления: ${vacancy.dateOfPosted}</small></p>
+                                        добавления: ${vacancy.dateOfPosted.getMonth()} ${vacancy.dateOfPosted.getDayOfMonth()}</small></p>
                             </#if>
                             <a href="" class="btn btn-dark">Обновить</a>
                             <a href="" class="btn btn-dark">Редактировать</a>

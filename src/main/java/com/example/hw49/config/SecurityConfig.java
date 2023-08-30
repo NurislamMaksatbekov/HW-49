@@ -54,10 +54,10 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancy/**")).hasAuthority("EMPLOYER")
+//                        .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancy/**")).hasAuthority("EMPLOYER")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/resumes")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/summary/**")).hasAuthority("EMPLOYER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resume/**")).hasAuthority("APPLICANT")
+//                        .requestMatchers(AntPathRequestMatcher.antMatcher("/summary/**")).hasAuthority("EMPLOYER")
+//                        .requestMatchers(AntPathRequestMatcher.antMatcher("/resume/**")).hasAuthority("APPLICANT")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/vacancy/category")).hasAuthority("APPLICANT")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/respond")).hasAuthority("APPLICANT")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/users/**")).fullyAuthenticated()

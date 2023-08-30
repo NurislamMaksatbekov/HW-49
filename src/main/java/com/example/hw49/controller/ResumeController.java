@@ -1,6 +1,7 @@
 package com.example.hw49.controller;
 
 import com.example.hw49.dto.ResumeDto;
+import com.example.hw49.service.CategoryService;
 import com.example.hw49.service.ResumeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ResumeController {
 
     private final ResumeService resumeService;
+    private final CategoryService categoryService;
 
     @GetMapping("/resumes")
     public String findAllResumes(Model model) {
@@ -31,21 +33,36 @@ public class ResumeController {
         return ResponseEntity.ok("Вы успешно удалили резюме");
     }
 
-    @PostMapping("resume/change")
-    public ResponseEntity<String> changeResume(@Valid @RequestBody ResumeDto resume, Authentication auth) {
-        resumeService.changeResume(resume, auth);
-        return ResponseEntity.ok("Вы успешно изменили резюме");
+    @GetMapping("resume/change/{resumeId}")
+    public String changeResume(Model model, @PathVariable Long resumeId){
+        model.addAttribute("resume", resumeService.findResumeById(resumeId));
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "resumes/change_resume";
+    }
+
+    @PostMapping("resume/change/{resumeId}")
+    public String changeResume(@Valid ResumeDto resume, Authentication auth, @PathVariable Long resumeId) {
+        resumeService.changeResume(resumeId,resume, auth);
+        return "redirect:/profile";
+    }
+
+
+    @PostMapping("resume/update/{resumeId}")
+    public String updateResume(@PathVariable Long resumeId){
+        resumeService.updateResume(resumeId);
+        return "redirect:/profile";
     }
 
     @GetMapping("resume/create")
-    public String createResume(){
+    public String createResume(Model model){
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "resumes/add_resume";
     }
 
     @PostMapping("resume/create")
-    public ResponseEntity<String> createResume(@Valid @RequestBody ResumeDto resumeDto, Authentication auth) {
+    public String createResume(@Valid ResumeDto resumeDto, Authentication auth) {
         resumeService.saveResume(resumeDto, auth);
-        return ResponseEntity.ok("Вы успешно добавили новое резюме");
+        return "redirect:/profile";
     }
 
     @GetMapping("resume/my-resumes")
@@ -58,16 +75,16 @@ public class ResumeController {
         return resumeService.findResumeByTitle(title);
     }
 
-    @GetMapping("summary/id")
-    public ResumeDto findResumeById(@RequestParam Long resumeId) {
-        return resumeService.findResumeById(resumeId);
+    @GetMapping("summary/{resumeId}")
+    public String findResumeById(@PathVariable Long resumeId, Model model) {
+        model.addAttribute("resume", resumeService.findResumeById(resumeId));
+        return "resumes/resume_info";
     }
 
     @GetMapping("summary/email")
     public List<ResumeDto> selectResumeByUser(@RequestParam String authorEmail) {
         return resumeService.selectResumeByUser(authorEmail);
     }
-
 
     @GetMapping("summary/category")
     public List<ResumeDto> getResumeByCategory(Long id){

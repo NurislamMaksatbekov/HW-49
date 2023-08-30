@@ -1,12 +1,14 @@
 package com.example.hw49.dao;
 
 import com.example.hw49.entity.Contact;
+import com.example.hw49.enums.ContactType;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -47,6 +49,7 @@ public class ContactDao extends BaseDao{
         String sql = "select * from contacts where resume_id = ?";
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Contact.class), id);
     }
+
 
     @Override
     public void delete(Long id) {

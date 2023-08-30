@@ -10,8 +10,8 @@ import java.util.List;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResumeDto {
     private Long id;
     @NotBlank(message = "Заполните поле")

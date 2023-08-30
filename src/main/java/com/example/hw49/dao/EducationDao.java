@@ -37,7 +37,7 @@ public class EducationDao extends BaseDao{
     @Override
     public Long save(Object obj) {
         Education e = (Education) obj;
-        String sql = "insert into educations(education, place_of_study, study_period, resume_id) " +
+        String sql = "insert into educations(education, place_of_study, study_period, RESUME_ID) " +
                 "values (?,?,?,?)";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});

@@ -28,4 +28,9 @@ public class CategoryDao{
                 jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class), title)
         ));
     }
+
+    public List<Category> getAllCategories(){
+        String sql = "select * from categories";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class));
+    }
 }

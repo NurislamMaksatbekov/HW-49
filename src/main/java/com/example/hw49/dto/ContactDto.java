@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ContactDto {
     @NotBlank(message = "Контактные данные не могут быть пустыми")
